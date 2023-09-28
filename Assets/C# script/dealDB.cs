@@ -28,23 +28,24 @@ public struct Data{
 
 public class dealDB : MonoBehaviour
 {
-    private string dbName = "URI=file:database.db";
+    private string dbName = "URI=file:"+ Application.dataPath + "database.db";
 
     // Start is called before the first frame update
     void Start()
     {
         createDB();
 
-        Data testing = new Data("a", 1, 1, 1, 1, 1, 1, 1);
-        insertData(testing);
+        //Data testing = new Data("a", 1, 1, 1, 1, 1, 1, 1);
+        //insertData(testing);
+        //insertData(testing);
 
-        displayData();
+        //displayData();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     
@@ -79,12 +80,13 @@ public class dealDB : MonoBehaviour
 
     public void displayData(){
         using(var connection = new SqliteConnection(dbName)){
+            connection.Open();
             using(var command = connection.CreateCommand()){
                 command.CommandText = "SELECT * FROM contestData;";
 
                 using(IDataReader reader = command.ExecuteReader()){
                     while(reader.Read()){
-                        Debug.Log("Formation: " + reader["formation"] + "index: " + reader["index"] + "Round: " + reader["round"] + "Role: " + reader["role"] + "Attackblock: " + reader["attackblock"] + "CatchBlock: " + reader["catchblock"] + "Situation: " + reader["situation"] + "Score: " + reader["score"] );
+                        Debug.Log("Formation: " + reader["formation"] + " index: " + reader["ballID"] + " Round: " + reader["round"] + " Role: " + reader["role"] + " Attackblock: " + reader["attackblock"] + " CatchBlock: " + reader["catchblock"] + " Situation: " + reader["situation"] + " Score: " + reader["score"] );
                     }
 
                     reader.Close();
