@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 43933713}
   - component: {fileID: 43933715}
   - component: {fileID: 43933714}
+  - component: {fileID: 43933716}
   m_Layer: 5
   m_Name: SelfScore
   m_TagString: Untagged
@@ -202,6 +203,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 43933712}
   m_CullTransparentMesh: 1
+--- !u!114 &43933716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 43933712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67586d97240ad474e9b9ee67d02b351e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Self_Point: 0
+  Self_Point_Text: {fileID: 1926665982}
+  They_Point: 0
+  They_Point_Text: {fileID: 621324857}
+  Self_Score: 0
+  Self_Score_Text: {fileID: 43933714}
+  They_Score: 0
+  They_Score_Text: {fileID: 441779036}
 --- !u!1 &90500265
 GameObject:
   m_ObjectHideFlags: 0
@@ -767,6 +788,7 @@ GameObject:
   - component: {fileID: 441779035}
   - component: {fileID: 441779037}
   - component: {fileID: 441779036}
+  - component: {fileID: 441779038}
   m_Layer: 5
   m_Name: TheyScore
   m_TagString: Untagged
@@ -835,6 +857,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 441779034}
   m_CullTransparentMesh: 1
+--- !u!114 &441779038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 441779034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67586d97240ad474e9b9ee67d02b351e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Self_Point: 0
+  Self_Point_Text: {fileID: 621324857}
+  They_Point: 0
+  They_Point_Text: {fileID: 1926665982}
+  Self_Score: 0
+  Self_Score_Text: {fileID: 43933714}
+  They_Score: 0
+  They_Score_Text: {fileID: 441779036}
 --- !u!1 &495462235
 GameObject:
   m_ObjectHideFlags: 0
@@ -918,7 +960,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 621324859}
+      - m_Target: {fileID: 441779038}
         m_TargetAssemblyTypeName: RefreshPoint, Assembly-CSharp
         m_MethodName: add_point
         m_Mode: 1
@@ -1138,6 +1180,10 @@ MonoBehaviour:
   Self_Point_Text: {fileID: 1926665982}
   They_Point: 0
   They_Point_Text: {fileID: 621324857}
+  Self_Score: 0
+  Self_Score_Text: {fileID: 0}
+  They_Score: 0
+  They_Score_Text: {fileID: 0}
 --- !u!1 &624144570
 GameObject:
   m_ObjectHideFlags: 0
@@ -2544,7 +2590,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1926665984}
+      - m_Target: {fileID: 43933716}
         m_TargetAssemblyTypeName: RefreshPoint, Assembly-CSharp
         m_MethodName: add_point
         m_Mode: 1
@@ -2910,6 +2956,10 @@ MonoBehaviour:
   Self_Point_Text: {fileID: 1926665982}
   They_Point: 0
   They_Point_Text: {fileID: 621324857}
+  Self_Score: 0
+  Self_Score_Text: {fileID: 0}
+  They_Score: 0
+  They_Score_Text: {fileID: 0}
 --- !u!1 &2036341054
 GameObject:
   m_ObjectHideFlags: 0
