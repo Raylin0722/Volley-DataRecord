@@ -8,20 +8,20 @@ public class RefreshPoint : MonoBehaviour
 {
     [SerializeField] int Self_Point;
     [SerializeField] Text Self_Point_Text;
-    [SerializeField] int They_Point;
-    [SerializeField] Text They_Point_Text;
+    [SerializeField] int Enemy_Point;
+    [SerializeField] Text Enemy_Point_Text;
     [SerializeField] int Self_Score;
     [SerializeField] Text Self_Score_Text;
-    [SerializeField] int They_Score;
-    [SerializeField] Text They_Score_Text;
+    [SerializeField] int Enemy_Score;
+    [SerializeField] Text Enemy_Score_Text;
     
     // Start is called before the first frame update
     void Start()
     {
         Self_Score = 0;
         Self_Point = 0;   
-        They_Point = 0;
-        They_Score = 0;
+        Enemy_Point = 0;
+        Enemy_Score = 0;
         Self_Point_Text.text = "00";
         Self_Score_Text.text = "0";
 
@@ -46,33 +46,33 @@ public class RefreshPoint : MonoBehaviour
             add_score();
         }
         else{
-            They_Point++;
-            if(They_Point < 10){
-                They_Point_Text.text = "0" + They_Point.ToString();
+            Enemy_Point++;
+            if(Enemy_Point < 10){
+                Enemy_Point_Text.text = "0" + Enemy_Point.ToString();
             }
             else{
-                They_Point_Text.text = They_Point.ToString();
+                Enemy_Point_Text.text = Enemy_Point.ToString();
             }
             add_score();
         }
     }
 
     public void add_score(){
-        Debug.Log(Self_Point + " " + They_Point);
-        if(Self_Point >= 25 && ((Self_Point - They_Point) >= 2)){
+        Debug.Log(Self_Point + " " + Enemy_Point);
+        if(Self_Point >= 25 && ((Self_Point - Enemy_Point) >= 2)){
             Self_Score++;
             Self_Score_Text.text = Self_Score.ToString();
             Self_Point_Text.text = "00";
-            They_Point_Text.text = "00";
+            Enemy_Point_Text.text = "00";
             Self_Point = 0;
-            They_Point = 0;
+            Enemy_Point = 0;
         }
-        else if(They_Point >= 25 && ((They_Point - Self_Point) >= 2)){
-            They_Score++;
-            They_Score_Text.text = They_Score.ToString();
-            They_Point_Text.text = "00";
+        else if(Enemy_Point >= 25 && ((Enemy_Point - Self_Point) >= 2)){
+            Enemy_Score++;
+            Enemy_Score_Text.text = Enemy_Score.ToString();
+            Enemy_Point_Text.text = "00";
             Self_Point_Text.text = "00";
-            They_Point = 0;
+            Enemy_Point = 0;
             Self_Point = 0;
         }
     }
