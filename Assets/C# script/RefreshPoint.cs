@@ -22,6 +22,9 @@ public class RefreshPoint : MonoBehaviour
         Self_Point = 0;   
         They_Point = 0;
         They_Score = 0;
+        Self_Point_Text.text = "00";
+        Self_Score_Text.text = "0";
+
     }
 
     // Update is called once per frame
@@ -55,13 +58,22 @@ public class RefreshPoint : MonoBehaviour
     }
 
     public void add_score(){
+        Debug.Log(Self_Point + " " + They_Point);
         if(Self_Point >= 25 && ((Self_Point - They_Point) >= 2)){
             Self_Score++;
             Self_Score_Text.text = Self_Score.ToString();
+            Self_Point_Text.text = "00";
+            They_Point_Text.text = "00";
+            Self_Point = 0;
+            They_Point = 0;
         }
         else if(They_Point >= 25 && ((They_Point - Self_Point) >= 2)){
             They_Score++;
             They_Score_Text.text = They_Score.ToString();
+            They_Point_Text.text = "00";
+            Self_Point_Text.text = "00";
+            They_Point = 0;
+            Self_Point = 0;
         }
     }
    
