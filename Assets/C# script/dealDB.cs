@@ -39,7 +39,7 @@ public class dealDB : MonoBehaviour
         //insertData(testing);
         //insertData(testing);
 
-        //displayData();
+        displayData();
     }
 
     // Update is called once per frame
