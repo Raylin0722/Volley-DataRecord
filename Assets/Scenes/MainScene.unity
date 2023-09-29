@@ -849,7 +849,7 @@ GameObject:
   - component: {fileID: 495462237}
   m_Layer: 5
   m_Name: TheyGetPoint
-  m_TagString: Untagged
+  m_TagString: TheyPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -917,7 +917,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 495462238}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 621324859}
+        m_TargetAssemblyTypeName: RefreshPoint, Assembly-CSharp
+        m_MethodName: add_point
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &495462238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1041,9 +1053,10 @@ GameObject:
   - component: {fileID: 621324856}
   - component: {fileID: 621324858}
   - component: {fileID: 621324857}
+  - component: {fileID: 621324859}
   m_Layer: 5
   m_Name: TheyPoints
-  m_TagString: Untagged
+  m_TagString: TheyPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1109,6 +1122,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 621324855}
   m_CullTransparentMesh: 1
+--- !u!114 &621324859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621324855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67586d97240ad474e9b9ee67d02b351e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Self_Point: 0
+  Self_Point_Text: {fileID: 1926665982}
+  They_Point: 0
+  They_Point_Text: {fileID: 621324857}
 --- !u!1 &624144570
 GameObject:
   m_ObjectHideFlags: 0
@@ -1697,8 +1726,8 @@ RectTransform:
   - {fileID: 495462236}
   - {fileID: 400171619}
   - {fileID: 826565339}
-  - {fileID: 1926665981}
   - {fileID: 621324856}
+  - {fileID: 1926665981}
   - {fileID: 43933713}
   - {fileID: 441779035}
   - {fileID: 1749547468}
@@ -2446,7 +2475,7 @@ GameObject:
   - component: {fileID: 1664896846}
   m_Layer: 5
   m_Name: SelfGetPoint
-  m_TagString: Untagged
+  m_TagString: SelfPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2514,7 +2543,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1664896847}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1926665984}
+        m_TargetAssemblyTypeName: RefreshPoint, Assembly-CSharp
+        m_MethodName: add_point
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1664896847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2784,9 +2825,10 @@ GameObject:
   - component: {fileID: 1926665981}
   - component: {fileID: 1926665983}
   - component: {fileID: 1926665982}
+  - component: {fileID: 1926665984}
   m_Layer: 5
   m_Name: SelfPoints
-  m_TagString: Untagged
+  m_TagString: SelfPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2852,6 +2894,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1926665980}
   m_CullTransparentMesh: 1
+--- !u!114 &1926665984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1926665980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67586d97240ad474e9b9ee67d02b351e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Self_Point: 0
+  Self_Point_Text: {fileID: 1926665982}
+  They_Point: 0
+  They_Point_Text: {fileID: 621324857}
 --- !u!1 &2036341054
 GameObject:
   m_ObjectHideFlags: 0
