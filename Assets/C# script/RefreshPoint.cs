@@ -23,8 +23,9 @@ public class RefreshPoint : MonoBehaviour
         Enemy_Point = 0;
         Enemy_Score = 0;
         Self_Point_Text.text = "00";
-        Self_Score_Text.text = "0";
-
+        Self_Score_Text.text = "00";
+        Enemy_Point_Text.text = "00";
+        Enemy_Score_Text.text = "00";
     }
 
     // Update is called once per frame
