@@ -51,9 +51,8 @@ public class RefreshPoint : MonoBehaviour
             else{
                 Self_Point_Text.text = Self_Point.ToString();
             }
-            add_score();
             changeServe(obj);
-            changeSideServe();
+            add_score();
         }
         else{
             Enemy_Point++;
