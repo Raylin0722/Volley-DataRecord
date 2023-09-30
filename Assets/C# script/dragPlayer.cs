@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 public class dragPlayer : MonoBehaviour {
     private Vector3 initialPosition;
     Vector2 difference = Vector2.zero;
+    int xPosition, yPosition;
     private void OnMouseDown() {
         initialPosition = transform.position;
         difference = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position;
@@ -17,7 +18,6 @@ public class dragPlayer : MonoBehaviour {
         transform.position = initialPosition;
     }
     private void MoveToWhichPosition() {
-        int xPosition, yPosition;
         if(transform.position.x >= -2.2 && transform.position.x < -1.76)
             xPosition = 0;
         else if(transform.position.x >= -1.76 && transform.position.x < -1.32)
