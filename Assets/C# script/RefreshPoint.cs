@@ -63,9 +63,9 @@ public class RefreshPoint : MonoBehaviour
             else{
                 Enemy_Point_Text.text = Enemy_Point.ToString();
             }
-            add_score();
             changeServe(obj);
-            changeSideServe();
+            add_score();
+            
         }
     }
 
@@ -76,6 +76,7 @@ public class RefreshPoint : MonoBehaviour
             Self_Score_Text.text = Self_Score.ToString();
             Self_Point_Text.text = "00";
             Enemy_Point_Text.text = "00";
+            changeSideServe();
             Self_Point = 0;
             Enemy_Point = 0;
             
@@ -85,6 +86,7 @@ public class RefreshPoint : MonoBehaviour
             Enemy_Score_Text.text = Enemy_Score.ToString();
             Enemy_Point_Text.text = "00";
             Self_Point_Text.text = "00";
+            changeSideServe();
             Enemy_Point = 0;
             Self_Point = 0;
             
@@ -106,23 +108,23 @@ public class RefreshPoint : MonoBehaviour
 
     public void changeSideServe(){
         //Debug.Log("Test");
-        if((Self_Score + Enemy_Score) % 2 == 0){
-            if(whoServe == 1){
-                Self_Serve.SetActive(false);
-                Enemy_Serve.SetActive(true);
-                whoServe = -1;
-                //Debug.Log(whoServe);
-                Debug.Log(Self_Serve.active);
-                Debug.Log(Enemy_Serve.active);
-            }
-            else if (whoServe == -1){
-                Self_Serve.SetActive(true);
-                Enemy_Serve.SetActive(false);
-                whoServe = 1;
-                //Debug.Log(whoServe);
-                Debug.Log(Self_Serve.active);
-                Debug.Log(Enemy_Serve.active);
-            }
+       
+        if(whoServe == 1){
+            Self_Serve.SetActive(false);
+            Enemy_Serve.SetActive(true);
+            whoServe = -1;
+            //Debug.Log(whoServe);
+            Debug.Log(Self_Serve.active);
+            Debug.Log(Enemy_Serve.active);
         }
+        else if (whoServe == -1){
+            Self_Serve.SetActive(true);
+            Enemy_Serve.SetActive(false);
+            whoServe = 1;
+            //Debug.Log(whoServe);
+            Debug.Log(Self_Serve.active);
+            Debug.Log(Enemy_Serve.active);
+        }
+        
     }
 }
