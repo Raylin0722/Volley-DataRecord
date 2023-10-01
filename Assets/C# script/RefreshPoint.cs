@@ -95,11 +95,11 @@ public class RefreshPoint : MonoBehaviour
     }
    
     public void changeServe(GameObject obj){
-        if(obj.tag == "SelfPoint" && Enemy_Serve.active){
+        if(obj.tag == "SelfPoint" && Enemy_Serve.activeSelf){
             Enemy_Serve.SetActive(false);
             Self_Serve.SetActive(true);
         }
-        else if(obj.tag == "EnemyPoint" && Self_Serve.active){
+        else if(obj.tag == "EnemyPoint" && Self_Serve.activeSelf){
             Enemy_Serve.SetActive(true);
             Self_Serve.SetActive(false);
         }
@@ -112,17 +112,11 @@ public class RefreshPoint : MonoBehaviour
             Self_Serve.SetActive(false);
             Enemy_Serve.SetActive(true);
             whoServe = -1;
-            //Debug.Log(whoServe);
-            Debug.Log(Self_Serve.active);
-            Debug.Log(Enemy_Serve.active);
         }
         else if (whoServe == -1){
             Self_Serve.SetActive(true);
             Enemy_Serve.SetActive(false);
             whoServe = 1;
-            //Debug.Log(whoServe);
-            Debug.Log(Self_Serve.active);
-            Debug.Log(Enemy_Serve.active);
         }
         
     }
