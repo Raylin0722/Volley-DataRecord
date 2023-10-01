@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 public class dragPlayer : MonoBehaviour {
+    int changePosition = 0; //更換位子變數判斷
     private Vector3 initialPosition;
     Vector2 difference = Vector2.zero;
     int xPosition, yPosition;
@@ -15,7 +17,11 @@ public class dragPlayer : MonoBehaviour {
     }
     private void OnMouseUp() {
         MoveToWhichPosition();
-        transform.position = initialPosition;
+        if(changePosition == 0)
+            transform.position = initialPosition;
+    }
+    public void startChangePosition() {
+        changePosition = 1 - changePosition;
     }
     private void MoveToWhichPosition() {
         if(transform.position.x >= -2.2 && transform.position.x < -1.76)
