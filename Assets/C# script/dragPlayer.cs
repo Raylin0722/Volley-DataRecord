@@ -7,10 +7,9 @@ using UnityEngine.UI;
 //int saveIndex = 0;
 
 public class dragPlayer : MonoBehaviour {
-    [SerializeField] string playerName;
+    [SerializeField] public string playerName;
     [SerializeField] GameObject SelfScore;
     [SerializeField] GameObject EnemyScore;
-
 
     static int changePosition = 0; //更換位子變數判斷
 
