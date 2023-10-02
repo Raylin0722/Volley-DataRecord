@@ -4,11 +4,10 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 public class dragPlayer : MonoBehaviour {
-    int changePosition = 0; //更換位子變數判斷
     private Vector3 initialPosition;
     private Vector3 AfterDragPosition;
     Vector2 difference = Vector2.zero;
-    int xPosition, yPosition;
+    int changePosition = 0; //更換位子變數判斷
     private void OnMouseDown() {
         initialPosition = transform.position;
         difference = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position;

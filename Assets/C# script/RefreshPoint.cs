@@ -27,9 +27,9 @@ public class RefreshPoint : MonoBehaviour
         Enemy_Point = 0;
         Enemy_Score = 0;
         Self_Point_Text.text = "00";
-        Self_Score_Text.text = "00";
+        Self_Score_Text.text = "0";
         Enemy_Point_Text.text = "00";
-        Enemy_Score_Text.text = "00";
+        Enemy_Score_Text.text = "0";
         whoServe = 1;
         Self_Serve.SetActive(true);
         Enemy_Serve.SetActive(false);
@@ -70,7 +70,11 @@ public class RefreshPoint : MonoBehaviour
 
     public void add_score(){
         //Debug.Log(Self_Point + " " + Enemy_Point);
-        if(Self_Point >= 25 && ((Self_Point - Enemy_Point) >= 2)){
+        int point = 25;
+        if(Self_Score == 2 && Enemy_Score == 2)
+            point = 15;
+
+        if(Self_Point >= point && ((Self_Point - Enemy_Point) >= 2)){
             Self_Score++;
             Self_Score_Text.text = Self_Score.ToString();
             Self_Point_Text.text = "00";
@@ -80,18 +84,15 @@ public class RefreshPoint : MonoBehaviour
             Enemy_Point = 0;
             
         }
-        else if(Enemy_Point >= 25 && ((Enemy_Point - Self_Point) >= 2)){
+        else if(Enemy_Point >= point && ((Enemy_Point - Self_Point) >= 2)){
             Enemy_Score++;
             Enemy_Score_Text.text = Enemy_Score.ToString();
             Enemy_Point_Text.text = "00";
             Self_Point_Text.text = "00";
             changeSideServe();
             Enemy_Point = 0;
-            Self_Point = 0;
-            
+            Self_Point = 0;   
         }
-
-        
     }
    
     public void changeServe(GameObject obj){
@@ -106,8 +107,6 @@ public class RefreshPoint : MonoBehaviour
     }
 
     public void changeSideServe(){
-        //Debug.Log("Test");
-       
         if(whoServe == 1){
             Self_Serve.SetActive(false);
             Enemy_Serve.SetActive(true);
