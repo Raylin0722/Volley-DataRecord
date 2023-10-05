@@ -10,18 +10,14 @@ public class dragPlayer : MonoBehaviour {
     [SerializeField] public string playerName;
     [SerializeField] GameObject SelfScore;
     [SerializeField] GameObject EnemyScore;
-
     static int changePosition = 0; //更換位子變數判斷
-
     static bool alreadtAttack = false;
     private Vector3 initialPosition;
     private Vector3 AfterDragPosition;
     Vector2 difference = Vector2.zero;
     int xPosition, yPosition;
-
     static dealDB.Data[] saveData = new dealDB.Data[300];
     static int saveIndex = 0;
-
     private void OnMouseDown() {
         initialPosition = transform.position;
         difference = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position;
@@ -74,10 +70,8 @@ public class dragPlayer : MonoBehaviour {
                 saveIndex++;
                 alreadtAttack = true;
             }
-                
             transform.position = initialPosition;
         }
-            
     }
     public void startChangePosition() {
         changePosition = 1 - changePosition;
