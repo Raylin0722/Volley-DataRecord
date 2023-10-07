@@ -18,7 +18,6 @@ public class dragPlayer : MonoBehaviour {
     private Vector3 initialPosition;
     private Vector3 AfterDragPosition;
     Vector2 difference = Vector2.zero;
-    int xPosition, yPosition;
 
     static dealDB.Data[] saveData = new dealDB.Data[300];
     static int saveIndex = 0;
@@ -35,7 +34,7 @@ public class dragPlayer : MonoBehaviour {
         int mode = clickOrDrag();
         if(changePosition == 0){
             int block = getBlock(AfterDragPosition);
-            Debug.Log("mode: " + mode + " alreadAttack: " + alreadtAttack + " saveIndex: " + saveIndex);
+            //Debug.Log("mode: " + mode + " alreadAttack: " + alreadtAttack + " saveIndex: " + saveIndex);
             if(mode == 1 || mode == -1 && alreadtAttack){
                 saveData[saveIndex].formation = null;
                 saveData[saveIndex].catchblock = block;
@@ -48,7 +47,7 @@ public class dragPlayer : MonoBehaviour {
                 alreadtAttack = false;
 
                 
-                Debug.Log("formation: " + saveData[saveIndex].formation + " Role: " + saveData[saveIndex].role + " Round: " + saveData[saveIndex].round + " Attack: " + saveData[saveIndex].attackblock + " Catch: " + saveData[saveIndex].catchblock + " Situation: " + saveData[saveIndex].situation + " catch");
+                //Debug.Log("formation: " + saveData[saveIndex].formation + " Role: " + saveData[saveIndex].role + " Round: " + saveData[saveIndex].round + " Attack: " + saveData[saveIndex].attackblock + " Catch: " + saveData[saveIndex].catchblock + " Situation: " + saveData[saveIndex].situation + " catch");
                 
             }
             else if(mode == -1 && !alreadtAttack){
@@ -59,7 +58,7 @@ public class dragPlayer : MonoBehaviour {
                 saveData[saveIndex].round = SelfScore.GetComponent<RefreshPoint>().Self_Score + EnemyScore.GetComponent<RefreshPoint>().Enemy_Score + 1;
                 saveData[saveIndex].situation = dealDB.ATTACK;
 
-                Debug.Log("formation: " + saveData[saveIndex].formation + " Role: " + saveData[saveIndex].role + " Round: " + saveData[saveIndex].round + " Attack: " + saveData[saveIndex].attackblock + " Catch: " + saveData[saveIndex].catchblock + " Situation: " + saveData[saveIndex].situation + " attack");
+                //Debug.Log("formation: " + saveData[saveIndex].formation + " Role: " + saveData[saveIndex].role + " Round: " + saveData[saveIndex].round + " Attack: " + saveData[saveIndex].attackblock + " Catch: " + saveData[saveIndex].catchblock + " Situation: " + saveData[saveIndex].situation + " attack");
                 
                 saveIndex++;
                 alreadtAttack = true;
@@ -71,10 +70,21 @@ public class dragPlayer : MonoBehaviour {
                 saveData[saveIndex].round = SelfScore.GetComponent<RefreshPoint>().Self_Score + EnemyScore.GetComponent<RefreshPoint>().Enemy_Score + 1;
                 saveData[saveIndex].situation = dealDB.SERVE;
                 
-                Debug.Log("formation: " + saveData[saveIndex].formation + " Role: " + saveData[saveIndex].role + " Round: " + saveData[saveIndex].round + " Attack: " + saveData[saveIndex].attackblock + " Catch: " + saveData[saveIndex].catchblock + " Situation: " + saveData[saveIndex].situation + " serve");
+                //Debug.Log("formation: " + saveData[saveIndex].formation + " Role: " + saveData[saveIndex].role + " Round: " + saveData[saveIndex].round + " Attack: " + saveData[saveIndex].attackblock + " Catch: " + saveData[saveIndex].catchblock + " Situation: " + saveData[saveIndex].situation + " serve");
                 saveIndex++;
                 alreadtAttack = true;
             }
+            else if(mode == 3){
+                saveData[saveIndex].formation = null;
+                saveData[saveIndex].attackblock = -1;
+                saveData[saveIndex].catchblock = block;
+                saveData[saveIndex].role = playerName;
+                saveData[saveIndex].round = SelfScore.GetComponent<RefreshPoint>().Self_Score + EnemyScore.GetComponent<RefreshPoint>().Enemy_Score + 1;
+                saveData[saveIndex].situation = dealDB.BLOCK;
+                
+                //Debug.Log("formation: " + saveData[saveIndex].formation + " Role: " + saveData[saveIndex].role + " Round: " + saveData[saveIndex].round + " Attack: " + saveData[saveIndex].attackblock + " Catch: " + saveData[saveIndex].catchblock + " Situation: " + saveData[saveIndex].situation + " serve");
+                saveIndex++;
+            }   
                 
             transform.position = initialPosition;
         }
@@ -82,24 +92,56 @@ public class dragPlayer : MonoBehaviour {
     }
     public void startChangePosition() {
         changePosition = 1 - changePosition;
+        Debug.Log(changePosition);
     }
     private int clickOrDrag() {
         if(AfterDragPosition == initialPosition) { //click
-            Debug.Log("點擊click");
+            //Debug.Log("點擊click");
             return 1;
         }
         else  if(AfterDragPosition != initialPosition && saveIndex != 0){ //drag and not serve
-            Debug.Log("拖曳drag");
+            //Debug.Log("拖曳drag");
             return -1;
         }
         else if(AfterDragPosition != initialPosition && saveIndex == 0){ //serve
             return 2;
         }
+        else if(AfterDragPosition != initialPosition && ( initialPosition[0] < 0 && AfterDragPosition[0] > 0 || initialPosition[0] > 0 && initialPosition[0] < 0 )){
+            return 3;
+        }
 
         return 0;
     }
 
+    [SerializeField] private GameObject[] allBlock;
+    private RectTransform[] allBlockRT = new RectTransform[24];
+    private Vector3[] allBlockXY;
+    //private float widthRatio = allBlock[0].GetComponent<RectTransform>().rect.width / 98, heightRatio =  allBlock[0].GetComponent<RectTransform>().rect.height / 93;
+
+    
     private int getBlock(Vector3 position){
+        
+        
+        /*RectTransform temp = block.GetComponent<RectTransform>();
+
+        Vector3 test = new Vector3(temp.rect.x, temp.rect.y, 0);
+
+        Debug.Log(" X: " + test[0] + " Y:" + test[1]);
+
+        test = temp.TransformPoint(test);
+        
+        Debug.Log("WidthRatio: " + widthRatio + " HeightRatio: " + heightRatio + " X: " + test[0] + " Y:" + test[1] + " Playerx: " + initialPosition[0] + " Playery: " +initialPosition[1]);
+*/
+        calBlockXY();
         return 0;
+    }
+
+    private void calBlockXY(){
+        for(int i = 0; i < 24; i++){
+            allBlockRT[i] = allBlock[i].GetComponent<RectTransform>();
+            allBlockXY[i] = new Vector3(allBlockRT[i].rect.x, allBlockRT[i].rect.y, 0);
+            allBlockXY[i] = allBlockRT[i].TransformPoint(allBlockXY[i]);
+            Debug.Log("X: " + allBlockXY[i] + " Y: " + allBlockXY[i]);
+        }
     }
 }
