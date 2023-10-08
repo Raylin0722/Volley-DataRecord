@@ -11,6 +11,7 @@ public class dragPlayer : MonoBehaviour {
     [SerializeField] GameObject SelfScore;
     [SerializeField] GameObject EnemyScore;
 
+    [SerializeField] GameObject canvas;
 
     static int changePosition = 0; //更換位子變數判斷
 
@@ -22,18 +23,45 @@ public class dragPlayer : MonoBehaviour {
     static dealDB.Data[] saveData = new dealDB.Data[300];
     static int saveIndex = 0;
 
+    GraphicRaycaster m_Raycaster;
+    PointerEventData m_PointerEventData;
+    EventSystem m_EventSystem;
+
+    void Start(){
+        //Fetch the Raycaster from the GameObject (the Canvas)
+        m_Raycaster = canvas.GetComponent<GraphicRaycaster>();
+        //Fetch the Event System from the Scene
+        m_EventSystem = canvas.GetComponent<EventSystem>();
+    }
     private void OnMouseDown() {
         initialPosition = transform.position;
         difference = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position;
     }
     private void OnMouseDrag() {
         transform.position = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - difference;
+        //Debug.Log("test: " + transform.position.x + " " + transform.position.y)
     }
     private void OnMouseUp() {
         AfterDragPosition = transform.position;
         int mode = clickOrDrag();
+
+        //Set up the new Pointer Event
+        m_PointerEventData = new PointerEventData(m_EventSystem);
+        //Set the Pointer Event Position to that of the mouse position
+        m_PointerEventData.position = Input.mousePosition;
+
+        //Create a list of Raycast Results
+        List<RaycastResult> results = new List<RaycastResult>();
+
+        //Raycast using the Graphics Raycaster and mouse click position
+        m_Raycaster.Raycast(m_PointerEventData, results);
+
+        //For every result returned, output the name of the GameObject on the Canvas hit by the Ray
+        
+        Debug.Log("Hit " + results[results.Count - 1].gameObject.name);
+
         if(changePosition == 0){
-            int block = getBlock(AfterDragPosition);
+            int block = 0;
             //Debug.Log("mode: " + mode + " alreadAttack: " + alreadtAttack + " saveIndex: " + saveIndex);
             if(mode == 1 || mode == -1 && alreadtAttack){
                 saveData[saveIndex].formation = null;
@@ -112,36 +140,6 @@ public class dragPlayer : MonoBehaviour {
 
         return 0;
     }
-
-    [SerializeField] private GameObject[] allBlock;
-    private RectTransform[] allBlockRT = new RectTransform[24];
-    private Vector3[] allBlockXY;
-    //private float widthRatio = allBlock[0].GetComponent<RectTransform>().rect.width / 98, heightRatio =  allBlock[0].GetComponent<RectTransform>().rect.height / 93;
-
-    
-    private int getBlock(Vector3 position){
-        
-        
-        /*RectTransform temp = block.GetComponent<RectTransform>();
-
-        Vector3 test = new Vector3(temp.rect.x, temp.rect.y, 0);
-
-        Debug.Log(" X: " + test[0] + " Y:" + test[1]);
-
-        test = temp.TransformPoint(test);
-        
-        Debug.Log("WidthRatio: " + widthRatio + " HeightRatio: " + heightRatio + " X: " + test[0] + " Y:" + test[1] + " Playerx: " + initialPosition[0] + " Playery: " +initialPosition[1]);
-*/
-        calBlockXY();
-        return 0;
-    }
-
-    private void calBlockXY(){
-        for(int i = 0; i < 24; i++){
-            allBlockRT[i] = allBlock[i].GetComponent<RectTransform>();
-            allBlockXY[i] = new Vector3(allBlockRT[i].rect.x, allBlockRT[i].rect.y, 0);
-            allBlockXY[i] = allBlockRT[i].TransformPoint(allBlockXY[i]);
-            Debug.Log("X: " + allBlockXY[i] + " Y: " + allBlockXY[i]);
-        }
-    }
 }
+
+
