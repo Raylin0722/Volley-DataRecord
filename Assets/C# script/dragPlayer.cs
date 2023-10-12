@@ -19,27 +19,24 @@ public class dragPlayer : MonoBehaviour {
     [SerializeField] GameObject canvas;
 
     static int changePosition = 0; //更換位子變數判斷
-
-    static bool alreadtAttack = false;
-    private Vector3 initialPosition;
-    private Vector3 AfterDragPosition;
+    private Vector3 initialPosition; // 球員初始位置
+    private Vector3 AfterDragPosition; // 球員移動後位置
     Vector2 difference = Vector2.zero;
 
-    public static dealDB.Data[] saveData;
-    public static int saveIndex;
+    public static dealDB.Data[] saveData; // 儲存資料用
+    public static int saveIndex; // 儲存資料用
 
-    static int block;
+    static int block; // 儲存動作 block
 
-    GraphicRaycaster m_Raycaster;
-    PointerEventData m_PointerEventData;
-    EventSystem m_EventSystem;
+    GraphicRaycaster m_Raycaster; // 判斷block用
+    PointerEventData m_PointerEventData; // 判斷block用
+    EventSystem m_EventSystem; // 判斷block用
 
-    static int oldblock;
+    static int oldblock; // 更新block顏色用
 
-    static GameObject oldGameobject;
-
-    static Vector2 oldPoisition;
-    static float duringTime;
+    static GameObject oldGameobject; // 更新block顏色用
+    static Vector2 oldPoisition; // 判斷動作用
+    static float duringTime; // 判斷動作用
 
     void Start(){
         //Fetch the Raycaster from the GameObject (the Canvas)
@@ -50,7 +47,7 @@ public class dragPlayer : MonoBehaviour {
         saveIndex = 0;
         oldblock = -1;
         oldGameobject = null;
-        oldPoisition = new Vector2(0, 0);
+        oldPoisition = Vector2.zero;
         duringTime = 0f;
     }
     private void OnMouseDown() {
@@ -111,8 +108,7 @@ public class dragPlayer : MonoBehaviour {
             
             if(mode == dealDB.CATCH){
                 setData(null, block, -1, dealDB.CATCH);
-                
-                alreadtAttack = false;
+        
                 //Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " catch");
                 
             }
@@ -120,14 +116,12 @@ public class dragPlayer : MonoBehaviour {
                 setData(null, -1, block, dealDB.ATTACK);
 
                 //Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " attack");
-                alreadtAttack = true;
             }
             else if(mode == dealDB.SERVE){
                 setData(null, -1, block, dealDB.SERVE);
                 
                 //Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " serve");
 
-                alreadtAttack = true;
             }
             else if(mode == dealDB.BLOCK){
                 setData(null, -1, block, dealDB.BLOCK);
