@@ -70,7 +70,7 @@ public class dragPlayer : MonoBehaviour {
         //Debug.Log(results[results.Count - 1].gameObject.GetComponent<block>().blockID is int);
         
         
-        if(results.Count != 0){
+        if(results.Count != 0 && changePosition == 0){
             
             Color temp = results.Last().gameObject.GetComponent<Image>().color;
             temp.a = 255f;
@@ -92,9 +92,10 @@ public class dragPlayer : MonoBehaviour {
         //Debug.Log(results.Count);
     }
     private void OnMouseUp() {
+
         AfterDragPosition = transform.position;
         int mode = clickOrDrag();
-
+        Debug.Log(changePosition);
         if(changePosition == 0){
             
             //Debug.Log("mode: " + mode + " alreadAttack: " + alreadtAttack + " saveIndex: " + saveIndex);
@@ -104,26 +105,26 @@ public class dragPlayer : MonoBehaviour {
                 alreadtAttack = false;
 
                 
-                Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " catch");
+                //Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " catch");
                 
             }
             else if(mode == -1 && !alreadtAttack){
                 setData(null, -1, block, dealDB.ATTACK);
 
-                Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " attack");
+                //Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " attack");
                 alreadtAttack = true;
             }
             else if(mode == 2){
                 setData(null, -1, block, dealDB.SERVE);
                 
-                Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " serve");
+                //Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " serve");
 
                 alreadtAttack = true;
             }
             else if(mode == 3){
                 setData(null, -1, block, dealDB.BLOCK);
 
-                Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " serve");
+                //Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " serve");
             }   
             //Debug.Log(saveIndex);  
             transform.position = initialPosition;
