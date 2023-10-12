@@ -6,6 +6,8 @@ using UnityEngine.UI;
 using database;
 using System.Data;
 using Mono.Data.Sqlite;
+using System;
+using System.Linq;
 
 //int saveIndex = 0;
 
@@ -56,9 +58,16 @@ public class dragPlayer : MonoBehaviour {
         //Raycast using the Graphics Raycaster and mouse click position
         m_Raycaster.Raycast(m_PointerEventData, results);
 
-        //For every result returned, output the name of the GameObject on the Canvas hit by the Ray
-        
-        //Debug.Log("Hit " + results[results.Count - 1].gameObject.name);
+        //Debug.Log("Hit " + results[results.Count - 1].gameObject.tag);
+        //Debug.Log(results[results.Count - 1].gameObject.GetComponent<block>().blockID is int);
+       
+        if(results.Count != 0){
+            Color temp = results.Last().gameObject.GetComponent<Image>().color;
+            temp.a = 255f;
+            results.Last().gameObject.GetComponent<Image>().color = temp;
+            Debug.Log("Not found!");
+        }
+        //Debug.Log(results.Count);
     }
     private void OnMouseUp() {
         AfterDragPosition = transform.position;
@@ -68,34 +77,35 @@ public class dragPlayer : MonoBehaviour {
             int block = 0;
             //Debug.Log("mode: " + mode + " alreadAttack: " + alreadtAttack + " saveIndex: " + saveIndex);
             if(mode == 1 || mode == -1 && alreadtAttack){
-                setData(null, block, -1, playerName, dealDB.CATCH);
+                setData(null, block, -1, dealDB.CATCH);
                 
                 alreadtAttack = false;
 
                 
-                Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex].attackblock + " Catch: " + saveData[saveIndex].catchblock + " Situation: " + saveData[saveIndex].situation + " catch");
+                Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " catch");
                 
             }
             else if(mode == -1 && !alreadtAttack){
-                setData(null, -1, block, playerName, dealDB.ATTACK);
+                setData(null, -1, block, dealDB.ATTACK);
 
-                Debug.Log("formation: " + saveData[saveIndex].formation + " Role: " + saveData[saveIndex].role + " Round: " + saveData[saveIndex].round + " Attack: " + saveData[saveIndex].attackblock + " Catch: " + saveData[saveIndex].catchblock + " Situation: " + saveData[saveIndex].situation + " attack");
+                Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " attack");
                 alreadtAttack = true;
             }
             else if(mode == 2){
-                setData(null, -1, block, playerName, dealDB.SERVE);
+                setData(null, -1, block, dealDB.SERVE);
                 
-                Debug.Log("formation: " + saveData[saveIndex].formation + " Role: " + saveData[saveIndex].role + " Round: " + saveData[saveIndex].round + " Attack: " + saveData[saveIndex].attackblock + " Catch: " + saveData[saveIndex].catchblock + " Situation: " + saveData[saveIndex].situation + " serve");
+                Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " serve");
 
                 alreadtAttack = true;
             }
             else if(mode == 3){
-                setData(null, -1, block, playerName, dealDB.BLOCK);
+                setData(null, -1, block, dealDB.BLOCK);
 
-                Debug.Log("formation: " + saveData[saveIndex].formation + " Role: " + saveData[saveIndex].role + " Round: " + saveData[saveIndex].round + " Attack: " + saveData[saveIndex].attackblock + " Catch: " + saveData[saveIndex].catchblock + " Situation: " + saveData[saveIndex].situation + " serve");
+                Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " serve");
             }   
             //Debug.Log(saveIndex);  
             transform.position = initialPosition;
+            //Debug.Log(playerName);
         }
             
     }
@@ -122,11 +132,11 @@ public class dragPlayer : MonoBehaviour {
         return 0;
     }
 
-    private void setData(string formation, int catchBlock, int attackBlock, string role, int situation){
+    private void setData(string formation, int catchBlock, int attackBlock, int situation){
         saveData[saveIndex].formation = formation;
         saveData[saveIndex].catchblock = catchBlock;
         saveData[saveIndex].attackblock = attackBlock;
-        saveData[saveIndex].role = role;
+        saveData[saveIndex].role = playerName;
         saveData[saveIndex].round = SelfScore.GetComponent<RefreshPoint>().Self_Score + EnemyScore.GetComponent<RefreshPoint>().Enemy_Score + 1;
         saveData[saveIndex].situation = situation;
         saveIndex++;

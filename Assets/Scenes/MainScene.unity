@@ -265,7 +265,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6246454134735780804, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: m_Name
-      value: EnemyPlayer (4)
+      value: Bplayer6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -420,7 +420,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6246454134735780804, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: m_Name
-      value: EnemyPlayer (5)
+      value: Bplayer1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -791,6 +791,11 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &89767942 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6985389947967242844, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
+  m_PrefabInstance: {fileID: 1792420953}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &102850679
 GameObject:
   m_ObjectHideFlags: 0
@@ -1043,7 +1048,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
   m_PrefabInstance: {fileID: 1086056311}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 493849245}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a7294d9149fd646ec92ce979a1da6958, type: 3}
@@ -1078,12 +1083,12 @@ RectTransform:
   m_LocalScale: {x: 4.07932, y: 4.07932, z: 4.07932}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 324208857}
-  - {fileID: 1944911636}
-  - {fileID: 938163627}
-  - {fileID: 1493411698}
-  - {fileID: 426714641}
   - {fileID: 146378580}
+  - {fileID: 938163627}
+  - {fileID: 1944911636}
+  - {fileID: 324208857}
+  - {fileID: 426714641}
+  - {fileID: 1493411698}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -3300,6 +3305,11 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &493849245 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6985389947967242844, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
+  m_PrefabInstance: {fileID: 1086056311}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &495462235
 GameObject:
   m_ObjectHideFlags: 0
@@ -3656,18 +3666,18 @@ MonoBehaviour:
   Enemy_Score_Text: {fileID: 43933714}
   Self_Serve: {fileID: 295465790}
   Enemy_Serve: {fileID: 732978794}
-  Self_Player1: {fileID: 0}
-  Self_Player2: {fileID: 0}
-  Self_Player3: {fileID: 0}
-  Self_Player4: {fileID: 0}
-  Self_Player5: {fileID: 0}
-  Self_Player6: {fileID: 0}
-  Enemy_Player1: {fileID: 0}
-  Enemy_Player2: {fileID: 0}
-  Enemy_Player3: {fileID: 0}
-  Enemy_Player4: {fileID: 0}
-  Enemy_Player5: {fileID: 0}
-  Enemy_Player6: {fileID: 0}
+  Self_Player1: {fileID: 493849245}
+  Self_Player2: {fileID: 1512382898}
+  Self_Player3: {fileID: 998208265}
+  Self_Player4: {fileID: 1886248336}
+  Self_Player5: {fileID: 89767942}
+  Self_Player6: {fileID: 1976822941}
+  Enemy_Player1: {fileID: 754452191}
+  Enemy_Player2: {fileID: 1121326184}
+  Enemy_Player3: {fileID: 1464556583}
+  Enemy_Player4: {fileID: 1005157243}
+  Enemy_Player5: {fileID: 1034553276}
+  Enemy_Player6: {fileID: 1281047164}
   whoServe: 0
   Sprite_tmp: {fileID: 0}
 --- !u!1 &624144570
@@ -3908,7 +3918,7 @@ PrefabInstance:
       objectReference: {fileID: 215616461}
     - target: {fileID: 6985389947967242844, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_Name
-      value: SelfPlayer (1)
+      value: Wplayer3
       objectReference: {fileID: 0}
     - target: {fileID: 7197761068637962010, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_Pivot.x
@@ -4960,7 +4970,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6246454134735780804, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: m_Name
-      value: EnemyPlayer (1)
+      value: Bplayer3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5315,7 +5325,7 @@ PrefabInstance:
       objectReference: {fileID: 215616461}
     - target: {fileID: 6985389947967242844, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_Name
-      value: SelfPlayer (2)
+      value: Wplayer2
       objectReference: {fileID: 0}
     - target: {fileID: 7197761068637962010, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_Pivot.x
@@ -5545,7 +5555,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
   m_PrefabInstance: {fileID: 904930761}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1512382898}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a7294d9149fd646ec92ce979a1da6958, type: 3}
@@ -5980,6 +5990,11 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &998208265 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6985389947967242844, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
+  m_PrefabInstance: {fileID: 711982175}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1004296432
 GameObject:
   m_ObjectHideFlags: 0
@@ -6736,7 +6751,7 @@ PrefabInstance:
       objectReference: {fileID: 215616461}
     - target: {fileID: 6985389947967242844, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_Name
-      value: SelfPlayer (5)
+      value: Wplayer1
       objectReference: {fileID: 0}
     - target: {fileID: 7197761068637962010, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_Pivot.x
@@ -6812,11 +6827,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7197761068637962010, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.42
+      value: -0.42000663
       objectReference: {fileID: 0}
     - target: {fileID: 7197761068637962010, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.31
+      value: 0.3099923
       objectReference: {fileID: 0}
     - target: {fileID: 7197761068637962010, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -8702,12 +8717,17 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
   m_PrefabInstance: {fileID: 2131454915}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1976822941}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a7294d9149fd646ec92ce979a1da6958, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1512382898 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6985389947967242844, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
+  m_PrefabInstance: {fileID: 904930761}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1514632830
 GameObject:
   m_ObjectHideFlags: 0
@@ -9176,7 +9196,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6246454134735780804, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: m_Name
-      value: EnemyPlayer (2)
+      value: Bplayer4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9648,7 +9668,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6246454134735780804, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: m_Name
-      value: EnemyPlayer (3)
+      value: Bplayer5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10311,7 +10331,7 @@ PrefabInstance:
       objectReference: {fileID: 215616461}
     - target: {fileID: 6985389947967242844, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_Name
-      value: SelfPlayer (4)
+      value: Wplayer5
       objectReference: {fileID: 0}
     - target: {fileID: 7197761068637962010, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_Pivot.x
@@ -10415,12 +10435,17 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
   m_PrefabInstance: {fileID: 1792420953}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 89767942}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a7294d9149fd646ec92ce979a1da6958, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1886248336 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6985389947967242844, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
+  m_PrefabInstance: {fileID: 1895868847}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1895868847
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10479,7 +10504,7 @@ PrefabInstance:
       objectReference: {fileID: 215616461}
     - target: {fileID: 6985389947967242844, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_Name
-      value: SelfPlayer
+      value: Wplayer4
       objectReference: {fileID: 0}
     - target: {fileID: 7197761068637962010, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_Pivot.x
@@ -10910,18 +10935,18 @@ MonoBehaviour:
   Enemy_Score_Text: {fileID: 441779036}
   Self_Serve: {fileID: 295465790}
   Enemy_Serve: {fileID: 732978794}
-  Self_Player1: {fileID: 0}
-  Self_Player2: {fileID: 0}
-  Self_Player3: {fileID: 0}
-  Self_Player4: {fileID: 0}
-  Self_Player5: {fileID: 0}
-  Self_Player6: {fileID: 0}
-  Enemy_Player1: {fileID: 0}
-  Enemy_Player2: {fileID: 0}
-  Enemy_Player3: {fileID: 0}
-  Enemy_Player4: {fileID: 0}
-  Enemy_Player5: {fileID: 0}
-  Enemy_Player6: {fileID: 0}
+  Self_Player1: {fileID: 493849245}
+  Self_Player2: {fileID: 1512382898}
+  Self_Player3: {fileID: 998208265}
+  Self_Player4: {fileID: 1886248336}
+  Self_Player5: {fileID: 89767942}
+  Self_Player6: {fileID: 1976822941}
+  Enemy_Player1: {fileID: 754452191}
+  Enemy_Player2: {fileID: 1121326184}
+  Enemy_Player3: {fileID: 1464556583}
+  Enemy_Player4: {fileID: 1005157243}
+  Enemy_Player5: {fileID: 1034553276}
+  Enemy_Player6: {fileID: 1281047164}
   whoServe: 0
   Sprite_tmp: {fileID: 0}
 --- !u!1 &1929569396
@@ -11023,12 +11048,17 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
   m_PrefabInstance: {fileID: 711982175}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 998208265}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a7294d9149fd646ec92ce979a1da6958, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1976822941 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6985389947967242844, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
+  m_PrefabInstance: {fileID: 2131454915}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2001325476
 GameObject:
   m_ObjectHideFlags: 0
@@ -11324,12 +11354,12 @@ RectTransform:
   m_LocalScale: {x: 4.07932, y: 4.07932, z: 4.07932}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 660225002}
   - {fileID: 2010558982}
   - {fileID: 861335376}
   - {fileID: 1160053106}
   - {fileID: 1353535896}
   - {fileID: 775943937}
-  - {fileID: 660225002}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -11457,7 +11487,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
   m_PrefabInstance: {fileID: 1895868847}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1886248336}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a7294d9149fd646ec92ce979a1da6958, type: 3}
@@ -11646,7 +11676,7 @@ PrefabInstance:
       objectReference: {fileID: 215616461}
     - target: {fileID: 6985389947967242844, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_Name
-      value: SelfPlayer (3)
+      value: Wplayer6
       objectReference: {fileID: 0}
     - target: {fileID: 7197761068637962010, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_Pivot.x
@@ -12008,7 +12038,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6246454134735780804, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: m_Name
-      value: EnemyPlayer
+      value: Bplayer2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
