@@ -10,15 +10,19 @@ using Mono.Data.Sqlite;
 //int saveIndex = 0;
 
 public class dragPlayer : MonoBehaviour {
-    [SerializeField] public string playerName;
+    [SerializeField] string playerName;
     [SerializeField] GameObject SelfScore;
     [SerializeField] GameObject EnemyScore;
+
     [SerializeField] GameObject canvas;
+
     static int changePosition = 0; //更換位子變數判斷
+
     static bool alreadtAttack = false;
     private Vector3 initialPosition;
     private Vector3 AfterDragPosition;
     Vector2 difference = Vector2.zero;
+
     public static dealDB.Data[] saveData;
     public static int saveIndex;
 
@@ -91,9 +95,9 @@ public class dragPlayer : MonoBehaviour {
                 Debug.Log("formation: " + saveData[saveIndex].formation + " Role: " + saveData[saveIndex].role + " Round: " + saveData[saveIndex].round + " Attack: " + saveData[saveIndex].attackblock + " Catch: " + saveData[saveIndex].catchblock + " Situation: " + saveData[saveIndex].situation + " serve");
             }   
             //Debug.Log(saveIndex);  
-
             transform.position = initialPosition;
         }
+            
     }
     public void startChangePosition() {
         changePosition = 1 - changePosition;

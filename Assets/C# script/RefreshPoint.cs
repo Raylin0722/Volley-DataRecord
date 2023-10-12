@@ -4,7 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class RefreshPoint : MonoBehaviour {
+
+
+public class RefreshPoint : MonoBehaviour
+{
     [SerializeField] int Self_Point;
     [SerializeField] Text Self_Point_Text;
     [SerializeField] int Enemy_Point;
@@ -15,18 +18,7 @@ public class RefreshPoint : MonoBehaviour {
     [SerializeField] Text Enemy_Score_Text;
     [SerializeField] GameObject Self_Serve;
     [SerializeField] GameObject Enemy_Serve;
-    [SerializeField] GameObject Self_Player1;
-    [SerializeField] GameObject Self_Player2;
-    [SerializeField] GameObject Self_Player3;
-    [SerializeField] GameObject Self_Player4;
-    [SerializeField] GameObject Self_Player5;
-    [SerializeField] GameObject Self_Player6;
-    [SerializeField] GameObject Enemy_Player1;
-    [SerializeField] GameObject Enemy_Player2;
-    [SerializeField] GameObject Enemy_Player3;
-    [SerializeField] GameObject Enemy_Player4;
-    [SerializeField] GameObject Enemy_Player5;
-    [SerializeField] GameObject Enemy_Player6;
+
     [SerializeField] int whoServe;// 0 unassign 1 left -1 right
 
     [SerializeField] GameObject dataScript;
@@ -78,7 +70,7 @@ public class RefreshPoint : MonoBehaviour {
         
     }
 
-    public void add_score() {//大比分
+    public void add_score(){//大比分
         //Debug.Log(Self_Point + " " + Enemy_Point);
         int winPoints = 25;
         if(Self_Score + Enemy_Score >= 4)
@@ -101,19 +93,19 @@ public class RefreshPoint : MonoBehaviour {
             changeSideServe();
             Enemy_Point = 0;
             Self_Point = 0;
-        } 
+        }
+
+        
     }
    
     public void changeServe(GameObject obj){
         if(obj.tag == "SelfPoint" && Enemy_Serve.activeSelf){
             Enemy_Serve.SetActive(false);
             Self_Serve.SetActive(true);
-            selfRotation();
         }
         else if(obj.tag == "EnemyPoint" && Self_Serve.activeSelf){
             Enemy_Serve.SetActive(true);
             Self_Serve.SetActive(false);
-            enemyRotation();
         }
     }
 
@@ -132,40 +124,6 @@ public class RefreshPoint : MonoBehaviour {
         }
         
     }
-    public Sprite Sprite_tmp;
-    string Name_tmp;
-    public void selfRotation() {
-        Sprite_tmp = Self_Player1.gameObject.GetComponent<SpriteRenderer>().sprite;
-        Self_Player1.gameObject.GetComponent<SpriteRenderer>().sprite = Self_Player2.gameObject.GetComponent<SpriteRenderer>().sprite;
-        Self_Player2.gameObject.GetComponent<SpriteRenderer>().sprite = Self_Player3.gameObject.GetComponent<SpriteRenderer>().sprite;
-        Self_Player3.gameObject.GetComponent<SpriteRenderer>().sprite = Self_Player4.gameObject.GetComponent<SpriteRenderer>().sprite;
-        Self_Player4.gameObject.GetComponent<SpriteRenderer>().sprite = Self_Player5.gameObject.GetComponent<SpriteRenderer>().sprite;
-        Self_Player5.gameObject.GetComponent<SpriteRenderer>().sprite = Self_Player6.gameObject.GetComponent<SpriteRenderer>().sprite;
-        Self_Player6.gameObject.GetComponent<SpriteRenderer>().sprite = Sprite_tmp;
+    
 
-        Name_tmp = Self_Player1.gameObject.GetComponent<dragPlayer>().playerName;
-        Self_Player1.gameObject.GetComponent<dragPlayer>().playerName = Self_Player2.gameObject.GetComponent<dragPlayer>().playerName;
-        Self_Player2.gameObject.GetComponent<dragPlayer>().playerName = Self_Player3.gameObject.GetComponent<dragPlayer>().playerName;
-        Self_Player3.gameObject.GetComponent<dragPlayer>().playerName = Self_Player4.gameObject.GetComponent<dragPlayer>().playerName;
-        Self_Player4.gameObject.GetComponent<dragPlayer>().playerName = Self_Player5.gameObject.GetComponent<dragPlayer>().playerName;
-        Self_Player5.gameObject.GetComponent<dragPlayer>().playerName = Self_Player6.gameObject.GetComponent<dragPlayer>().playerName;
-        Self_Player6.gameObject.GetComponent<dragPlayer>().playerName = Name_tmp;
-    }
-    public void enemyRotation() {
-        Sprite_tmp = Enemy_Player1.gameObject.GetComponent<SpriteRenderer>().sprite;
-        Enemy_Player1.gameObject.GetComponent<SpriteRenderer>().sprite = Enemy_Player2.gameObject.GetComponent<SpriteRenderer>().sprite;
-        Enemy_Player2.gameObject.GetComponent<SpriteRenderer>().sprite = Enemy_Player3.gameObject.GetComponent<SpriteRenderer>().sprite;
-        Enemy_Player3.gameObject.GetComponent<SpriteRenderer>().sprite = Enemy_Player4.gameObject.GetComponent<SpriteRenderer>().sprite;
-        Enemy_Player4.gameObject.GetComponent<SpriteRenderer>().sprite = Enemy_Player5.gameObject.GetComponent<SpriteRenderer>().sprite;
-        Enemy_Player5.gameObject.GetComponent<SpriteRenderer>().sprite = Enemy_Player6.gameObject.GetComponent<SpriteRenderer>().sprite;
-        Enemy_Player6.gameObject.GetComponent<SpriteRenderer>().sprite = Sprite_tmp;
-
-        Name_tmp = Enemy_Player1.gameObject.GetComponent<dragPlayer>().playerName;
-        Enemy_Player1.gameObject.GetComponent<dragPlayer>().playerName = Enemy_Player2.gameObject.GetComponent<dragPlayer>().playerName;
-        Enemy_Player2.gameObject.GetComponent<dragPlayer>().playerName = Enemy_Player3.gameObject.GetComponent<dragPlayer>().playerName;
-        Enemy_Player3.gameObject.GetComponent<dragPlayer>().playerName = Enemy_Player4.gameObject.GetComponent<dragPlayer>().playerName;
-        Enemy_Player4.gameObject.GetComponent<dragPlayer>().playerName = Enemy_Player5.gameObject.GetComponent<dragPlayer>().playerName;
-        Enemy_Player5.gameObject.GetComponent<dragPlayer>().playerName = Enemy_Player6.gameObject.GetComponent<dragPlayer>().playerName;
-        Enemy_Player6.gameObject.GetComponent<dragPlayer>().playerName = Name_tmp;
-    }
 }
