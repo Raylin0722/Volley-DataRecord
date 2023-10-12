@@ -38,6 +38,9 @@ public class dragPlayer : MonoBehaviour {
 
     static GameObject oldGameobject;
 
+    static Vector2 oldPoisition;
+    static float duringTime;
+
     void Start(){
         //Fetch the Raycaster from the GameObject (the Canvas)
         m_Raycaster = canvas.GetComponent<GraphicRaycaster>();
@@ -47,6 +50,8 @@ public class dragPlayer : MonoBehaviour {
         saveIndex = 0;
         oldblock = -1;
         oldGameobject = null;
+        oldPoisition = new Vector2(0, 0);
+        duringTime = 0f;
     }
     private void OnMouseDown() {
         initialPosition = transform.position;
@@ -83,35 +88,48 @@ public class dragPlayer : MonoBehaviour {
                 oldblock = block;
             }
         }
+
+        if(Math.Abs(transform.position.x - oldPoisition[0]) < 0.1f && Math.Abs(transform.position.y - oldPoisition[1]) < 0.01f){
+            duringTime += Time.deltaTime;
+        }
+        else{
+            oldPoisition = (Vector2)transform.position;
+            duringTime = 0f;
+        }
+
+        if(duringTime > 0.7f){
+            //這邊要把角色發光 找時間回來做
+        }
+        
     }
     private void OnMouseUp() {
-
+        //Debug.Log(duringTime);
         AfterDragPosition = transform.position;
         int mode = clickOrDrag();
         //Debug.Log(changePosition);
         if(changePosition == 0){
             
-            if(mode == 1 || mode == -1 && alreadtAttack){
+            if(mode == dealDB.CATCH){
                 setData(null, block, -1, dealDB.CATCH);
                 
                 alreadtAttack = false;
                 //Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " catch");
                 
             }
-            else if(mode == -1 && !alreadtAttack){
+            else if(mode == dealDB.ATTACK){
                 setData(null, -1, block, dealDB.ATTACK);
 
                 //Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " attack");
                 alreadtAttack = true;
             }
-            else if(mode == 2){
+            else if(mode == dealDB.SERVE){
                 setData(null, -1, block, dealDB.SERVE);
                 
                 //Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " serve");
 
                 alreadtAttack = true;
             }
-            else if(mode == 3){
+            else if(mode == dealDB.BLOCK){
                 setData(null, -1, block, dealDB.BLOCK);
 
                 //Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " serve");
@@ -122,6 +140,7 @@ public class dragPlayer : MonoBehaviour {
             Color revert = oldGameobject.GetComponent<Image>().color;
             revert.a = 0f;
             oldGameobject.GetComponent<Image>().color = revert;
+
         }
             
     }
@@ -129,21 +148,22 @@ public class dragPlayer : MonoBehaviour {
         changePosition = 1 - changePosition;
     }
     private int clickOrDrag() {
-        if(AfterDragPosition == initialPosition) { //click
-            //Debug.Log("點擊click");
-            return 1;
+        if(saveIndex == 0){ // serve
+            Debug.Log("serve");
+            return dealDB.SERVE;
         }
-        else  if(AfterDragPosition != initialPosition && saveIndex != 0){ //drag and not serve
-            //Debug.Log("拖曳drag");
-            return -1;
+        else if(duringTime < 0.7f && block != 8 && saveIndex != 0){ // catch
+            Debug.Log("catch");
+            return dealDB.CATCH;
         }
-        else if(AfterDragPosition != initialPosition && saveIndex == 0){ //serve
-            return 2;
+        else if(duringTime < 0.7f && block == 8){ // block
+            Debug.Log("block");
+            return dealDB.BLOCK;
         }
-        else if(AfterDragPosition != initialPosition && ( initialPosition[0] < 0 && AfterDragPosition[0] > 0 || initialPosition[0] > 0 && initialPosition[0] < 0 )){
-            return 3;
+        else if(duringTime >= 0.7f){ // atack
+            Debug.Log("attack");
+            return dealDB.ATTACK;
         }
-
         return 0;
     }
 
