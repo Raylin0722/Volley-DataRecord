@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+
+
 public class RefreshPoint : MonoBehaviour
 {
     [SerializeField] int Self_Point;
@@ -18,7 +20,9 @@ public class RefreshPoint : MonoBehaviour
     [SerializeField] GameObject Enemy_Serve;
 
     [SerializeField] int whoServe;// 0 unassign 1 left -1 right
-    
+
+    [SerializeField] GameObject dataScript;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,17 +37,14 @@ public class RefreshPoint : MonoBehaviour
         whoServe = 1;
         Self_Serve.SetActive(true);
         Enemy_Serve.SetActive(false);
+        
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-       
-    }
 
     public void add_point(){//小比分
         GameObject obj = EventSystem.current.currentSelectedGameObject;
         if(obj.tag == "SelfPoint"){
+            
             Self_Point++;
             if(Self_Point < 10){
                 Self_Point_Text.text = "0" + Self_Point.ToString();
@@ -66,6 +67,7 @@ public class RefreshPoint : MonoBehaviour
             add_score();
             
         }
+        
     }
 
     public void add_score(){//大比分
@@ -122,4 +124,6 @@ public class RefreshPoint : MonoBehaviour
         }
         
     }
+    
+
 }
