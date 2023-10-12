@@ -6,8 +6,6 @@ TagManager:
   tags:
   - SelfPoint
   - EnemyPoint
-  - sitePlan
-  - serveLeft
   layers:
   - Default
   - TransparentFX
