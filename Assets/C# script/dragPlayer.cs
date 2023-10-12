@@ -28,9 +28,15 @@ public class dragPlayer : MonoBehaviour {
     public static dealDB.Data[] saveData;
     public static int saveIndex;
 
+    static int block;
+
     GraphicRaycaster m_Raycaster;
     PointerEventData m_PointerEventData;
     EventSystem m_EventSystem;
+
+    static int oldblock;
+
+    static GameObject oldGameobject;
 
     void Start(){
         //Fetch the Raycaster from the GameObject (the Canvas)
@@ -39,6 +45,8 @@ public class dragPlayer : MonoBehaviour {
         m_EventSystem = canvas.GetComponent<EventSystem>();
         saveData = new dealDB.Data[300];
         saveIndex = 0;
+        oldblock = -1;
+        oldGameobject = null;
     }
     private void OnMouseDown() {
         initialPosition = transform.position;
@@ -60,12 +68,26 @@ public class dragPlayer : MonoBehaviour {
 
         //Debug.Log("Hit " + results[results.Count - 1].gameObject.tag);
         //Debug.Log(results[results.Count - 1].gameObject.GetComponent<block>().blockID is int);
-       
+        
+        
         if(results.Count != 0){
+            
             Color temp = results.Last().gameObject.GetComponent<Image>().color;
             temp.a = 255f;
             results.Last().gameObject.GetComponent<Image>().color = temp;
-            Debug.Log("Not found!");
+            block = results.Last().gameObject.GetComponent<block>().blockID;
+            if(oldblock == -1){
+                oldblock = block;
+                oldGameobject = results.Last().gameObject;
+            }
+            else if(oldblock != -1 && oldblock != block){
+                Color revert = oldGameobject.GetComponent<Image>().color;
+                revert.a = 0f;
+                oldGameobject.GetComponent<Image>().color = revert;
+
+                oldGameobject = results.Last().gameObject;
+                oldblock = block;
+            }
         }
         //Debug.Log(results.Count);
     }
@@ -74,7 +96,7 @@ public class dragPlayer : MonoBehaviour {
         int mode = clickOrDrag();
 
         if(changePosition == 0){
-            int block = 0;
+            
             //Debug.Log("mode: " + mode + " alreadAttack: " + alreadtAttack + " saveIndex: " + saveIndex);
             if(mode == 1 || mode == -1 && alreadtAttack){
                 setData(null, block, -1, dealDB.CATCH);
@@ -106,6 +128,9 @@ public class dragPlayer : MonoBehaviour {
             //Debug.Log(saveIndex);  
             transform.position = initialPosition;
             //Debug.Log(playerName);
+            Color revert = oldGameobject.GetComponent<Image>().color;
+            revert.a = 0f;
+            oldGameobject.GetComponent<Image>().color = revert;
         }
             
     }
