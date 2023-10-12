@@ -60,16 +60,10 @@ public class dragPlayer : MonoBehaviour {
         //Set the Pointer Event Position to that of the mouse position
         m_PointerEventData.position = Input.mousePosition;
 
-        //Create a list of Raycast Results
         List<RaycastResult> results = new List<RaycastResult>();
 
-        //Raycast using the Graphics Raycaster and mouse click position
         m_Raycaster.Raycast(m_PointerEventData, results);
 
-        //Debug.Log("Hit " + results[results.Count - 1].gameObject.tag);
-        //Debug.Log(results[results.Count - 1].gameObject.GetComponent<block>().blockID is int);
-        
-        
         if(results.Count != 0 && changePosition == 0){
             
             Color temp = results.Last().gameObject.GetComponent<Image>().color;
@@ -89,22 +83,18 @@ public class dragPlayer : MonoBehaviour {
                 oldblock = block;
             }
         }
-        //Debug.Log(results.Count);
     }
     private void OnMouseUp() {
 
         AfterDragPosition = transform.position;
         int mode = clickOrDrag();
-        Debug.Log(changePosition);
+        //Debug.Log(changePosition);
         if(changePosition == 0){
             
-            //Debug.Log("mode: " + mode + " alreadAttack: " + alreadtAttack + " saveIndex: " + saveIndex);
             if(mode == 1 || mode == -1 && alreadtAttack){
                 setData(null, block, -1, dealDB.CATCH);
                 
                 alreadtAttack = false;
-
-                
                 //Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " catch");
                 
             }
@@ -126,9 +116,9 @@ public class dragPlayer : MonoBehaviour {
 
                 //Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " serve");
             }   
-            //Debug.Log(saveIndex);  
+
             transform.position = initialPosition;
-            //Debug.Log(playerName);
+
             Color revert = oldGameobject.GetComponent<Image>().color;
             revert.a = 0f;
             oldGameobject.GetComponent<Image>().color = revert;
@@ -137,7 +127,6 @@ public class dragPlayer : MonoBehaviour {
     }
     public void startChangePosition() {
         changePosition = 1 - changePosition;
-        //Debug.Log(changePosition);
     }
     private int clickOrDrag() {
         if(AfterDragPosition == initialPosition) { //click
@@ -189,6 +178,12 @@ public class dragPlayer : MonoBehaviour {
             insertData(saveData[i]);
         }
         saveIndex = 0;
+    }
+
+    public void deletednewData(){
+        
+        if(saveIndex > 0)
+            saveIndex--;
     }
 
 }
