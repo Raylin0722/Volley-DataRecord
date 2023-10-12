@@ -4,7 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class RefreshPoint : MonoBehaviour {
+
+
+public class RefreshPoint : MonoBehaviour
+{
     [SerializeField] int Self_Point;
     [SerializeField] Text Self_Point_Text;
     [SerializeField] int Enemy_Point;
@@ -15,6 +18,7 @@ public class RefreshPoint : MonoBehaviour {
     [SerializeField] Text Enemy_Score_Text;
     [SerializeField] GameObject Self_Serve;
     [SerializeField] GameObject Enemy_Serve;
+
     [SerializeField] GameObject Self_Player1;
     [SerializeField] GameObject Self_Player2;
     [SerializeField] GameObject Self_Player3;
@@ -27,8 +31,9 @@ public class RefreshPoint : MonoBehaviour {
     [SerializeField] GameObject Enemy_Player4;
     [SerializeField] GameObject Enemy_Player5;
     [SerializeField] GameObject Enemy_Player6;
+
     [SerializeField] int whoServe;// 0 unassign 1 left -1 right
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,17 +48,14 @@ public class RefreshPoint : MonoBehaviour {
         whoServe = 1;
         Self_Serve.SetActive(true);
         Enemy_Serve.SetActive(false);
+        
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-       
-    }
 
     public void add_point(){//小比分
         GameObject obj = EventSystem.current.currentSelectedGameObject;
         if(obj.tag == "SelfPoint"){
+            
             Self_Point++;
             if(Self_Point < 10){
                 Self_Point_Text.text = "0" + Self_Point.ToString();
@@ -76,9 +78,10 @@ public class RefreshPoint : MonoBehaviour {
             add_score();
             
         }
+        
     }
 
-    public void add_score() {//大比分
+    public void add_score(){//大比分
         //Debug.Log(Self_Point + " " + Enemy_Point);
         int winPoints = 25;
         if(Self_Score + Enemy_Score >= 4)
@@ -101,7 +104,9 @@ public class RefreshPoint : MonoBehaviour {
             changeSideServe();
             Enemy_Point = 0;
             Self_Point = 0;
-        } 
+        }
+
+        
     }
    
     public void changeServe(GameObject obj){
@@ -132,6 +137,7 @@ public class RefreshPoint : MonoBehaviour {
         }
         
     }
+    
     public Sprite Sprite_tmp;
     string Name_tmp;
     public void selfRotation() {
@@ -168,4 +174,5 @@ public class RefreshPoint : MonoBehaviour {
         Enemy_Player5.gameObject.GetComponent<dragPlayer>().playerName = Enemy_Player6.gameObject.GetComponent<dragPlayer>().playerName;
         Enemy_Player6.gameObject.GetComponent<dragPlayer>().playerName = Name_tmp;
     }
+
 }
