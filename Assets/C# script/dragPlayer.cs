@@ -37,6 +37,8 @@ public class dragPlayer : MonoBehaviour {
     static GameObject oldGameobject; // 更新block顏色用
     static Vector2 oldPoisition; // 判斷動作用
     static float duringTime; // 判斷動作用
+    public RectTransform content;
+    private Text LogText;
 
     void Start(){
         //Fetch the Raycaster from the GameObject (the Canvas)
@@ -134,9 +136,9 @@ public class dragPlayer : MonoBehaviour {
             Color revert = oldGameobject.GetComponent<Image>().color;
             revert.a = 0f;
             oldGameobject.GetComponent<Image>().color = revert;
-
+            GenerateLogTable();
         }
-            
+        
     }
     public void startChangePosition() {
         changePosition = 1 - changePosition;
@@ -188,18 +190,45 @@ public class dragPlayer : MonoBehaviour {
     }
 
     public void dealData(){
+        LogText = content.GetComponent<Text>();
         for(int i = 0; i < saveIndex; i++){
             insertData(saveData[i]);
+        }
+        GameObject obj = EventSystem.current.currentSelectedGameObject;
+        if(obj.tag == "SelfPoint"){
+            LogText.text += "Self Score\n";
+        }
+        else if(obj.tag == "EnemyPoint"){
+            LogText.text += "Enemy Score\n";
         }
         saveIndex = 0;
     }
 
     public void deletednewData(){
-        
         if(saveIndex > 0)
             saveIndex--;
+        GenerateLogTable();
     }
 
+    public void GenerateLogTable(){
+        LogText = content.GetComponent<Text>();
+        LogText.text = "";
+        for(int i = 0;i < saveIndex;i++){
+            if(saveData[i].situation == 0){
+                LogText.text += $"Round:{saveData[i].round}, {saveData[i].role}:, Situation: CATCHING\n";
+            }
+            else if(saveData[i].situation == 1){
+                LogText.text += $"Round:{saveData[i].round}, {saveData[i].role}:, Situation: SERVING\n";
+            }
+            else if(saveData[i].situation == 2){
+                LogText.text += $"Round:{saveData[i].round}, {saveData[i].role}:, Situation: ATTACKING\n";
+            }
+            else{
+                LogText.text += $"Round:{saveData[i].round}, {saveData[i].role}:, Situation: BLOCKING\n";
+            }
+        }
+        
+    }
 }
 
 

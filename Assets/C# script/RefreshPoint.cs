@@ -8,9 +8,9 @@ using UnityEngine.EventSystems;
 
 public class RefreshPoint : MonoBehaviour
 {
-    [SerializeField] int Self_Point;
+    [SerializeField] public int Self_Point;
     [SerializeField] Text Self_Point_Text;
-    [SerializeField] int Enemy_Point;
+    [SerializeField] public int Enemy_Point;
     [SerializeField] Text Enemy_Point_Text;
     [SerializeField] public int Self_Score;
     [SerializeField] Text Self_Score_Text;

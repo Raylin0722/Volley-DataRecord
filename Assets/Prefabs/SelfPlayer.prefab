@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 5
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 57b69f0754f9b42ce890477a8ebfe955, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -102,7 +102,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7294d9149fd646ec92ce979a1da6958, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  changePositionButton: {fileID: 0}
+  playerName: Wplayer1
+  SelfScore: {fileID: 0}
+  EnemyScore: {fileID: 0}
+  canvas: {fileID: 0}
+  content: {fileID: 0}
+  dbName: "URI=file:C:/Users/User/OneDrive - NTNU/\u6587\u4EF6/GitHub/Volley-DataRecord/Assetsdatabase.db"
 --- !u!58 &8993665480817957400
 CircleCollider2D:
   m_ObjectHideFlags: 0
