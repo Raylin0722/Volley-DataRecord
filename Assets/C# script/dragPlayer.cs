@@ -39,6 +39,14 @@ public class dragPlayer : MonoBehaviour {
     static float duringTime; // 判斷動作用
     public RectTransform content;
     private Text LogText;
+    private string datapath = Application.streamingAssetsPath;
+    private string name = "database.db";
+    public string dbName;
+
+    public string gameName;
+
+
+    
 
     void Start(){
         //Fetch the Raycaster from the GameObject (the Canvas)
@@ -51,6 +59,11 @@ public class dragPlayer : MonoBehaviour {
         oldGameobject = null;
         oldPoisition = Vector2.zero;
         duringTime = 0f;
+        dbName = System.IO.Path.Combine(datapath, name);
+    
+        dbName = "URI=file:" + dbName;
+        DateTime now = DateTime.Now;
+        gameName = now.ToString("yyyy_MM_dd");
     }
     private void OnMouseDown() {
         initialPosition = transform.position;
@@ -168,13 +181,14 @@ public class dragPlayer : MonoBehaviour {
         saveIndex++;
     }
 
-    public string dbName = "URI=file:database.db";
+    
+    
     public void insertData(dealDB.Data data){
         using(var connection = new SqliteConnection(dbName)){
             connection.Open();
 
             using (var command = connection.CreateCommand()){
-                command.CommandText = "INSERT INTO contestData (formation, round, role, attackblock, catchblock, situation, score) VALUES (\"" + data.formation + "\", " + 
+                command.CommandText = "INSERT INTO '" + gameName + "_contestData' (formation, round, role, attackblock, catchblock, situation, score) VALUES (\"" + data.formation + "\", " + 
                 data.round + ", \"" + data.role + "\", " + data.attackblock + ", " +
                 data.catchblock + "," + data.situation + ", " + data.score + ");";
                 command.ExecuteNonQuery();
