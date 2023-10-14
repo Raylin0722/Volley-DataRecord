@@ -39,9 +39,9 @@ public class dragPlayer : MonoBehaviour {
     static float duringTime; // 判斷動作用
     public RectTransform content;
     private Text LogText;
-    private string datapath = Application.streamingAssetsPath;
-    private string name = "database.db";
-    public string dbName;
+    private string SApath = Application.streamingAssetsPath;
+    private string dbName = "database.db";
+    public string databasePath;
 
     public string gameName;
 
@@ -59,9 +59,9 @@ public class dragPlayer : MonoBehaviour {
         oldGameobject = null;
         oldPoisition = Vector2.zero;
         duringTime = 0f;
-        dbName = System.IO.Path.Combine(datapath, name);
+        databasePath = System.IO.Path.Combine(SApath, dbName);
     
-        dbName = "URI=file:" + dbName;
+        databasePath = "URI=file:" + databasePath;
         DateTime now = DateTime.Now;
         gameName = now.ToString("yyyy_MM_dd");
     }
@@ -184,7 +184,7 @@ public class dragPlayer : MonoBehaviour {
     
     
     public void insertData(dealDB.Data data){
-        using(var connection = new SqliteConnection(dbName)){
+        using(var connection = new SqliteConnection(databasePath)){
             connection.Open();
 
             using (var command = connection.CreateCommand()){
@@ -198,17 +198,27 @@ public class dragPlayer : MonoBehaviour {
         }
     }
 
+    
     public void dealData(){
+        
         LogText = content.GetComponent<Text>();
-        for(int i = 0; i < saveIndex; i++){
-            insertData(saveData[i]);
-        }
+        
         GameObject obj = EventSystem.current.currentSelectedGameObject;
         if(obj.tag == "SelfPoint"){
             LogText.text += "Self Score\n";
+            if(saveIndex != 0){
+                saveData[saveIndex - 1].score = 1;
+            }
         }
         else if(obj.tag == "EnemyPoint"){
             LogText.text += "Enemy Score\n";
+            if(saveIndex != 0){
+                saveData[saveIndex - 1].score = -1;
+            }
+        }
+        for(int i = 0; i < saveIndex; i++){
+            insertData(saveData[i]);
+            
         }
         saveIndex = 0;
     }

@@ -36,21 +36,21 @@ namespace database
             }
 
         }
-        public string dbName;
-        private string datapath = Application.streamingAssetsPath;
-        private string name = "database.db";
+        public string databasePath;
+        private string SApath = Application.streamingAssetsPath;
+        private string dbName = "database.db";
 
         // Start is called before the first frame update
         void Start(){
             DateTime now = DateTime.Now;
             gameName = now.ToString("yyyy_MM_dd");
 
-            dbName = System.IO.Path.Combine(datapath, name);
-            Debug.Log(dbName);
-            dbName = "URI=file:" + dbName;
+            databasePath = System.IO.Path.Combine(SApath, dbName);
+            //Debug.Log(databasePath);
+            databasePath = "URI=file:" + databasePath;
             createDB();
             Data data = new Data(null,0, 0, null, 0, 0, 0, 0);
-            using(var connection = new SqliteConnection(dbName)){
+            using(var connection = new SqliteConnection(databasePath)){
                 connection.Open();
 
                 using (var command = connection.CreateCommand()){
@@ -67,7 +67,7 @@ namespace database
         
 
         public void createDB(){
-            using(var connection = new SqliteConnection(dbName)){
+            using(var connection = new SqliteConnection(databasePath)){
                 connection.Open();
 
                 using(var command = connection.CreateCommand()){
@@ -81,7 +81,7 @@ namespace database
         }
 
         public void displayData(){
-            using(var connection = new SqliteConnection(dbName)){
+            using(var connection = new SqliteConnection(databasePath)){
                 connection.Open();
                 using(var command = connection.CreateCommand()){
                     command.CommandText = "SELECT * FROM contestData;";
