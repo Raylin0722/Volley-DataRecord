@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Data;
 using Mono.Data.Sqlite;
+using System;
 
 namespace database
 {
@@ -12,6 +13,8 @@ namespace database
         public const int SERVE = 1;
         public const int ATTACK = 2;
         public const int BLOCK = 3;
+        
+        public string gameName;
         public struct Data{
             public string formation;
             public int index;
@@ -33,18 +36,32 @@ namespace database
             }
 
         }
-        public string dbName = "URI=file:"+ Application.dataPath + "database.db";
+        public string dbName;
+        private string datapath = Application.streamingAssetsPath;
+        private string name = "database.db";
 
         // Start is called before the first frame update
-        void Start()
-        {
+        void Start(){
+            DateTime now = DateTime.Now;
+            gameName = now.ToString("yyyy_MM_dd");
+
+            dbName = System.IO.Path.Combine(datapath, name);
+            Debug.Log(dbName);
+            dbName = "URI=file:" + dbName;
             createDB();
+            Data data = new Data(null,0, 0, null, 0, 0, 0, 0);
+            using(var connection = new SqliteConnection(dbName)){
+                connection.Open();
 
-            Data testing = new Data("a", 0, 1, "test", 1, 1, 1, 1);
-            //insertData(testing);
-            //insertData(testing);
+                using (var command = connection.CreateCommand()){
+                    command.CommandText = "INSERT INTO '" + gameName + "_contestData' (formation, round, role, attackblock, catchblock, situation, score) VALUES (\"" + data.formation + "\", " + 
+                    data.round + ", \"" + data.role + "\", " + data.attackblock + ", " +
+                    data.catchblock + "," + data.situation + ", " + data.score + ");";
+                    command.ExecuteNonQuery();
+                }
 
-            //displayData();
+                connection.Close();
+            }
         }
 
         
@@ -54,7 +71,8 @@ namespace database
                 connection.Open();
 
                 using(var command = connection.CreateCommand()){
-                    command.CommandText = "CREATE TABLE IF NOT EXISTS contestData (ballID INTEGER PRIMARY KEY AUTOINCREMENT, formation VARCHAR(50),  round INTEGER, role VARCHAR(50), attackblock INTEGER, catchblock INTEGER, situation INTEGER, score INTEGER)";
+                    command.CommandText = "CREATE TABLE IF NOT EXISTS '" + gameName + "_contestData' (ballID INTEGER PRIMARY KEY AUTOINCREMENT, formation VARCHAR(50),  round INTEGER, role VARCHAR(50), attackblock INTEGER, catchblock INTEGER, situation INTEGER, score INTEGER)";
+                    //Debug.Log(command.CommandText);
                     command.ExecuteNonQuery();
                 }
 

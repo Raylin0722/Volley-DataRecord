@@ -58,10 +58,9 @@ public class dragPlayer : MonoBehaviour {
     }
     private void OnMouseDrag() {
         transform.position = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - difference;
-        //Debug.Log("test: " + transform.position.x + " " + transform.position.y)
-        //Set up the new Pointer Event
+        
         m_PointerEventData = new PointerEventData(m_EventSystem);
-        //Set the Pointer Event Position to that of the mouse position
+
         m_PointerEventData.position = Input.mousePosition;
 
         List<RaycastResult> results = new List<RaycastResult>();
@@ -102,33 +101,29 @@ public class dragPlayer : MonoBehaviour {
         
     }
     private void OnMouseUp() {
-        //Debug.Log(duringTime);
+
         AfterDragPosition = transform.position;
         int mode = clickOrDrag();
-        //Debug.Log(changePosition);
+
         if(changePosition == 0){
             
             if(mode == dealDB.CATCH){
                 setData(null, block, -1, dealDB.CATCH);
         
-                //Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " catch");
-                
             }
             else if(mode == dealDB.ATTACK){
+               
                 setData(null, -1, block, dealDB.ATTACK);
 
-                //Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " attack");
             }
             else if(mode == dealDB.SERVE){
+                
                 setData(null, -1, block, dealDB.SERVE);
                 
-                //Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " serve");
-
             }
             else if(mode == dealDB.BLOCK){
+                
                 setData(null, -1, block, dealDB.BLOCK);
-
-                //Debug.Log("formation: " + saveData[saveIndex - 1].formation + " Role: " + saveData[saveIndex - 1].role + " Round: " + saveData[saveIndex - 1].round + " Attack: " + saveData[saveIndex - 1].attackblock + " Catch: " + saveData[saveIndex - 1].catchblock + " Situation: " + saveData[saveIndex - 1].situation + " serve");
             }   
 
             transform.position = initialPosition;
@@ -173,7 +168,7 @@ public class dragPlayer : MonoBehaviour {
         saveIndex++;
     }
 
-    public string dbName = "URI=file:"+ Application.dataPath + "database.db";
+    public string dbName = "URI=file:database.db";
     public void insertData(dealDB.Data data){
         using(var connection = new SqliteConnection(dbName)){
             connection.Open();
