@@ -72,9 +72,10 @@ public class dragPlayer : MonoBehaviour {
         difference = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position;
     }
     private void OnMouseDrag() {
+
+        PlayerSize = transform.localScale;
+
         transform.position = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - difference;
-        
-        
         
         m_PointerEventData = new PointerEventData(m_EventSystem);
 
@@ -114,7 +115,6 @@ public class dragPlayer : MonoBehaviour {
 
         if(duringTime > 0.7f){
             //這邊要把角色發光 找時間回來做
-            PlayerSize = transform.localScale;
             Debug.Log(PlayerSize);
             transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
         }
