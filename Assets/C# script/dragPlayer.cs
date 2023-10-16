@@ -69,12 +69,11 @@ public class dragPlayer : MonoBehaviour {
     }
     private void OnMouseDown() {
         initialPosition = transform.position;
+        PlayerSize = transform.localScale;
+        //Debug.Log(PlayerSize);
         difference = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position;
     }
     private void OnMouseDrag() {
-
-        PlayerSize = transform.localScale;
-
         transform.position = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - difference;
         
         m_PointerEventData = new PointerEventData(m_EventSystem);
@@ -115,8 +114,8 @@ public class dragPlayer : MonoBehaviour {
 
         if(duringTime > 0.7f){
             //這邊要把角色發光 找時間回來做
-            Debug.Log(PlayerSize);
-            transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+            //Debug.Log(PlayerSize);
+            transform.localScale = new Vector3(PlayerSize[0] * 2, PlayerSize[1] * 2, PlayerSize[2] * 2);
         }
     }
     private void OnMouseUp() {
@@ -142,6 +141,7 @@ public class dragPlayer : MonoBehaviour {
                 
                 setData(null, -1, block, dealDB.BLOCK);
             }   
+            Debug.Log(PlayerSize);
             transform.localScale = PlayerSize;
             transform.position = initialPosition;
             Color revert = oldGameobject.GetComponent<Image>().color;
@@ -237,16 +237,16 @@ public class dragPlayer : MonoBehaviour {
         LogText.text = "";
         for(int i = 0;i < saveIndex;i++){
             if(saveData[i].situation == 0){
-                LogText.text += $"Round:{saveData[i].round}, {saveData[i].role}:, Situation: CATCHING\n";
+                LogText.text += $"R{saveData[i].round}, {saveData[i].role}:, Situ: CATCHING\n";
             }
             else if(saveData[i].situation == 1){
-                LogText.text += $"Round:{saveData[i].round}, {saveData[i].role}:, Situation: SERVING\n";
+                LogText.text += $"R{saveData[i].round}, {saveData[i].role}:, Situ: SERVING\n";
             }
             else if(saveData[i].situation == 2){
-                LogText.text += $"Round:{saveData[i].round}, {saveData[i].role}:, Situation: ATTACKING\n";
+                LogText.text += $"R{saveData[i].round}, {saveData[i].role}:, Situ: ATTACKING\n";
             }
             else{
-                LogText.text += $"Round:{saveData[i].round}, {saveData[i].role}:, Situation: BLOCKING\n";
+                LogText.text += $"R{saveData[i].round}, {saveData[i].role}:, Situ: BLOCKING\n";
             }
         }
         
