@@ -30,7 +30,7 @@ RectTransform:
   m_GameObject: {fileID: 6246454134735780804}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.08902813, y: 0.08902813, z: 0.08902813}
+  m_LocalScale: {x: 0.09533452, y: 0.09533452, z: 0.09533452}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -109,7 +109,8 @@ MonoBehaviour:
   EnemyScore: {fileID: 0}
   canvas: {fileID: 0}
   content: {fileID: 0}
-  dbName: "URI=file:C:/Users/User/OneDrive - NTNU/\u6587\u4EF6/GitHub/Volley-DataRecord/Assetsdatabase.db"
+  databasePath: 
+  gameName: 
 --- !u!58 &8729495146485159591
 CircleCollider2D:
   m_ObjectHideFlags: 0

@@ -21,6 +21,7 @@ public class dragPlayer : MonoBehaviour {
     static int changePosition = 0; //更換位子變數判斷
     private Vector3 initialPosition; // 球員初始位置
     private Vector3 AfterDragPosition; // 球員移動後位置
+    public Vector3 PlayerSize; //球員大小
     Vector2 difference = Vector2.zero;
 
     public static dealDB.Data[] saveData; // 儲存資料用
@@ -45,6 +46,7 @@ public class dragPlayer : MonoBehaviour {
 
     public string gameName;
 
+  
 
     
 
@@ -71,6 +73,8 @@ public class dragPlayer : MonoBehaviour {
     }
     private void OnMouseDrag() {
         transform.position = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - difference;
+        
+        
         
         m_PointerEventData = new PointerEventData(m_EventSystem);
 
@@ -110,11 +114,12 @@ public class dragPlayer : MonoBehaviour {
 
         if(duringTime > 0.7f){
             //這邊要把角色發光 找時間回來做
+            PlayerSize = transform.localScale;
+            Debug.Log(PlayerSize);
+            transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
         }
-        
     }
     private void OnMouseUp() {
-
         AfterDragPosition = transform.position;
         int mode = clickOrDrag();
 
@@ -122,7 +127,6 @@ public class dragPlayer : MonoBehaviour {
             
             if(mode == dealDB.CATCH){
                 setData(null, block, -1, dealDB.CATCH);
-        
             }
             else if(mode == dealDB.ATTACK){
                
@@ -138,9 +142,8 @@ public class dragPlayer : MonoBehaviour {
                 
                 setData(null, -1, block, dealDB.BLOCK);
             }   
-
+            transform.localScale = PlayerSize;
             transform.position = initialPosition;
-
             Color revert = oldGameobject.GetComponent<Image>().color;
             revert.a = 0f;
             oldGameobject.GetComponent<Image>().color = revert;
