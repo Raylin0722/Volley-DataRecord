@@ -46,9 +46,6 @@ public class dragPlayer : MonoBehaviour {
 
     public string gameName;
 
-  
-
-    
 
     void Start(){
         //Fetch the Raycaster from the GameObject (the Canvas)
