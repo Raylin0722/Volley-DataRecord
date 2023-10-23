@@ -7,7 +7,10 @@ TagManager:
   - SelfPoint
   - EnemyPoint
   - sitePlan
-  - serveLeft
+  - serve
+  - block
+  - blocking
+  - outside
   layers:
   - Default
   - TransparentFX

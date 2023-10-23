@@ -20,11 +20,11 @@ namespace database
             public int index;
             public int round;
             public string role;
-            public int attackblock, catchblock, situation;
-            public int score;
+            public string attackblock, catchblock;
+            public int score, situation;
 
-            public Data(string formation, int index, int round, string role, int attackblock,
-                        int catchblock, int situation, int score){
+            public Data(string formation, int index, int round, string role, string attackblock,
+                        string catchblock, int situation, int score){
                 this.formation = formation;
                 this.index = index;
                 this.round = round;
@@ -49,19 +49,6 @@ namespace database
             //Debug.Log(databasePath);
             databasePath = "URI=file:" + databasePath;
             createDB();
-            Data data = new Data(null,0, 0, null, 0, 0, 0, 0);
-            using(var connection = new SqliteConnection(databasePath)){
-                connection.Open();
-
-                using (var command = connection.CreateCommand()){
-                    command.CommandText = "INSERT INTO '" + gameName + "_contestData' (formation, round, role, attackblock, catchblock, situation, score) VALUES (\"" + data.formation + "\", " + 
-                    data.round + ", \"" + data.role + "\", " + data.attackblock + ", " +
-                    data.catchblock + "," + data.situation + ", " + data.score + ");";
-                    command.ExecuteNonQuery();
-                }
-
-                connection.Close();
-            }
         }
 
         
@@ -71,7 +58,7 @@ namespace database
                 connection.Open();
 
                 using(var command = connection.CreateCommand()){
-                    command.CommandText = "CREATE TABLE IF NOT EXISTS '" + gameName + "_contestData' (ballID INTEGER PRIMARY KEY AUTOINCREMENT, formation VARCHAR(50),  round INTEGER, role VARCHAR(50), attackblock INTEGER, catchblock INTEGER, situation INTEGER, score INTEGER)";
+                    command.CommandText = "CREATE TABLE IF NOT EXISTS '" + gameName + "_contestData' (ballID INTEGER PRIMARY KEY AUTOINCREMENT, formation VARCHAR(50),  round INTEGER, role VARCHAR(50), attackblock VARCHAR(30), catchblock VARCHAR(30), situation INTEGER, score INTEGER)";
                     //Debug.Log(command.CommandText);
                     command.ExecuteNonQuery();
                 }

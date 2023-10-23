@@ -27,13 +27,14 @@ public class dragPlayer : MonoBehaviour {
     public static dealDB.Data[] saveData; // 儲存資料用
     public static int saveIndex; // 儲存資料用
 
-    static int block; // 儲存動作 block
+    static string block; // 儲存動作 block
+
+    static string blockTag;
+    static string oldblock; // 更新block顏色用
 
     GraphicRaycaster m_Raycaster; // 判斷block用
     PointerEventData m_PointerEventData; // 判斷block用
     EventSystem m_EventSystem; // 判斷block用
-
-    static int oldblock; // 更新block顏色用
 
     static GameObject oldGameobject; // 更新block顏色用
     static Vector2 oldPoisition; // 判斷動作用
@@ -54,7 +55,7 @@ public class dragPlayer : MonoBehaviour {
         m_EventSystem = canvas.GetComponent<EventSystem>();
         saveData = new dealDB.Data[300];
         saveIndex = 0;
-        oldblock = -1;
+        oldblock = null;
         oldGameobject = null;
         oldPoisition = Vector2.zero;
         duringTime = 0f;
@@ -81,21 +82,21 @@ public class dragPlayer : MonoBehaviour {
 
         m_Raycaster.Raycast(m_PointerEventData, results);
 
-        if(results.Count != 0 && changePosition == 0){
+        if(results.Count != 0 && changePosition == 0 && (results.Last().gameObject.tag == "block" || results.Last().gameObject.tag == "outside" || results.Last().gameObject.tag == "serve")){
             
             Color temp = results.Last().gameObject.GetComponent<Image>().color;
             temp.a = 255f;
             results.Last().gameObject.GetComponent<Image>().color = temp;
             block = results.Last().gameObject.GetComponent<block>().blockID;
-            if(oldblock == -1){
+            blockTag = results.Last().gameObject.tag;
+            if(oldblock == null){
                 oldblock = block;
                 oldGameobject = results.Last().gameObject;
             }
-            else if(oldblock != -1 && oldblock != block){
+            else if(oldblock != null && oldblock != block){
                 Color revert = oldGameobject.GetComponent<Image>().color;
                 revert.a = 0f;
                 oldGameobject.GetComponent<Image>().color = revert;
-
                 oldGameobject = results.Last().gameObject;
                 oldblock = block;
             }
@@ -109,7 +110,7 @@ public class dragPlayer : MonoBehaviour {
             duringTime = 0f;
         }
 
-        if(duringTime > 0.7f){
+        if(duringTime > 0.55f){
             //這邊要把角色發光 找時間回來做
             //Debug.Log(PlayerSize);
             transform.localScale = new Vector3(PlayerSize[0] * 2, PlayerSize[1] * 2, PlayerSize[2] * 2);
@@ -122,23 +123,23 @@ public class dragPlayer : MonoBehaviour {
         if(changePosition == 0){
             
             if(mode == dealDB.CATCH){
-                setData(null, block, -1, dealDB.CATCH);
+                setData(null, block, null, dealDB.CATCH);
             }
             else if(mode == dealDB.ATTACK){
                
-                setData(null, -1, block, dealDB.ATTACK);
+                setData(null, null, block, dealDB.ATTACK);
 
             }
             else if(mode == dealDB.SERVE){
                 
-                setData(null, -1, block, dealDB.SERVE);
+                setData(null, null, block, dealDB.SERVE);
                 
             }
             else if(mode == dealDB.BLOCK){
                 
-                setData(null, -1, block, dealDB.BLOCK);
+                setData(null, null, block, dealDB.BLOCK);
             }   
-            Debug.Log(PlayerSize);
+            //Debug.Log(PlayerSize);
             transform.localScale = PlayerSize;
             transform.position = initialPosition;
             Color revert = oldGameobject.GetComponent<Image>().color;
@@ -152,26 +153,27 @@ public class dragPlayer : MonoBehaviour {
         changePosition = 1 - changePosition;
     }
     private int clickOrDrag() {
+        Debug.Log(blockTag);
         if(saveIndex == 0){ // serve
-            Debug.Log("serve");
+            //Debug.Log("serve");
             return dealDB.SERVE;
         }
-        else if(duringTime < 0.7f && block != 8 && saveIndex != 0){ // catch
-            Debug.Log("catch");
+        else if(duringTime < 0.5f && blockTag != "blocking"){ // catch
+            //Debug.Log("catch");
             return dealDB.CATCH;
         }
-        else if(duringTime < 0.7f && block == 8){ // block
-            Debug.Log("block");
+        else if(duringTime < 0.5f && blockTag == "blocking"){ // block
+            //Debug.Log("block");
             return dealDB.BLOCK;
         }
-        else if(duringTime >= 0.7f){ // atack
-            Debug.Log("attack");
+        else if(duringTime >= 0.5f){ // atack
+            //Debug.Log("attack");
             return dealDB.ATTACK;
         }
         return 0;
     }
 
-    private void setData(string formation, int catchBlock, int attackBlock, int situation){
+    private void setData(string formation, string catchBlock, string attackBlock, int situation){
         saveData[saveIndex].formation = formation;
         saveData[saveIndex].catchblock = catchBlock;
         saveData[saveIndex].attackblock = attackBlock;
@@ -189,8 +191,9 @@ public class dragPlayer : MonoBehaviour {
 
             using (var command = connection.CreateCommand()){
                 command.CommandText = "INSERT INTO '" + gameName + "_contestData' (formation, round, role, attackblock, catchblock, situation, score) VALUES (\"" + data.formation + "\", " + 
-                data.round + ", \"" + data.role + "\", " + data.attackblock + ", " +
-                data.catchblock + "," + data.situation + ", " + data.score + ");";
+                data.round + ", \"" + data.role + "\", \"" + data.attackblock + "\",\"" +
+                data.catchblock + "\"," + data.situation + ", " + data.score + ");";
+                Debug.Log(command.CommandText);
                 command.ExecuteNonQuery();
             }
 
