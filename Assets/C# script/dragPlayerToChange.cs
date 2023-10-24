@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 public class dragPlayerToChange : MonoBehaviour {
-    private Vector3 initialPosition; // 球員初始位置
+    private Vector3 initialPosition;
     Vector2 difference = Vector2.zero;
     [SerializeField] GameObject allofPlayer;
     [SerializeField] string PlayerName;
@@ -12,16 +12,13 @@ public class dragPlayerToChange : MonoBehaviour {
     public void OnMouseDown() {
         initialPosition = transform.position;
         difference = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position;
-        Debug.Log("StartDrag");
     }
     public void OnMouseDrag() {
         transform.position = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - difference;
-        Debug.Log("OnDrag");
     }
     public void OnMouseUp() {
         checkPlayerToSwtich();
         transform.position = initialPosition;
-        Debug.Log("EndDrag");
     }
     [SerializeField] GameObject WPlayer1;
     [SerializeField] GameObject WPlayer2;
