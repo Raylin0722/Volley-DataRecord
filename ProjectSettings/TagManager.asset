@@ -3,7 +3,17 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
+<<<<<<< Updated upstream
   tags: []
+=======
+  tags:
+  - SelfPoint
+  - EnemyPoint
+  - sitePlan
+  - serveLeft
+  - AllofPlayer
+  - PlayerOnField
+>>>>>>> Stashed changes
   layers:
   - Default
   - TransparentFX
