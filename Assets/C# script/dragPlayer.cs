@@ -82,7 +82,7 @@ public class dragPlayer : MonoBehaviour {
 
         m_Raycaster.Raycast(m_PointerEventData, results);
 
-        if(results.Count != 0 && changePosition == 0 && (results.Last().gameObject.tag == "block" || results.Last().gameObject.tag == "outside" || results.Last().gameObject.tag == "serve")){
+        if(results.Count != 0 && changePosition == 0 && (results.Last().gameObject.tag == "block" || results.Last().gameObject.tag == "blocking" || results.Last().gameObject.tag == "outside" || results.Last().gameObject.tag == "serve")){
             
             Color temp = results.Last().gameObject.GetComponent<Image>().color;
             temp.a = 255f;
@@ -114,6 +114,9 @@ public class dragPlayer : MonoBehaviour {
             //這邊要把角色發光 找時間回來做
             //Debug.Log(PlayerSize);
             transform.localScale = new Vector3(PlayerSize[0] * 2, PlayerSize[1] * 2, PlayerSize[2] * 2);
+        }
+        else{
+            transform.localScale = PlayerSize;
         }
     }
     private void OnMouseUp() {
