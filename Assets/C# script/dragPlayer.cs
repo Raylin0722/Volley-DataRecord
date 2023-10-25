@@ -126,21 +126,21 @@ public class dragPlayer : MonoBehaviour {
         if(changePosition == 0){
             
             if(mode == dealDB.CATCH){
-                setData(null, block, null, dealDB.CATCH);
+                setData(null, block, null, dealDB.CATCH, 0);
             }
             else if(mode == dealDB.ATTACK){
                
-                setData(null, null, block, dealDB.ATTACK);
+                setData(null, null, block, dealDB.ATTACK, 0);
 
             }
             else if(mode == dealDB.SERVE){
                 
-                setData(null, null, block, dealDB.SERVE);
+                setData(null, null, block, dealDB.SERVE, 0);
                 
             }
             else if(mode == dealDB.BLOCK){
                 
-                setData(null, null, block, dealDB.BLOCK);
+                setData(null, null, block, dealDB.BLOCK, 0);
             }   
             //Debug.Log(PlayerSize);
             transform.localScale = PlayerSize;
@@ -176,13 +176,14 @@ public class dragPlayer : MonoBehaviour {
         return 0;
     }
 
-    private void setData(string formation, string catchBlock, string attackBlock, int situation){
+    private void setData(string formation, string catchBlock, string attackBlock, int situation, int score){
         saveData[saveIndex].formation = formation;
         saveData[saveIndex].catchblock = catchBlock;
         saveData[saveIndex].attackblock = attackBlock;
         saveData[saveIndex].role = playerName;
         saveData[saveIndex].round = SelfScore.GetComponent<RefreshPoint>().Self_Score + EnemyScore.GetComponent<RefreshPoint>().Enemy_Score + 1;
         saveData[saveIndex].situation = situation;
+        saveData[saveIndex].score = score;
         saveIndex++;
     }
 
