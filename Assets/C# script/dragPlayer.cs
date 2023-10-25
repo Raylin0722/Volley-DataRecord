@@ -102,21 +102,23 @@ public class dragPlayer : MonoBehaviour {
             }
         }
 
-        if(Math.Abs(transform.position.x - oldPoisition[0]) < 0.1f && Math.Abs(transform.position.y - oldPoisition[1]) < 0.01f){
-            duringTime += Time.deltaTime;
-        }
-        else{
-            oldPoisition = (Vector2)transform.position;
-            duringTime = 0f;
-        }
+        if(changePosition == 0){
+            if(Math.Abs(transform.position.x - oldPoisition[0]) < 0.1f && Math.Abs(transform.position.y - oldPoisition[1]) < 0.01f){
+                duringTime += Time.deltaTime;
+            }
+            else{
+                oldPoisition = (Vector2)transform.position;
+                duringTime = 0f;
+            }
 
-        if(duringTime > 0.55f){
-            //這邊要把角色發光 找時間回來做
-            //Debug.Log(PlayerSize);
-            transform.localScale = new Vector3(PlayerSize[0] * 2, PlayerSize[1] * 2, PlayerSize[2] * 2);
-        }
-        else{
-            transform.localScale = PlayerSize;
+            if(duringTime > 0.55f){
+                //這邊要把角色發光 找時間回來做
+                //Debug.Log(PlayerSize);
+                transform.localScale = new Vector3(PlayerSize[0] * 2, PlayerSize[1] * 2, PlayerSize[2] * 2);
+            }
+            else{
+                transform.localScale = PlayerSize;
+            }
         }
     }
     private void OnMouseUp() {
