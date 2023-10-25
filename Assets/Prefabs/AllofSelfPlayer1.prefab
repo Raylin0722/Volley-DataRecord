@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6985389947967242844
+--- !u!1 &6419598609958621135
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,43 +8,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7197761068637962010}
-  - component: {fileID: 1327795846970972602}
-  - component: {fileID: 6505826943382900087}
-  - component: {fileID: 8993665480817957400}
+  - component: {fileID: 4445825568703991068}
+  - component: {fileID: 6159839144879315655}
+  - component: {fileID: 8875036895490034067}
+  - component: {fileID: 8410469840002714440}
   m_Layer: 0
-  m_Name: SelfPlayer
+  m_Name: AllofSelfPlayer1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &7197761068637962010
-RectTransform:
+  m_IsActive: 0
+--- !u!4 &4445825568703991068
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6985389947967242844}
+  m_GameObject: {fileID: 6419598609958621135}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_LocalPosition: {x: 316.77762, y: 582.19495, z: 0}
+  m_LocalScale: {x: 0.6140344, y: 0.6140344, z: 0.6140344}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.62, y: 2.61}
-  m_SizeDelta: {x: 1, y: 1}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!212 &1327795846970972602
+--- !u!212 &6159839144879315655
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6985389947967242844}
+  m_GameObject: {fileID: 6419598609958621135}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -78,8 +74,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
-  m_Sprite: {fileID: 21300000, guid: 57b69f0754f9b42ce890477a8ebfe955, type: 3}
+  m_SortingOrder: 6
+  m_Sprite: {fileID: 21300000, guid: 6edf87289ef8b054595a03130e44cdc2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -90,33 +86,13 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6505826943382900087
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6985389947967242844}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7294d9149fd646ec92ce979a1da6958, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerName: W01
-  SelfScore: {fileID: 0}
-  EnemyScore: {fileID: 0}
-  canvas: {fileID: 0}
-  PlayerSize: {x: 0, y: 0, z: 0}
-  content: {fileID: 0}
-  databasePath: 
-  gameName: 
---- !u!58 &8993665480817957400
+--- !u!58 &8875036895490034067
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6985389947967242844}
+  m_GameObject: {fileID: 6419598609958621135}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -142,6 +118,33 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.00004529953, y: 0.00003862381}
+  m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.49999997
+  m_Radius: 0.5
+--- !u!114 &8410469840002714440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6419598609958621135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0d8d2576f32a914ba1feadaae82a401, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allofPlayer: {fileID: 6419598609958621135}
+  PlayerName: 01
+  typeofPlayer: 0
+  WPlayer1: {fileID: 0}
+  WPlayer2: {fileID: 0}
+  WPlayer3: {fileID: 0}
+  WPlayer4: {fileID: 0}
+  WPlayer5: {fileID: 0}
+  WPlayer6: {fileID: 0}
+  BPlayer1: {fileID: 0}
+  BPlayer2: {fileID: 0}
+  BPlayer3: {fileID: 0}
+  BPlayer4: {fileID: 0}
+  BPlayer5: {fileID: 0}
+  BPlayer6: {fileID: 0}
