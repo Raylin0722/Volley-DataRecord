@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-
+using TMPro;
 
 
 public class RefreshPoint : MonoBehaviour
@@ -138,16 +138,16 @@ public class RefreshPoint : MonoBehaviour
         
     }
     
-    public Sprite Sprite_tmp;
+    public string text_tmp;
     string Name_tmp;
     public void selfRotation() {
-        Sprite_tmp = Self_Player1.gameObject.GetComponent<SpriteRenderer>().sprite;
-        Self_Player1.gameObject.GetComponent<SpriteRenderer>().sprite = Self_Player2.gameObject.GetComponent<SpriteRenderer>().sprite;
-        Self_Player2.gameObject.GetComponent<SpriteRenderer>().sprite = Self_Player3.gameObject.GetComponent<SpriteRenderer>().sprite;
-        Self_Player3.gameObject.GetComponent<SpriteRenderer>().sprite = Self_Player4.gameObject.GetComponent<SpriteRenderer>().sprite;
-        Self_Player4.gameObject.GetComponent<SpriteRenderer>().sprite = Self_Player5.gameObject.GetComponent<SpriteRenderer>().sprite;
-        Self_Player5.gameObject.GetComponent<SpriteRenderer>().sprite = Self_Player6.gameObject.GetComponent<SpriteRenderer>().sprite;
-        Self_Player6.gameObject.GetComponent<SpriteRenderer>().sprite = Sprite_tmp;
+        text_tmp = Self_Player1.gameObject.GetComponentInChildren<TextMeshPro>().text;
+        Self_Player1.gameObject.GetComponentInChildren<TextMeshPro>().text = Self_Player2.gameObject.GetComponentInChildren<TextMeshPro>().text;
+        Self_Player2.gameObject.GetComponentInChildren<TextMeshPro>().text = Self_Player3.gameObject.GetComponentInChildren<TextMeshPro>().text;
+        Self_Player3.gameObject.GetComponentInChildren<TextMeshPro>().text = Self_Player4.gameObject.GetComponentInChildren<TextMeshPro>().text;
+        Self_Player4.gameObject.GetComponentInChildren<TextMeshPro>().text = Self_Player5.gameObject.GetComponentInChildren<TextMeshPro>().text;
+        Self_Player5.gameObject.GetComponentInChildren<TextMeshPro>().text = Self_Player6.gameObject.GetComponentInChildren<TextMeshPro>().text;
+        Self_Player6.gameObject.GetComponentInChildren<TextMeshPro>().text = text_tmp;
 
         Name_tmp = Self_Player1.gameObject.GetComponent<dragPlayer>().playerName;
         Self_Player1.gameObject.GetComponent<dragPlayer>().playerName = Self_Player2.gameObject.GetComponent<dragPlayer>().playerName;
@@ -158,13 +158,13 @@ public class RefreshPoint : MonoBehaviour
         Self_Player6.gameObject.GetComponent<dragPlayer>().playerName = Name_tmp;
     }
     public void enemyRotation() {
-        Sprite_tmp = Enemy_Player1.gameObject.GetComponent<SpriteRenderer>().sprite;
-        Enemy_Player1.gameObject.GetComponent<SpriteRenderer>().sprite = Enemy_Player2.gameObject.GetComponent<SpriteRenderer>().sprite;
-        Enemy_Player2.gameObject.GetComponent<SpriteRenderer>().sprite = Enemy_Player3.gameObject.GetComponent<SpriteRenderer>().sprite;
-        Enemy_Player3.gameObject.GetComponent<SpriteRenderer>().sprite = Enemy_Player4.gameObject.GetComponent<SpriteRenderer>().sprite;
-        Enemy_Player4.gameObject.GetComponent<SpriteRenderer>().sprite = Enemy_Player5.gameObject.GetComponent<SpriteRenderer>().sprite;
-        Enemy_Player5.gameObject.GetComponent<SpriteRenderer>().sprite = Enemy_Player6.gameObject.GetComponent<SpriteRenderer>().sprite;
-        Enemy_Player6.gameObject.GetComponent<SpriteRenderer>().sprite = Sprite_tmp;
+        text_tmp = Enemy_Player1.gameObject.GetComponentInChildren<TextMeshPro>().text;
+        Enemy_Player1.gameObject.GetComponentInChildren<TextMeshPro>().text = Enemy_Player2.gameObject.GetComponentInChildren<TextMeshPro>().text;
+        Enemy_Player2.gameObject.GetComponentInChildren<TextMeshPro>().text = Enemy_Player3.gameObject.GetComponentInChildren<TextMeshPro>().text;
+        Enemy_Player3.gameObject.GetComponentInChildren<TextMeshPro>().text = Enemy_Player4.gameObject.GetComponentInChildren<TextMeshPro>().text;
+        Enemy_Player4.gameObject.GetComponentInChildren<TextMeshPro>().text = Enemy_Player5.gameObject.GetComponentInChildren<TextMeshPro>().text;
+        Enemy_Player5.gameObject.GetComponentInChildren<TextMeshPro>().text = Enemy_Player6.gameObject.GetComponentInChildren<TextMeshPro>().text;
+        Enemy_Player6.gameObject.GetComponentInChildren<TextMeshPro>().text = text_tmp;
 
         Name_tmp = Enemy_Player1.gameObject.GetComponent<dragPlayer>().playerName;
         Enemy_Player1.gameObject.GetComponent<dragPlayer>().playerName = Enemy_Player2.gameObject.GetComponent<dragPlayer>().playerName;

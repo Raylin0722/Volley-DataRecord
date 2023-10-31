@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 public class dragPlayerToChange : MonoBehaviour {
     private Vector3 initialPosition;
     Vector2 difference = Vector2.zero;
-    [SerializeField] GameObject allofPlayer;
     [SerializeField] string PlayerName;
     [SerializeField] int typeofPlayer;
     public void OnMouseDown() {
@@ -20,6 +20,7 @@ public class dragPlayerToChange : MonoBehaviour {
         checkPlayerToSwtich();
         transform.position = initialPosition;
     }
+    [SerializeField] GameObject allofPlayer;
     [SerializeField] GameObject WPlayer1;
     [SerializeField] GameObject WPlayer2;
     [SerializeField] GameObject WPlayer3;
@@ -77,7 +78,7 @@ public class dragPlayerToChange : MonoBehaviour {
         }
     }
     public void SwitchPlayerInfo(GameObject playertoSwitch) {
-        playertoSwitch.gameObject.GetComponent<SpriteRenderer>().sprite = allofPlayer.gameObject.GetComponent<SpriteRenderer>().sprite;
+        playertoSwitch.gameObject.GetComponentInChildren<TextMeshPro>().text = allofPlayer.gameObject.GetComponentInChildren<TextMeshPro>().text;
         playertoSwitch.gameObject.GetComponent<dragPlayer>().playerName = allofPlayer.gameObject.GetComponent<dragPlayerToChange>().PlayerName;
     }
 }
