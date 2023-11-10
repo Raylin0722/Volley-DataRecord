@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class ShowshowListPlayerObject : MonoBehaviour
 {
@@ -87,18 +89,30 @@ public class ShowshowListPlayerObject : MonoBehaviour
     }
     void showPlayer() {
         if(showSelfPlayer == 1) {
-            AllofSelfPlayer1.SetActive(true);
-            AllofSelfPlayer2.SetActive(true);
-            AllofSelfPlayer3.SetActive(true);
-            AllofSelfPlayer4.SetActive(true);
-            AllofSelfPlayer5.SetActive(true);
-            AllofSelfPlayer6.SetActive(true);
-            AllofSelfPlayer7.SetActive(true);
-            AllofSelfPlayer8.SetActive(true);
-            AllofSelfPlayer9.SetActive(true);
-            AllofSelfPlayer10.SetActive(true);
-            AllofSelfPlayer11.SetActive(true);
-            AllofSelfPlayer12.SetActive(true);
+            if(!string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[0,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[0,1]))
+                AllofSelfPlayer1.SetActive(true);
+            if(!string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[1,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[1,1]))
+                AllofSelfPlayer2.SetActive(true);
+            if(!string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[2,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[2,1]))
+                AllofSelfPlayer3.SetActive(true);
+            if(!string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[3,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[3,1]))
+                AllofSelfPlayer4.SetActive(true);
+            if(!string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[4,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[4,1]))
+                AllofSelfPlayer5.SetActive(true);
+            if(!string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[5,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[5,1]))
+                AllofSelfPlayer6.SetActive(true);
+            if(!string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[6,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[6,1]))
+                AllofSelfPlayer7.SetActive(true);
+            if(!string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[7,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[7,1]))
+                AllofSelfPlayer8.SetActive(true);
+            if(!string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[8,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[8,1]))
+                AllofSelfPlayer9.SetActive(true);
+            if(!string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[9,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[9,1]))
+                AllofSelfPlayer10.SetActive(true);
+            if(!string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[10,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[10,1]))
+                AllofSelfPlayer11.SetActive(true);
+            if(!string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[11,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[11,1]))
+                AllofSelfPlayer12.SetActive(true);
         }
         if(showSelfPlayer == 0) {
             AllofSelfPlayer1.SetActive(false);
@@ -115,18 +129,30 @@ public class ShowshowListPlayerObject : MonoBehaviour
             AllofSelfPlayer12.SetActive(false);
         }
         if(showEnemyPlayer == 1) {
-            AllofEnemyPlayer1.SetActive(true);
-            AllofEnemyPlayer2.SetActive(true);
-            AllofEnemyPlayer3.SetActive(true);
-            AllofEnemyPlayer4.SetActive(true);
-            AllofEnemyPlayer5.SetActive(true);
-            AllofEnemyPlayer6.SetActive(true);
-            AllofEnemyPlayer7.SetActive(true);
-            AllofEnemyPlayer8.SetActive(true);
-            AllofEnemyPlayer9.SetActive(true);
-            AllofEnemyPlayer10.SetActive(true);
-            AllofEnemyPlayer11.SetActive(true);
-            AllofEnemyPlayer12.SetActive(true);
+            if(!string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[0,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[0,1]))
+                AllofEnemyPlayer1.SetActive(true);
+            if(!string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[1,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[1,1]))
+                AllofEnemyPlayer2.SetActive(true);
+            if(!string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[2,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[2,1]))
+                AllofEnemyPlayer3.SetActive(true);
+            if(!string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[3,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[3,1]))
+                AllofEnemyPlayer4.SetActive(true);
+            if(!string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[4,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[4,1]))
+                AllofEnemyPlayer5.SetActive(true);
+            if(!string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[5,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[5,1]))
+                AllofEnemyPlayer6.SetActive(true);
+            if(!string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[6,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[6,1]))
+                AllofEnemyPlayer7.SetActive(true);
+            if(!string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[7,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[7,1]))
+                AllofEnemyPlayer8.SetActive(true);
+            if(!string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[8,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[8,1]))
+                AllofEnemyPlayer9.SetActive(true);
+            if(!string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[9,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[9,1]))
+                AllofEnemyPlayer10.SetActive(true);
+            if(!string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[10,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[10,1]))
+                AllofEnemyPlayer11.SetActive(true);
+            if(!string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[11,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[11,1]))
+                AllofEnemyPlayer12.SetActive(true);
         }
         if(showEnemyPlayer == 0) {
             AllofEnemyPlayer1.SetActive(false);

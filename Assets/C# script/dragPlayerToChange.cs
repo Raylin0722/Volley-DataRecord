@@ -7,7 +7,7 @@ using TMPro;
 public class dragPlayerToChange : MonoBehaviour {
     private Vector3 initialPosition;
     Vector2 difference = Vector2.zero;
-    [SerializeField] string PlayerName;
+    [SerializeField] public string PlayerName;
     [SerializeField] int typeofPlayer;
     public void OnMouseDown() {
         initialPosition = transform.position;
