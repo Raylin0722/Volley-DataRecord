@@ -81,4 +81,33 @@ public class dragPlayerToChange : MonoBehaviour {
         playertoSwitch.gameObject.GetComponentInChildren<TextMeshPro>().text = allofPlayer.gameObject.GetComponentInChildren<TextMeshPro>().text;
         playertoSwitch.gameObject.GetComponent<dragPlayer>().playerName = allofPlayer.gameObject.GetComponent<dragPlayerToChange>().PlayerName;
     }
+
+    void OnDisable(){
+        if(allofPlayer != null)
+            allofPlayer = null;
+        if(WPlayer1 != null)
+            WPlayer1 = null;
+        if(WPlayer2 != null)
+            WPlayer2 = null;
+        if(WPlayer3 != null)
+            WPlayer3 = null;
+        if(WPlayer4 != null)
+            WPlayer4 = null;
+        if(WPlayer5 != null)
+            WPlayer5 = null;
+        if(WPlayer6 != null)
+            WPlayer6 = null;
+        if(BPlayer1 != null)
+            BPlayer1 = null;
+        if(BPlayer2 != null)
+            BPlayer2 = null;
+        if(BPlayer3 != null)
+            BPlayer3 = null;
+        if(BPlayer4 != null)
+            BPlayer4 = null;
+        if(BPlayer5 != null)
+            BPlayer5 = null;
+        if(BPlayer6 != null)
+            BPlayer6 = null;
+    }
 }

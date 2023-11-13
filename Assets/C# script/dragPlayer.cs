@@ -3,29 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using database;
 using System.Data;
 using Mono.Data.Sqlite;
 using System;
 using System.Linq;
+using TMPro;
 
 //int saveIndex = 0;
 
 public class dragPlayer : MonoBehaviour {
-    [SerializeField] public string playerName;
     [SerializeField] GameObject SelfScore;
     [SerializeField] GameObject EnemyScore;
-
+    [SerializeField] GameObject database;
     [SerializeField] GameObject canvas;
+
+    [SerializeField] public string playerName;
 
     static int changePosition = 0; //更換位子變數判斷
     private Vector3 initialPosition; // 球員初始位置
     private Vector3 AfterDragPosition; // 球員移動後位置
     public Vector3 PlayerSize; //球員大小
     Vector2 difference = Vector2.zero;
-
-    public static dealDB.Data[] saveData; // 儲存資料用
-    public static int saveIndex; // 儲存資料用
 
     static string block; // 儲存動作 block
 
@@ -41,29 +39,25 @@ public class dragPlayer : MonoBehaviour {
     static float duringTime; // 判斷動作用
     public RectTransform content;
     private Text LogText;
-    private string SApath = Application.streamingAssetsPath;
-    private string dbName = "database.db";
-    public string databasePath;
 
-    public string gameName;
+    public dealDB.Data[] saveData;
+    public int[] saveIndex;
 
+    
 
     void Start(){
         //Fetch the Raycaster from the GameObject (the Canvas)
         m_Raycaster = canvas.GetComponent<GraphicRaycaster>();
         //Fetch the Event System from the Scene
         m_EventSystem = canvas.GetComponent<EventSystem>();
-        saveData = new dealDB.Data[300];
-        saveIndex = 0;
         oldblock = null;
         oldGameobject = null;
         oldPoisition = Vector2.zero;
         duringTime = 0f;
-        databasePath = System.IO.Path.Combine(SApath, dbName);
-    
-        databasePath = "URI=file:" + databasePath;
-        DateTime now = DateTime.Now;
-        gameName = now.ToString("yyyy_MM_dd");
+
+        saveIndex = database.GetComponent<dealDB>().saveIndex;
+        saveData = database.GetComponent<dealDB>().saveData;
+        
     }
     private void OnMouseDown() {
         initialPosition = transform.position;
@@ -112,8 +106,6 @@ public class dragPlayer : MonoBehaviour {
             }
 
             if(duringTime > 0.55f){
-                //這邊要把角色發光 找時間回來做
-                //Debug.Log(PlayerSize);
                 transform.localScale = new Vector3(PlayerSize[0] * 2, PlayerSize[1] * 2, PlayerSize[2] * 2);
             }
             else{
@@ -123,26 +115,35 @@ public class dragPlayer : MonoBehaviour {
     }
     private void OnMouseUp() {
         AfterDragPosition = transform.position;
+        string formationLeft = "", formationRight = "", formation = "";
+        TextMeshPro[] WPlayer = database.GetComponent<dealDB>().WPlayer;
+        TextMeshPro[] BPlayer = database.GetComponent<dealDB>().BPlayer;
+        for(int i = 0; i < 6; i++){
+            formationLeft += $"L{WPlayer[i].text} ";
+            formationRight += $"R{BPlayer[i].text} ";
+        }
+        formation = formationLeft + formationRight;
+        
         int mode = clickOrDrag();
 
         if(changePosition == 0){
             
             if(mode == dealDB.CATCH){
-                setData(null, block, null, dealDB.CATCH, 0);
+                setData(formation, block, null, dealDB.CATCH, 0);
             }
             else if(mode == dealDB.ATTACK){
                
-                setData(null, null, block, dealDB.ATTACK, 0);
+                setData(formation, null, block, dealDB.ATTACK, 0);
 
             }
             else if(mode == dealDB.SERVE){
                 
-                setData(null, null, block, dealDB.SERVE, 0);
+                setData(formation, null, block, dealDB.SERVE, 0);
                 
             }
             else if(mode == dealDB.BLOCK){
                 
-                setData(null, null, block, dealDB.BLOCK, 0);
+                setData(formation, null, block, dealDB.BLOCK, 0);
             }   
             //Debug.Log(PlayerSize);
             transform.localScale = PlayerSize;
@@ -159,7 +160,7 @@ public class dragPlayer : MonoBehaviour {
     }
     private int clickOrDrag() {
         Debug.Log(blockTag);
-        if(saveIndex == 0){ // serve
+        if(saveIndex[0] == 0){ // serve
             //Debug.Log("serve");
             return dealDB.SERVE;
         }
@@ -179,34 +180,16 @@ public class dragPlayer : MonoBehaviour {
     }
 
     private void setData(string formation, string catchBlock, string attackBlock, int situation, int score){
-        saveData[saveIndex].formation = formation;
-        saveData[saveIndex].catchblock = catchBlock;
-        saveData[saveIndex].attackblock = attackBlock;
-        saveData[saveIndex].role = playerName;
-        saveData[saveIndex].round = SelfScore.GetComponent<RefreshPoint>().Self_Score + EnemyScore.GetComponent<RefreshPoint>().Enemy_Score + 1;
-        saveData[saveIndex].situation = situation;
-        saveData[saveIndex].score = score;
-        saveIndex++;
+        
+        saveData[saveIndex[0]].formation = formation;
+        saveData[saveIndex[0]].catchblock = catchBlock;
+        saveData[saveIndex[0]].attackblock = attackBlock;
+        saveData[saveIndex[0]].role = playerName;
+        saveData[saveIndex[0]].round = SelfScore.GetComponent<RefreshPoint>().Self_Score + EnemyScore.GetComponent<RefreshPoint>().Enemy_Score + 1;
+        saveData[saveIndex[0]].situation = situation;
+        saveData[saveIndex[0]].score = score;
+        (saveIndex[0])++;
     }
-
-    
-    
-    public void insertData(dealDB.Data data){
-        using(var connection = new SqliteConnection(databasePath)){
-            connection.Open();
-
-            using (var command = connection.CreateCommand()){
-                command.CommandText = "INSERT INTO '" + gameName + "_contestData' (formation, round, role, attackblock, catchblock, situation, score) VALUES (\"" + data.formation + "\", " + 
-                data.round + ", \"" + data.role + "\", \"" + data.attackblock + "\",\"" +
-                data.catchblock + "\"," + data.situation + ", " + data.score + ");";
-                Debug.Log(command.CommandText);
-                command.ExecuteNonQuery();
-            }
-
-            connection.Close();
-        }
-    }
-
     
     public void dealData(){
         
@@ -215,33 +198,32 @@ public class dragPlayer : MonoBehaviour {
         GameObject obj = EventSystem.current.currentSelectedGameObject;
         if(obj.tag == "SelfPoint"){
             LogText.text += "Self Score\n";
-            if(saveIndex != 0){
-                saveData[saveIndex - 1].score = 1;
+            if(saveIndex[0] != 0){
+                saveData[saveIndex[0] - 1].score = 1;
             }
         }
         else if(obj.tag == "EnemyPoint"){
             LogText.text += "Enemy Score\n";
-            if(saveIndex != 0){
-                saveData[saveIndex - 1].score = -1;
+            if(saveIndex[0] != 0){
+                saveData[saveIndex[0] - 1].score = -1;
             }
         }
-        for(int i = 0; i < saveIndex; i++){
-            insertData(saveData[i]);
-            
+        for(int i = 0; i < saveIndex[0]; i++){
+            database.GetComponent<dealDB>().insertData(saveData[i]);
         }
-        saveIndex = 0;
+        saveIndex[0] = 0;
     }
 
     public void deletednewData(){
-        if(saveIndex > 0)
-            saveIndex--;
+        if(saveIndex[0] > 0)
+            (saveIndex[0])--;
         GenerateLogTable();
     }
 
     public void GenerateLogTable(){
         LogText = content.GetComponent<Text>();
         LogText.text = "";
-        for(int i = 0;i < saveIndex;i++){
+        for(int i = 0; i < saveIndex[0]; i++){
             if(saveData[i].situation == 0){
                 LogText.text += $"R{saveData[i].round}, {saveData[i].role}:, Situ: CATCHING\n";
             }
@@ -256,6 +238,23 @@ public class dragPlayer : MonoBehaviour {
             }
         }
         
+    }
+
+    void OnDisable() {
+        if (SelfScore != null) 
+            SelfScore = null;
+
+        if(EnemyScore != null)
+           EnemyScore = null;
+        
+        if(database != null)
+            database = null;
+        
+        if(canvas != null)
+           canvas = null; 
+
+        if(playerName != null)
+            playerName = null;    
     }
 }
 
