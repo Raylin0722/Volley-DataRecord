@@ -756,6 +756,7 @@ MonoBehaviour:
   Enemy_Player5: {fileID: 1034553276}
   Enemy_Player6: {fileID: 1281047164}
   whoServe: 0
+  setServe: 0
   text_tmp: 
 --- !u!1 &65014967
 GameObject:
@@ -2086,7 +2087,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u6575\u65B9\u5F97\u5206"
+  m_Text: "\u53F3\u65B9\u5F97\u5206"
 --- !u!222 &256427741
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4597,6 +4598,7 @@ MonoBehaviour:
   Enemy_Player5: {fileID: 1034553276}
   Enemy_Player6: {fileID: 1281047164}
   whoServe: 0
+  setServe: 0
   text_tmp: 
 --- !u!1 &443133503
 GameObject:
@@ -5812,6 +5814,7 @@ MonoBehaviour:
   Enemy_Player5: {fileID: 1034553276}
   Enemy_Player6: {fileID: 1281047164}
   whoServe: 0
+  setServe: 0
   text_tmp: 
 --- !u!1 &624144570
 GameObject:
@@ -5883,7 +5886,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u5DF1\u65B9\u5F97\u5206"
+  m_Text: "\u5DE6\u65B9\u5F97\u5206"
 --- !u!222 &624144573
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7604,7 +7607,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1973327731}
   m_HandleRect: {fileID: 1973327730}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 0.99999845
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -8556,7 +8559,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.0010098219, y: 0.006059658}
+  m_AnchoredPosition: {x: 0.0010098219, y: 0.0035266988}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &908573765
@@ -17956,6 +17959,7 @@ MonoBehaviour:
   Enemy_Player5: {fileID: 1034553276}
   Enemy_Player6: {fileID: 1281047164}
   whoServe: 0
+  setServe: 0
   text_tmp: 
 --- !u!1 &1929569396
 GameObject:
