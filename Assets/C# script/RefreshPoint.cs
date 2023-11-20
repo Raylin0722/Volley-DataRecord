@@ -33,6 +33,7 @@ public class RefreshPoint : MonoBehaviour
     [SerializeField] GameObject Enemy_Player6;
 
     [SerializeField] int whoServe;// 0 unassign 1 left -1 right
+    [SerializeField] int setServe;
 
     // Start is called before the first frame update
     void Start()
@@ -46,6 +47,7 @@ public class RefreshPoint : MonoBehaviour
         Enemy_Point_Text.text = "00";
         Enemy_Score_Text.text = "0";
         whoServe = 1;
+        setServe = 1;
         Self_Serve.SetActive(true);
         Enemy_Serve.SetActive(false);
         
@@ -124,20 +126,24 @@ public class RefreshPoint : MonoBehaviour
 
     public void changeSideServe(){
         //Debug.Log("Test");
-       
-        if(whoServe == 1){
-            Self_Serve.SetActive(false);
-            Enemy_Serve.SetActive(true);
-            whoServe = -1;
-        }
-        else if (whoServe == -1){
+        // setServe 1 -> left -1 -> right
+        if(setServe == 1){
             Self_Serve.SetActive(true);
             Enemy_Serve.SetActive(false);
             whoServe = 1;
         }
+        else if (setServe == -1){
+            Self_Serve.SetActive(false);
+            Enemy_Serve.SetActive(true);
+            whoServe = -1;
+        }
         
     }
     
+    public void playerTeamChange(){
+        
+    }
+
     public string text_tmp;
     string Name_tmp;
     public void selfRotation() {
