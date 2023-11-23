@@ -8296,42 +8296,46 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SelfTeamName: {fileID: 1749547469}
   EnemyTeamName: {fileID: 1261274001}
-  WP1: {fileID: 493849245}
-  WP2: {fileID: 1512382898}
-  WP3: {fileID: 998208265}
-  WP4: {fileID: 1886248336}
-  WP5: {fileID: 89767942}
-  WP6: {fileID: 1976822941}
-  BP1: {fileID: 754452191}
-  BP2: {fileID: 1121326184}
-  BP3: {fileID: 1464556583}
-  BP4: {fileID: 1005157243}
-  BP5: {fileID: 1034553276}
-  BP6: {fileID: 1281047164}
-  SP1: {fileID: 2061307091}
-  SP2: {fileID: 1952212676}
-  SP3: {fileID: 1977878313}
-  SP4: {fileID: 1207365156}
-  SP5: {fileID: 680837991}
-  SP6: {fileID: 1783463575}
-  SP7: {fileID: 1546506674}
-  SP8: {fileID: 2065864164}
-  SP9: {fileID: 1539521298}
-  SP10: {fileID: 893416130}
-  SP11: {fileID: 888306497}
-  SP12: {fileID: 367437050}
-  EP1: {fileID: 815146161}
-  EP2: {fileID: 288755823}
-  EP3: {fileID: 309778918}
-  EP4: {fileID: 1372198101}
-  EP5: {fileID: 1535070159}
-  EP6: {fileID: 214036559}
-  EP7: {fileID: 918464562}
-  EP8: {fileID: 323174298}
-  EP9: {fileID: 1318268751}
-  EP10: {fileID: 1591509793}
-  EP11: {fileID: 544253197}
-  EP12: {fileID: 904731651}
+  WP:
+  - {fileID: 493849245}
+  - {fileID: 1512382898}
+  - {fileID: 998208265}
+  - {fileID: 1886248336}
+  - {fileID: 89767942}
+  - {fileID: 1976822941}
+  BP:
+  - {fileID: 754452191}
+  - {fileID: 1121326184}
+  - {fileID: 1464556583}
+  - {fileID: 1005157243}
+  - {fileID: 1034553276}
+  - {fileID: 1281047164}
+  SP:
+  - {fileID: 2061307091}
+  - {fileID: 1952212676}
+  - {fileID: 1977878313}
+  - {fileID: 1207365156}
+  - {fileID: 680837991}
+  - {fileID: 1783463575}
+  - {fileID: 1546506674}
+  - {fileID: 2065864164}
+  - {fileID: 1539521298}
+  - {fileID: 893416130}
+  - {fileID: 888306497}
+  - {fileID: 367437050}
+  EP:
+  - {fileID: 815146161}
+  - {fileID: 288755823}
+  - {fileID: 309778918}
+  - {fileID: 1372198101}
+  - {fileID: 1535070159}
+  - {fileID: 214036559}
+  - {fileID: 918464562}
+  - {fileID: 323174298}
+  - {fileID: 1318268751}
+  - {fileID: 1591509793}
+  - {fileID: 544253197}
+  - {fileID: 904731651}
   WarningMessage: {fileID: 592153754}
 --- !u!1 &904731651 stripped
 GameObject:
@@ -8559,7 +8563,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.0010098219, y: 0.0035266988}
+  m_AnchoredPosition: {x: 0.0010098219, y: 0.0013904683}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &908573765
@@ -9210,30 +9214,32 @@ MonoBehaviour:
   List: {fileID: 979111765}
   ShowSelfPlayerButtom: {fileID: 1517734011}
   ShowEnemyPlayerButtom: {fileID: 1604503889}
-  AllofSelfPlayer1: {fileID: 2061307091}
-  AllofSelfPlayer2: {fileID: 1952212676}
-  AllofSelfPlayer3: {fileID: 1977878313}
-  AllofSelfPlayer4: {fileID: 1207365156}
-  AllofSelfPlayer5: {fileID: 680837991}
-  AllofSelfPlayer6: {fileID: 1783463575}
-  AllofSelfPlayer7: {fileID: 1546506674}
-  AllofSelfPlayer8: {fileID: 2065864164}
-  AllofSelfPlayer9: {fileID: 1539521298}
-  AllofSelfPlayer10: {fileID: 893416130}
-  AllofSelfPlayer11: {fileID: 888306497}
-  AllofSelfPlayer12: {fileID: 367437050}
-  AllofEnemyPlayer1: {fileID: 815146161}
-  AllofEnemyPlayer2: {fileID: 288755823}
-  AllofEnemyPlayer3: {fileID: 309778918}
-  AllofEnemyPlayer4: {fileID: 1372198101}
-  AllofEnemyPlayer5: {fileID: 1535070159}
-  AllofEnemyPlayer6: {fileID: 214036559}
-  AllofEnemyPlayer7: {fileID: 918464562}
-  AllofEnemyPlayer8: {fileID: 323174298}
-  AllofEnemyPlayer9: {fileID: 1318268751}
-  AllofEnemyPlayer10: {fileID: 1591509793}
-  AllofEnemyPlayer11: {fileID: 544253197}
-  AllofEnemyPlayer12: {fileID: 904731651}
+  AllofSelfPlayer:
+  - {fileID: 2061307091}
+  - {fileID: 1952212676}
+  - {fileID: 1977878313}
+  - {fileID: 1207365156}
+  - {fileID: 680837991}
+  - {fileID: 1783463575}
+  - {fileID: 1546506674}
+  - {fileID: 2065864164}
+  - {fileID: 1539521298}
+  - {fileID: 893416130}
+  - {fileID: 888306497}
+  - {fileID: 367437050}
+  AllofEnemyPlayer:
+  - {fileID: 815146161}
+  - {fileID: 288755823}
+  - {fileID: 309778918}
+  - {fileID: 1372198101}
+  - {fileID: 1535070159}
+  - {fileID: 214036559}
+  - {fileID: 918464562}
+  - {fileID: 323174298}
+  - {fileID: 1318268751}
+  - {fileID: 1591509793}
+  - {fileID: 544253197}
+  - {fileID: 904731651}
   showList: 0
   showSelfPlayer: 0
   showEnemyPlayer: 0

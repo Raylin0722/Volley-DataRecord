@@ -8,10 +8,7 @@ using TMPro;
 public class InsertInfo : MonoBehaviour
 {
     [SerializeField] Text SelfTeamName, EnemyTeamName;
-    [SerializeField] GameObject WP1, WP2, WP3, WP4, WP5, WP6; //self player on field
-    [SerializeField] GameObject BP1, BP2, BP3, BP4, BP5, BP6; //enemy player on field
-    [SerializeField] GameObject SP1, SP2, SP3, SP4, SP5, SP6, SP7, SP8, SP9, SP10, SP11, SP12; // all of self player
-    [SerializeField] GameObject EP1, EP2, EP3, EP4, EP5, EP6, EP7, EP8, EP9, EP10, EP11, EP12; // all of enemy player
+    [SerializeField] GameObject[] WP, BP, SP, EP; // self/enemy player on field, all of self/enemy player
     [SerializeField] GameObject WarningMessage;
     void Update() {
         int showWarningMessage = 0;
@@ -62,80 +59,18 @@ public class InsertInfo : MonoBehaviour
         DefaultNameforTesting();
         SelfTeamName.text = SaveAndLoadName.TeamName[0];
         EnemyTeamName.text = SaveAndLoadName.TeamName[1];
-        WP1.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.SelfPlayerInfo[0,0];
-        WP1.gameObject.GetComponent<dragPlayer>().playerName = SaveAndLoadName.SelfPlayerInfo[0,1];
-        WP2.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.SelfPlayerInfo[1,0];
-        WP2.gameObject.GetComponent<dragPlayer>().playerName = SaveAndLoadName.SelfPlayerInfo[1,1];
-        WP3.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.SelfPlayerInfo[2,0];
-        WP3.gameObject.GetComponent<dragPlayer>().playerName = SaveAndLoadName.SelfPlayerInfo[2,1];
-        WP4.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.SelfPlayerInfo[3,0];
-        WP4.gameObject.GetComponent<dragPlayer>().playerName = SaveAndLoadName.SelfPlayerInfo[3,1];
-        WP5.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.SelfPlayerInfo[4,0];
-        WP5.gameObject.GetComponent<dragPlayer>().playerName = SaveAndLoadName.SelfPlayerInfo[4,1];
-        WP6.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.SelfPlayerInfo[5,0];
-        WP6.gameObject.GetComponent<dragPlayer>().playerName = SaveAndLoadName.SelfPlayerInfo[5,1];
+        for(int i = 0;i < 6;i++) {
+            WP[i].gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.SelfPlayerInfo[i,0];
+            WP[i].gameObject.GetComponent<dragPlayer>().playerName = SaveAndLoadName.SelfPlayerInfo[i,1];
+            BP[i].gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.EnemyPlayerInfo[i,0];
+            BP[i].gameObject.GetComponent<dragPlayer>().playerName = SaveAndLoadName.EnemyPlayerInfo[i,1];
+        }
 
-        BP1.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.EnemyPlayerInfo[0,0];
-        BP1.gameObject.GetComponent<dragPlayer>().playerName = SaveAndLoadName.EnemyPlayerInfo[0,1];
-        BP2.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.EnemyPlayerInfo[1,0];
-        BP2.gameObject.GetComponent<dragPlayer>().playerName = SaveAndLoadName.EnemyPlayerInfo[1,1];
-        BP3.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.EnemyPlayerInfo[2,0];
-        BP3.gameObject.GetComponent<dragPlayer>().playerName = SaveAndLoadName.EnemyPlayerInfo[2,1];
-        BP4.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.EnemyPlayerInfo[3,0];
-        BP4.gameObject.GetComponent<dragPlayer>().playerName = SaveAndLoadName.EnemyPlayerInfo[3,1];
-        BP5.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.EnemyPlayerInfo[4,0];
-        BP5.gameObject.GetComponent<dragPlayer>().playerName = SaveAndLoadName.EnemyPlayerInfo[4,1];
-        BP6.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.EnemyPlayerInfo[5,0];
-        BP6.gameObject.GetComponent<dragPlayer>().playerName = SaveAndLoadName.EnemyPlayerInfo[5,1];
-
-        SP1.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.SelfPlayerInfo[0,0];
-        SP1.gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.SelfPlayerInfo[0,1];
-        SP2.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.SelfPlayerInfo[1,0];
-        SP2.gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.SelfPlayerInfo[1,1];
-        SP3.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.SelfPlayerInfo[2,0];
-        SP3.gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.SelfPlayerInfo[2,1];
-        SP4.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.SelfPlayerInfo[3,0];
-        SP4.gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.SelfPlayerInfo[3,1];
-        SP5.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.SelfPlayerInfo[4,0];
-        SP5.gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.SelfPlayerInfo[4,1];
-        SP6.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.SelfPlayerInfo[5,0];
-        SP6.gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.SelfPlayerInfo[5,1];
-        SP7.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.SelfPlayerInfo[6,0];
-        SP7.gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.SelfPlayerInfo[6,1];
-        SP8.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.SelfPlayerInfo[7,0];
-        SP8.gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.SelfPlayerInfo[7,1];
-        SP9.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.SelfPlayerInfo[8,0];
-        SP9.gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.SelfPlayerInfo[8,1];
-        SP10.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.SelfPlayerInfo[9,0];
-        SP10.gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.SelfPlayerInfo[9,1];
-        SP11.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.SelfPlayerInfo[10,0];
-        SP11.gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.SelfPlayerInfo[10,1];
-        SP12.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.SelfPlayerInfo[11,0];
-        SP12.gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.SelfPlayerInfo[11,1];
-
-        EP1.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.EnemyPlayerInfo[0,0];
-        EP1.gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.EnemyPlayerInfo[0,1];
-        EP2.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.EnemyPlayerInfo[1,0];
-        EP2.gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.EnemyPlayerInfo[1,1];
-        EP3.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.EnemyPlayerInfo[2,0];
-        EP3.gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.EnemyPlayerInfo[2,1];
-        EP4.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.EnemyPlayerInfo[3,0];
-        EP4.gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.EnemyPlayerInfo[3,1];
-        EP5.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.EnemyPlayerInfo[4,0];
-        EP5.gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.EnemyPlayerInfo[4,1];
-        EP6.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.EnemyPlayerInfo[5,0];
-        EP6.gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.EnemyPlayerInfo[5,1];
-        EP7.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.EnemyPlayerInfo[6,0];
-        EP7.gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.EnemyPlayerInfo[6,1];
-        EP8.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.EnemyPlayerInfo[7,0];
-        EP8.gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.EnemyPlayerInfo[7,1];
-        EP9.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.EnemyPlayerInfo[8,0];
-        EP9.gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.EnemyPlayerInfo[8,1];
-        EP10.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.EnemyPlayerInfo[9,0];
-        EP10.gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.EnemyPlayerInfo[9,1];
-        EP11.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.EnemyPlayerInfo[10,0];
-        EP11.gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.EnemyPlayerInfo[10,1];
-        EP12.gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.EnemyPlayerInfo[11,0];
-        EP12.gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.EnemyPlayerInfo[11,1];
+        for(int i = 0;i < 12;i++) {
+            SP[i].gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.SelfPlayerInfo[i,0];
+            SP[i].gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.SelfPlayerInfo[i,1];
+            EP[i].gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.EnemyPlayerInfo[i,0];
+            EP[i].gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.EnemyPlayerInfo[i,1];
+        }
     }
 }

@@ -4099,54 +4099,58 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SelfTeamName: {fileID: 366539556}
   EnemyTeamName: {fileID: 897130730}
-  SP1Number: {fileID: 1299495771}
-  SP2Number: {fileID: 1070903538}
-  SP3Number: {fileID: 1992108117}
-  SP4Number: {fileID: 1606475918}
-  SP5Number: {fileID: 1961751528}
-  SP6Number: {fileID: 1255455645}
-  SP7Number: {fileID: 1428929299}
-  SP8Number: {fileID: 1658696946}
-  SP9Number: {fileID: 777518945}
-  SP10Number: {fileID: 1873188490}
-  SP11Number: {fileID: 1636097917}
-  SP12Number: {fileID: 2011328092}
-  SP1Name: {fileID: 1205584993}
-  SP2Name: {fileID: 583891127}
-  SP3Name: {fileID: 1910095365}
-  SP4Name: {fileID: 1732369068}
-  SP5Name: {fileID: 571011538}
-  SP6Name: {fileID: 1620290836}
-  SP7Name: {fileID: 855768326}
-  SP8Name: {fileID: 2137535713}
-  SP9Name: {fileID: 2035420380}
-  SP10Name: {fileID: 792599711}
-  SP11Name: {fileID: 1091040236}
-  SP12Name: {fileID: 2014977850}
-  EP1Number: {fileID: 1860643309}
-  EP2Number: {fileID: 1700506018}
-  EP3Number: {fileID: 1368737417}
-  EP4Number: {fileID: 1373992267}
-  EP5Number: {fileID: 656122854}
-  EP6Number: {fileID: 2048190631}
-  EP7Number: {fileID: 1951248027}
-  EP8Number: {fileID: 1618861869}
-  EP9Number: {fileID: 1192984291}
-  EP10Number: {fileID: 1047844421}
-  EP11Number: {fileID: 1286976793}
-  EP12Number: {fileID: 2001819584}
-  EP1Name: {fileID: 605502862}
-  EP2Name: {fileID: 1123809131}
-  EP3Name: {fileID: 1460734884}
-  EP4Name: {fileID: 1781768607}
-  EP5Name: {fileID: 831648763}
-  EP6Name: {fileID: 1810827548}
-  EP7Name: {fileID: 2140840828}
-  EP8Name: {fileID: 1983540397}
-  EP9Name: {fileID: 1859385977}
-  EP10Name: {fileID: 1806753819}
-  EP11Name: {fileID: 1737474518}
-  EP12Name: {fileID: 1874228175}
+  SPNumber:
+  - {fileID: 1299495771}
+  - {fileID: 1070903538}
+  - {fileID: 1992108117}
+  - {fileID: 1606475918}
+  - {fileID: 1961751528}
+  - {fileID: 1255455645}
+  - {fileID: 1428929299}
+  - {fileID: 1658696946}
+  - {fileID: 777518945}
+  - {fileID: 1873188490}
+  - {fileID: 1636097917}
+  - {fileID: 2011328092}
+  SPName:
+  - {fileID: 1205584993}
+  - {fileID: 583891127}
+  - {fileID: 1910095365}
+  - {fileID: 1732369068}
+  - {fileID: 571011538}
+  - {fileID: 1620290836}
+  - {fileID: 855768326}
+  - {fileID: 2137535713}
+  - {fileID: 2035420380}
+  - {fileID: 792599711}
+  - {fileID: 1091040236}
+  - {fileID: 2014977850}
+  EPNumber:
+  - {fileID: 1860643309}
+  - {fileID: 1700506018}
+  - {fileID: 1368737417}
+  - {fileID: 1373992267}
+  - {fileID: 656122854}
+  - {fileID: 2048190631}
+  - {fileID: 1951248027}
+  - {fileID: 1618861869}
+  - {fileID: 1192984291}
+  - {fileID: 1047844421}
+  - {fileID: 1286976793}
+  - {fileID: 2001819584}
+  EPName:
+  - {fileID: 605502862}
+  - {fileID: 1123809131}
+  - {fileID: 1460734884}
+  - {fileID: 1781768607}
+  - {fileID: 831648763}
+  - {fileID: 1810827548}
+  - {fileID: 2140840828}
+  - {fileID: 1983540397}
+  - {fileID: 1859385977}
+  - {fileID: 1806753819}
+  - {fileID: 1737474518}
+  - {fileID: 1874228175}
 --- !u!1001 &997809863
 PrefabInstance:
   m_ObjectHideFlags: 0
