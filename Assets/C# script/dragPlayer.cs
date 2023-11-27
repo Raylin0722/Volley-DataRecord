@@ -185,7 +185,7 @@ public class dragPlayer : MonoBehaviour {
         saveData[saveIndex[0]].catchblock = catchBlock;
         saveData[saveIndex[0]].attackblock = attackBlock;
         saveData[saveIndex[0]].role = playerName;
-        saveData[saveIndex[0]].round = SelfScore.GetComponent<RefreshPoint>().Self_Score + EnemyScore.GetComponent<RefreshPoint>().Enemy_Score + 1;
+        saveData[saveIndex[0]].round = RefreshPoint.Self_Score + RefreshPoint.Enemy_Score + 1;
         saveData[saveIndex[0]].situation = situation;
         saveData[saveIndex[0]].score = score;
         (saveIndex[0])++;
@@ -224,20 +224,32 @@ public class dragPlayer : MonoBehaviour {
         LogText = content.GetComponent<Text>();
         LogText.text = "";
         for(int i = 0; i < saveIndex[0]; i++){
+            string roleColor = changeRoleColor(saveData[i].role);
             if(saveData[i].situation == 0){
-                LogText.text += $"R{saveData[i].round}, {saveData[i].role}:, Situ: CATCHING\n";
+                LogText.text += $"R{saveData[i].round}, <color={roleColor}>{saveData[i].role}</color>, Situ: CATCHING\n";
             }
             else if(saveData[i].situation == 1){
-                LogText.text += $"R{saveData[i].round}, {saveData[i].role}:, Situ: SERVING\n";
+                LogText.text += $"R{saveData[i].round}, <color={roleColor}>{saveData[i].role}</color>, Situ: SERVING\n";
             }
             else if(saveData[i].situation == 2){
-                LogText.text += $"R{saveData[i].round}, {saveData[i].role}:, Situ: ATTACKING\n";
+                LogText.text += $"R{saveData[i].round}, <color={roleColor}>{saveData[i].role}</color>, Situ: ATTACKING\n";
             }
             else{
-                LogText.text += $"R{saveData[i].round}, {saveData[i].role}:, Situ: BLOCKING\n";
+                LogText.text += $"R{saveData[i].round}, <color={roleColor}>{saveData[i].role}</color>, Situ: BLOCKING\n";
             }
         }
-        
+    }
+
+    public string changeRoleColor(string role_tmp) {
+        string color_tmp;
+        for(int i = 0;i < 12;i++) {
+            if(role_tmp == SaveAndLoadName.SelfPlayerInfo[i,1]) {
+                color_tmp = "red";
+                return color_tmp;
+            }
+        }
+        color_tmp = "blue";
+        return color_tmp;
     }
 
     void OnDisable() {
