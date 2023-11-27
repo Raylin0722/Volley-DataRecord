@@ -96,7 +96,7 @@ public class dragPlayer : MonoBehaviour {
         }
 
         if(changePosition == 0){
-            if(Math.Abs(transform.position.x - oldPoisition[0]) < 0.1f && Math.Abs(transform.position.y - oldPoisition[1]) < 0.01f){
+            if(Math.Abs(transform.position.x - oldPoisition[0]) < 0.3f && Math.Abs(transform.position.y - oldPoisition[1]) < 0.3f){
                 duringTime += Time.deltaTime;
             }
             else{
