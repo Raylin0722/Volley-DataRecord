@@ -10,7 +10,7 @@ public class InsertInfo : MonoBehaviour
     [SerializeField] Text SelfTeamName, EnemyTeamName;
     [SerializeField] GameObject[] WP, BP, SP, EP; // self/enemy player on field, all of self/enemy player
     [SerializeField] GameObject WarningMessage;
-    [SerializeField] public static int forTest = 0; //測試用 之後要刪
+    [SerializeField] public static bool forTest = false; //測試用 之後要刪
     void Update() {
         int showWarningMessage = 0;
         for(int i = 0;i < 6;i++) {
@@ -27,8 +27,8 @@ public class InsertInfo : MonoBehaviour
         else
             WarningMessage.SetActive(false);
     }
-    public void DefaultNameforTesting(int forTest) {
-        if(forTest != 0) {
+    public void DefaultNameforTesting() {
+        if(forTest) {
             return;
         }
         SaveAndLoadName.TeamName[0] = "預設A";
@@ -60,23 +60,31 @@ public class InsertInfo : MonoBehaviour
         SaveAndLoadName.EnemyPlayerInfo[5,1] = "Ll";
     }
     void Start() {
-        DefaultNameforTesting(forTest);
-        forTest = 1;
-        
+        DefaultNameforTesting();
+
         SelfTeamName.text = SaveAndLoadName.TeamName[0];
         EnemyTeamName.text = SaveAndLoadName.TeamName[1];
-        for(int i = 0;i < 6;i++) {
-            WP[i].gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.SelfPlayerInfo[i,Setting.showPlayer];
-            BP[i].gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.EnemyPlayerInfo[i,Setting.showPlayer];
-            WP[i].gameObject.GetComponent<dragPlayer>().playerName = SaveAndLoadName.SelfPlayerInfo[i,1];
-            BP[i].gameObject.GetComponent<dragPlayer>().playerName = SaveAndLoadName.EnemyPlayerInfo[i,1];
+
+        if(!forTest) {
+            for(int i = 0;i < 6;i++) {
+                WP[i].gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.SelfPlayerInfo[i,Setting.showPlayer];
+                BP[i].gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.EnemyPlayerInfo[i,Setting.showPlayer];
+                WP[i].gameObject.GetComponent<dragPlayer>().playerNum = SaveAndLoadName.SelfPlayerInfo[i,0];
+                BP[i].gameObject.GetComponent<dragPlayer>().playerNum = SaveAndLoadName.EnemyPlayerInfo[i,0];
+                WP[i].gameObject.GetComponent<dragPlayer>().playerName = SaveAndLoadName.SelfPlayerInfo[i,1];
+                BP[i].gameObject.GetComponent<dragPlayer>().playerName = SaveAndLoadName.EnemyPlayerInfo[i,1];
+            }
         }
 
         for(int i = 0;i < 12;i++) {
             SP[i].gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.SelfPlayerInfo[i,Setting.showPlayer];
             EP[i].gameObject.GetComponentInChildren<TextMeshPro>().text = SaveAndLoadName.EnemyPlayerInfo[i,Setting.showPlayer];
+            SP[i].gameObject.GetComponent<dragPlayerToChange>().PlayerNum = SaveAndLoadName.SelfPlayerInfo[i,0];
+            EP[i].gameObject.GetComponent<dragPlayerToChange>().PlayerNum = SaveAndLoadName.EnemyPlayerInfo[i,0];
             SP[i].gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.SelfPlayerInfo[i,1];
             EP[i].gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.EnemyPlayerInfo[i,1];
         }
+        
+        forTest = true;
     }
 }

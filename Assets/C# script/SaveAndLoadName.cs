@@ -9,7 +9,6 @@ public class SaveAndLoadName : MonoBehaviour
     [SerializeField] public static string[] TeamName = new string[2];
     [SerializeField] public static string[,] SelfPlayerInfo = new string[12, 2];
     [SerializeField] public static string[,] EnemyPlayerInfo = new string[12, 2];
-    
     [SerializeField] InputField SelfTeamName, EnemyTeamName;
     [SerializeField] InputField[] SPNumber;
     [SerializeField] InputField[] SPName;

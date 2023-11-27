@@ -652,7 +652,6 @@ GameObject:
   - component: {fileID: 43933713}
   - component: {fileID: 43933715}
   - component: {fileID: 43933714}
-  - component: {fileID: 43933716}
   m_Layer: 5
   m_Name: SelfScore
   m_TagString: Untagged
@@ -721,28 +720,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 43933712}
   m_CullTransparentMesh: 1
---- !u!114 &43933716
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 43933712}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67586d97240ad474e9b9ee67d02b351e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Self_Point_Text: {fileID: 1926665982}
-  Enemy_Point_Text: {fileID: 621324857}
-  Self_Score_Text: {fileID: 43933714}
-  Enemy_Score_Text: {fileID: 441779036}
-  Self_Team_Name: {fileID: 1749547469}
-  Enemy_Team_Name: {fileID: 1261274001}
-  Self_Player: []
-  Enemy_Player: []
-  Self_Serve: {fileID: 295465790}
-  Enemy_Serve: {fileID: 732978794}
 --- !u!1 &65014967
 GameObject:
   m_ObjectHideFlags: 0
@@ -2937,6 +2914,7 @@ MonoBehaviour:
   database: {fileID: 386398051}
   canvas: {fileID: 895018766}
   playerName: 
+  playerNum: 
   PlayerSize: {x: 0, y: 0, z: 0}
   content: {fileID: 908573764}
   saveIndex: 
@@ -4319,7 +4297,6 @@ GameObject:
   - component: {fileID: 441779035}
   - component: {fileID: 441779037}
   - component: {fileID: 441779036}
-  - component: {fileID: 441779038}
   m_Layer: 5
   m_Name: EnemyScore
   m_TagString: Untagged
@@ -4388,28 +4365,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 441779034}
   m_CullTransparentMesh: 1
---- !u!114 &441779038
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 441779034}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67586d97240ad474e9b9ee67d02b351e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Self_Point_Text: {fileID: 1926665982}
-  Enemy_Point_Text: {fileID: 621324857}
-  Self_Score_Text: {fileID: 43933714}
-  Enemy_Score_Text: {fileID: 441779036}
-  Self_Team_Name: {fileID: 0}
-  Enemy_Team_Name: {fileID: 0}
-  Self_Player: []
-  Enemy_Player: []
-  Self_Serve: {fileID: 295465790}
-  Enemy_Serve: {fileID: 732978794}
 --- !u!1 &443133503
 GameObject:
   m_ObjectHideFlags: 0
@@ -5521,7 +5476,6 @@ GameObject:
   - component: {fileID: 621324856}
   - component: {fileID: 621324858}
   - component: {fileID: 621324857}
-  - component: {fileID: 621324859}
   m_Layer: 5
   m_Name: EnemyPoints
   m_TagString: EnemyPoint
@@ -5590,28 +5544,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 621324855}
   m_CullTransparentMesh: 1
---- !u!114 &621324859
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 621324855}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67586d97240ad474e9b9ee67d02b351e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Self_Point_Text: {fileID: 1926665982}
-  Enemy_Point_Text: {fileID: 621324857}
-  Self_Score_Text: {fileID: 43933714}
-  Enemy_Score_Text: {fileID: 441779036}
-  Self_Team_Name: {fileID: 1749547469}
-  Enemy_Team_Name: {fileID: 1261274001}
-  Self_Player: []
-  Enemy_Player: []
-  Self_Serve: {fileID: 295465790}
-  Enemy_Serve: {fileID: 732978794}
 --- !u!1 &624144570
 GameObject:
   m_ObjectHideFlags: 0
@@ -7406,7 +7338,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1973327731}
   m_HandleRect: {fileID: 1973327730}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 0.99999845
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -8400,7 +8332,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.0010098219, y: 0.0060901754}
+  m_AnchoredPosition: {x: 0.0010098219, y: 0.0006275289}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &908573765
@@ -17696,7 +17628,6 @@ GameObject:
   - component: {fileID: 1926665981}
   - component: {fileID: 1926665983}
   - component: {fileID: 1926665982}
-  - component: {fileID: 1926665984}
   m_Layer: 5
   m_Name: SelfPoints
   m_TagString: SelfPoint
@@ -17765,28 +17696,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1926665980}
   m_CullTransparentMesh: 1
---- !u!114 &1926665984
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1926665980}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67586d97240ad474e9b9ee67d02b351e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Self_Point_Text: {fileID: 1926665982}
-  Enemy_Point_Text: {fileID: 621324857}
-  Self_Score_Text: {fileID: 43933714}
-  Enemy_Score_Text: {fileID: 441779036}
-  Self_Team_Name: {fileID: 1749547469}
-  Enemy_Team_Name: {fileID: 1261274001}
-  Self_Player: []
-  Enemy_Player: []
-  Self_Serve: {fileID: 295465790}
-  Enemy_Serve: {fileID: 732978794}
 --- !u!1 &1929569396
 GameObject:
   m_ObjectHideFlags: 0

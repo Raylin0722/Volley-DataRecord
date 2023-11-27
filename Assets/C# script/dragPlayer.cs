@@ -16,9 +16,8 @@ public class dragPlayer : MonoBehaviour {
     [SerializeField] GameObject EnemyScore;
     [SerializeField] GameObject database;
     [SerializeField] GameObject canvas;
-
     [SerializeField] public string playerName;
-
+    [SerializeField] public string playerNum;
     static int changePosition = 0; //更換位子變數判斷
     private Vector3 initialPosition; // 球員初始位置
     private Vector3 AfterDragPosition; // 球員移動後位置

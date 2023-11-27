@@ -8,6 +8,7 @@ public class dragPlayerToChange : MonoBehaviour {
     private Vector3 initialPosition;
     Vector2 difference = Vector2.zero;
     [SerializeField] public string PlayerName;
+    [SerializeField] public string PlayerNum;
     [SerializeField] int typeofPlayer;
     public void OnMouseDown() {
         initialPosition = transform.position;
@@ -79,6 +80,7 @@ public class dragPlayerToChange : MonoBehaviour {
     }
     public void SwitchPlayerInfo(GameObject playertoSwitch) {
         playertoSwitch.gameObject.GetComponentInChildren<TextMeshPro>().text = allofPlayer.gameObject.GetComponentInChildren<TextMeshPro>().text;
+        playertoSwitch.gameObject.GetComponent<dragPlayer>().playerNum = allofPlayer.gameObject.GetComponent<dragPlayerToChange>().PlayerNum;
         playertoSwitch.gameObject.GetComponent<dragPlayer>().playerName = allofPlayer.gameObject.GetComponent<dragPlayerToChange>().PlayerName;
     }
 

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ChangePositionButtonColor : MonoBehaviour{
     public GameObject button;
-    int changeColor = 0;
+    static int changeColor = 0;
     public void changeButtonColor() {
         changeColor = 1 - changeColor;
         if(changeColor == 1)
