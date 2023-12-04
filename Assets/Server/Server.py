@@ -22,7 +22,7 @@ config = {
 def index():
     return 'index'
 
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login():
     account = request.form.get("account")
     password = request.form.get("password")
@@ -41,7 +41,7 @@ def login():
     cur.close()
     cnx.close()
 
-@app.route("/register")
+@app.route("/register", methods=['GET', 'POST'])
 def register():
     account = request.form.get("account")
     password = request.form.get("password")
@@ -71,7 +71,7 @@ def register():
 
     return returnResult
 
-@app.route("/initDB")
+@app.route("/initDB", methods=['GET', 'POST'])
 def initDB():
     gameName = request.form.get("gameName")
     account = request.form.get("account")
@@ -99,6 +99,18 @@ def initDB():
         
     return resultReturn
     
-
+@app.route("/insertData", methods=['GET', 'POST'])
+def insertData():
+    data = request.get_json()
+    account = request.form.get("account")
+    gameName = request.form.get("gameName")
+    for i in range(len(data)):
+        print(data[i])
+    return "Test"
+   
+@app.route("/displayData", methods=['GET', 'POST'])
+def displayData():
+    ()
     
-    
+if __name__ == '__main__':
+    app.run(port=5000, debug=True)   

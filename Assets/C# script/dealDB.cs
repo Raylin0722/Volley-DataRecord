@@ -20,6 +20,8 @@ public class dealDB : MonoBehaviour
     public const int BLOCK = 3;
     
     public string gameName;
+    public string account;
+    public string hashPasswd;
     public struct Data{
         public string formation;
         public int index;
@@ -41,74 +43,60 @@ public class dealDB : MonoBehaviour
         }
 
     }
-    public Data[] saveData = new Data[300]; // 儲存資料用
-    public int[] saveIndex = new int[1]; // 儲存資料用
-    public string databasePath;
-    private string SApath = Application.streamingAssetsPath;
-    private string dbName = "database.db";
+    public class Return{
+        public bool success;
+    }
+    public Data[] saveData; // 儲存資料用
+    public int[] saveIndex; // 儲存資料用
+    public Data[] showData; // 顯示資料用
 
     // Start is called before the first frame update
     void Awake(){
-
         saveData = new Data[300]; // 儲存資料用
         saveIndex = new int[1]; // 儲存資料用
-
-        DateTime now = DateTime.Now;
-        gameName = now.ToString("yyyy_MM_dd");
-
-        databasePath = System.IO.Path.Combine(SApath, dbName);
-        //Debug.Log(databasePath);
-        databasePath = "URI=file:" + databasePath;
-        createDB();
     }
 
-    public void createDB(){
-        using(var connection = new SqliteConnection(databasePath)){
-            connection.Open();
+    public void CallinitDB(string gameName){
+        
+    }
 
-            using(var command = connection.CreateCommand()){
-                command.CommandText = "CREATE TABLE IF NOT EXISTS '" + gameName + "_contestData' (ballID INTEGER PRIMARY KEY AUTOINCREMENT, formation VARCHAR(50),  round INTEGER, role VARCHAR(50), attackblock VARCHAR(30), catchblock VARCHAR(30), situation INTEGER, score INTEGER)";
-                //Debug.Log(command.CommandText);
-                command.ExecuteNonQuery();
-            }
+    IEnumerator initDB(){
+        WWWForm form = new WWWForm();
+        form.AddField("gameName", gameName);
+        form.AddField("account", account);
 
-            connection.Close();
+        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/initDB", form);
+        yield return www.SendWebRequest();
+
+        Return result = new Return();
+
+        if(www.result == UnityWebRequest.Result.Success){
+            string response = www.downloadHandler.text;
+            result = JsonUtility.FromJson<Return>(response);
         }
+        else
+            result.success = false;
+
+        yield return result;
+
     }
 
     public void displayData(){
-        using(var connection = new SqliteConnection(databasePath)){
-            connection.Open();
-            using(var command = connection.CreateCommand()){
-                command.CommandText = "SELECT * FROM contestData;";
+        WWWForm form = new WWWForm();
+        form.AddField("gameName", gameName);
+        form.AddField("account", account);
 
-                using(IDataReader reader = command.ExecuteReader()){
-                    while(reader.Read()){
-                        Debug.Log("Index: " + reader["ballID"] + " Formation: " + reader["formation"] +  " Round: " + reader["round"] + " Role: " + reader["role"] + " Attackblock: " + reader["attackblock"] + " CatchBlock: " + reader["catchblock"] + " Situation: " + reader["situation"] + " Score: " + reader["score"] );
-                    }
+        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/displayData", form);
+        yield return www.SendWebRequest();
 
-                    reader.Close();
-                }
-            }
-
-            connection.Close();
+        if(www.result == UnityWebRequest.Result.Success){
+            string response = www.downloadHandler.text;
+            showData = JsonUtility.FromJson<Data[]>(response);
         }
     }
 
-    public void insertData(Data data){
-        using(var connection = new SqliteConnection(databasePath)){
-            connection.Open();
-
-            using (var command = connection.CreateCommand()){
-                command.CommandText = "INSERT INTO '" + gameName + "_contestData' (formation, round, role, attackblock, catchblock, situation, score) VALUES (\"" + data.formation + "\", " + 
-                data.round + ", \"" + data.role + "\", \"" + data.attackblock + "\",\"" +
-                data.catchblock + "\"," + data.situation + ", " + data.score + ");";
-                Debug.Log(command.CommandText);
-                command.ExecuteNonQuery();
-            }
-
-            connection.Close();
-        }
+    public void insertData(){
+        
     }
 
 }
