@@ -26,21 +26,18 @@ public class RefreshPoint : MonoBehaviour
     [SerializeField] public static int setServe = 0; //每回合發球方 0,1
     [SerializeField] public static Vector3[] Self_Player_Default_Position = new Vector3[6];
     [SerializeField] public static Vector3[] Enemy_Player_Default_Position = new Vector3[6];
-    [SerializeField] public static string[,] SelfPlayerCurrentPosition = new string[6, 2]; //場上球員紀錄
-    [SerializeField] public static string[,] EnemyPlayerCurrentPosition = new string[6, 2]; 
     // Start is called before the first frame update
-    void Start()
-    {
-        UpdatePointScore();
-        UpdatePlayerInfo();
-        //UpdateCurrentPosition();
+    void Start() {
+        getDefaultPosition();
         changeServe(0);
         changeSideServe();
-        getDefaultPosition();
         FirstTimeOpen = true;
     }
     void Update() {
-        playerPositionInfo();
+        if(Setting.serve_change == 1) {
+            changeSideServe();
+            Setting.serve_change = 0;
+        }
     }
     public void getDefaultPosition() {
         if(!FirstTimeOpen) {
@@ -50,32 +47,7 @@ public class RefreshPoint : MonoBehaviour
             }
         }
     }
-    public void UpdatePointScore() {
-        if(Self_Point < 10)
-            Self_Point_Text.text = "0" + Self_Point.ToString();
-        else
-            Self_Point_Text.text = Self_Point.ToString();
-        Self_Score_Text.text = Self_Score.ToString();
-
-        if(Enemy_Point < 10)
-            Enemy_Point_Text.text = "0" + Enemy_Point.ToString();
-        else
-            Enemy_Point_Text.text = Enemy_Point.ToString();
-        Enemy_Score_Text.text = Enemy_Score.ToString();
-    }
-    public void UpdatePlayerInfo() {
-        if(FirstTimeOpen == false)
-            return;
-        for(int i = 0;i < 6;i++) {
-            Self_Player[i].gameObject.GetComponentInChildren<TextMeshPro>().text = SelfPlayerCurrentPosition[i,Setting.showPlayer];
-            Enemy_Player[i].gameObject.GetComponentInChildren<TextMeshPro>().text = EnemyPlayerCurrentPosition[i,Setting.showPlayer];
-            Self_Player[i].gameObject.GetComponent<dragPlayer>().playerNum = SelfPlayerCurrentPosition[i,0];
-            Enemy_Player[i].gameObject.GetComponent<dragPlayer>().playerNum = EnemyPlayerCurrentPosition[i,0];
-            Self_Player[i].gameObject.GetComponent<dragPlayer>().playerName = SelfPlayerCurrentPosition[i,1];
-            Enemy_Player[i].gameObject.GetComponent<dragPlayer>().playerName = EnemyPlayerCurrentPosition[i,1];
-        }
-    }
-    public void add_point(){//小比分
+    public void add_point() {
         GameObject obj = EventSystem.current.currentSelectedGameObject;
         if(obj.tag == "SelfPoint"){
             Self_Point++;
@@ -102,8 +74,7 @@ public class RefreshPoint : MonoBehaviour
             add_score();   
         }
     }
-    public void add_score(){//大比分
-        //Debug.Log(Self_Point + " " + Enemy_Point);
+    public void add_score() {
         int winPoints = 25;
         if(Self_Score + Enemy_Score >= 4)
             winPoints = 15;
@@ -133,8 +104,6 @@ public class RefreshPoint : MonoBehaviour
     //whoWin -1,0,1
     //setServe 0,1
     public void changeServe(int whoWin) {
-        Debug.Log(whoWin);
-        Debug.Log(setServe);
         if(whoWin == 0) {
             if(setServe == 1)
                 Self_Serve.SetActive(false);
@@ -154,7 +123,6 @@ public class RefreshPoint : MonoBehaviour
             enemyRotation();
         }
     }
-
     public void changeSideServe() {
         if(Self_Point != 0 && Enemy_Point != 0)
             return;
@@ -203,14 +171,6 @@ public class RefreshPoint : MonoBehaviour
         Enemy_Player[5].gameObject.GetComponent<dragPlayer>().playerNum = Num_tmp;
         Enemy_Player[5].gameObject.GetComponent<dragPlayer>().playerName = Name_tmp;
     }
-    public void playerPositionInfo() {
-        for(int i = 0;i < 6;i++) {
-            SelfPlayerCurrentPosition[i,0] = Self_Player[i].gameObject.GetComponent<dragPlayer>().playerNum;
-            EnemyPlayerCurrentPosition[i,0] = Enemy_Player[i].gameObject.GetComponent<dragPlayer>().playerNum;
-            SelfPlayerCurrentPosition[i,1] = Self_Player[i].gameObject.GetComponent<dragPlayer>().playerName;
-            EnemyPlayerCurrentPosition[i,1] = Enemy_Player[i].gameObject.GetComponent<dragPlayer>().playerName;
-        }
-    }
     public void backToDefaultPosition(int side) { //-1,0,1
         if(side == -1 || side == 0) {
             for(int i = 0;i < 6;i++)
@@ -221,6 +181,7 @@ public class RefreshPoint : MonoBehaviour
                 Enemy_Player[i].transform.position = Enemy_Player_Default_Position[i];
         }
     }
+    public static int change_all = 0;
     public void changeAll() {
         string teamName = SaveAndLoadName.TeamName[0];
         SaveAndLoadName.TeamName[0] = SaveAndLoadName.TeamName[1];
@@ -261,5 +222,7 @@ public class RefreshPoint : MonoBehaviour
         string teamScore_tmp = Self_Score_Text.text;
         Self_Score_Text.text = Enemy_Score_Text.text;
         Enemy_Score_Text.text = teamScore_tmp;
+
+        change_all = 1;
     }
 }

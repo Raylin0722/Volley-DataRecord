@@ -5,19 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class openSettingScene : MonoBehaviour
 {
-    [SerializeField] string MainScene;
-    [SerializeField] string SetScene;
-    [SerializeField] string data;
+    [SerializeField] GameObject MainScene;
+    [SerializeField] GameObject SettingScene;
     public void showSetting() {
-        SceneManager.LoadScene(SetScene);
+        SettingScene.SetActive(true);
     }
     public void closeSetting() {
-        SceneManager.LoadScene(MainScene);
-    }
-    public void showData() {
-        SceneManager.LoadScene(data);
-    }
-    public void closeData() {
-        SceneManager.LoadScene(MainScene);
+        SettingScene.SetActive(false);
     }
 }

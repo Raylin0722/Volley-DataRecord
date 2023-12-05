@@ -9,16 +9,15 @@ public class Setting : MonoBehaviour
     [SerializeField] Button serveFirstGameButton;
     [SerializeField] public static int showPlayer = 0;
     [SerializeField] public static int whoServe = 0;
-    void Start() {
-        showPlayerButton.GetComponentInChildren<Text>().text = (showPlayer == 0) ? "背號" : "名字";
-        serveFirstGameButton.GetComponentInChildren<Text>().text = (whoServe == 0) ? "左方" : "右方";
-    }
+    [SerializeField] public static int show_change = 0, serve_change = 0;
     public void showPlayerNumName() {
         showPlayer = 1 - showPlayer;
         showPlayerButton.GetComponentInChildren<Text>().text = (showPlayer == 0) ? "背號" : "名字";
+        show_change = 1;
     }
     public void changeServeFirstGame() {
         whoServe = 1 - whoServe;
         serveFirstGameButton.GetComponentInChildren<Text>().text = (whoServe == 0) ? "左方" : "右方";
+        serve_change = 1;
     }
 }
