@@ -46,6 +46,7 @@ public class dealDB : MonoBehaviour
     }
     public class Return{
         public bool success;
+        public int situation;
     }
     public List<Data> saveData; // 儲存資料用 
     public List<Data> showData; // 顯示資料用
