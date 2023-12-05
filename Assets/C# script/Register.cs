@@ -24,11 +24,6 @@ public class Register : MonoBehaviour
         WarnMessage.text = "Account and passwords: English letters, numbers only, 8-16 characters";
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public void CallRegisterUser(){
         if(string.IsNullOrEmpty(accountField.text))
             WarnMessage.text = "Account can't be empty!";   
@@ -122,5 +117,8 @@ public class Register : MonoBehaviour
         }
     }
 
+    public void GoToMain(){
+        SceneManager.LoadScene("StartMenu");
+    }
 
 }
