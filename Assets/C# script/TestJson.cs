@@ -7,7 +7,8 @@ using System.Collections;
 
 public class MyScript : MonoBehaviour
 {
-
+    [SerializeField] GameObject text1;
+    [SerializeField] GameObject text2;
     public struct testData
     {
         public string formation;
@@ -32,19 +33,9 @@ public class MyScript : MonoBehaviour
     }
     void Start()
     {
-        // 创建 Data 数组
-        testData[] dataArray = new testData[]
-        {
-            new testData("Formation1", 1, 2, "Role1", "Attack1", "Catch1", 3, 100),
-            new testData("Formation2", 2, 3, "Role2", "Attack2", "Catch2", 4, 150)
-            // 可以添加更多 Data 对象
-        };
-
-        // 将 Data 数组序列化为 JSON 字符串
-        string jsonData = JsonConvert.SerializeObject(dataArray);
-
-        // 发送 POST 请求
-        StartCoroutine(SendPostRequest(jsonData));
+        RectTransform text1Pos = text1.GetComponent<RectTransform>();
+        RectTransform text2Pos = text2.GetComponent<RectTransform>();
+        text2Pos.anchoredPosition = new Vector2(text1Pos.anchoredPosition.x + 168f, text1Pos.anchoredPosition.y);
     }
 
     IEnumerator SendPostRequest(string jsonData)
@@ -76,4 +67,7 @@ public class MyScript : MonoBehaviour
             }
         }
     }
+
+
+
 }
