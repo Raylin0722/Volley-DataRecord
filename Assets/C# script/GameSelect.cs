@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
 using System.Text.RegularExpressions;
 using UnityEngine.EventSystems;
+using TMPro;
 
 
 public class GameSelect : MonoBehaviour
@@ -92,14 +93,14 @@ public class GameSelect : MonoBehaviour
         GameContent.sizeDelta = new Vector2(GameContent.sizeDelta.x, 0 * prefabHeight);
         PlayerContent.sizeDelta = new Vector2(PlayerContent.sizeDelta.x, 0 * prefabHeight);
 
-
+        
 
     }
 
     public InputField PName;
     public InputField PNum;
     public InputField GName;
-    public InputField GDate;
+    public TMP_InputField GDate;
     public Text PWarning;
     public Text GWarning;
     public void CallAddPlayer(){
@@ -117,7 +118,10 @@ public class GameSelect : MonoBehaviour
         StartCoroutine(AddPlayer(PNumIN, PNameIn));
     }
     public void CallAddGame(){
-        StartCoroutine(AddGame());
+        //StartCoroutine(AddGame());
+        if(!string.IsNullOrEmpty(GDate.text)){
+            
+        }
     }
 
     public void CallUpdateUserData(){
