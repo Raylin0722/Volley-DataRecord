@@ -18,6 +18,7 @@ public class UserData : MonoBehaviour
         }
 
         Instance = this;
+        Instance.tag = "DontDestroy";
         DontDestroyOnLoad(gameObject);   
     }
 }

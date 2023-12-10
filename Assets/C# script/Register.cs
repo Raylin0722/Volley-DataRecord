@@ -78,6 +78,7 @@ public class Register : MonoBehaviour
                 UserData.Instance.UserID = result.UserID;
                 UserData.Instance.numOfGame = result.numOfGame;
                 UserData.Instance.numOfPlayer = result.numOfPlayer;
+
             }
         }
         else{
@@ -136,7 +137,11 @@ public class Register : MonoBehaviour
     }
 
     public void GoToMain(){
+        GameObject[] dontDestroyObjects = GameObject.FindGameObjectsWithTag("DontDestroy");
+        foreach (GameObject obj in dontDestroyObjects)
+            Destroy(obj);
         SceneManager.LoadScene("StartMenu");
+        
     }
 
 }

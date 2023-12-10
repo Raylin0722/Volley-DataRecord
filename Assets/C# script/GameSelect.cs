@@ -24,20 +24,15 @@ public class GameSelect : MonoBehaviour
     public GameObject AddPlayerObj;
     public GameObject AddGameObj; 
 
-    public class PlayerData{
-        public int PlayerID;
-        public int PlayerNumber;
-        public string PlyaerName;
-    }
-    public class GameData{
-        public int GameID;
-        public string GameDate;
-        public string GameName;
-    }
-
     public class ServerToUser{
-        public List<PlayerData> PlayerList;
-        public List<GameData> GameList;
+        public bool success;
+        public int situation;
+        public List<int> UserPlayerID;
+        public List<string> UserPlayerName;
+        public List<int> UserPlayerNumber;
+        public List<int> UserGameID;
+        public List<string> UserGameDate;
+        public List<string> UserGameName;
     }
 
     public class Return{
@@ -49,16 +44,20 @@ public class GameSelect : MonoBehaviour
     public int numOfPlayer;
     public int UserID;
     public string UserName;
-    public List<GameData> GameList;
-    public List<PlayerData> PlayerList;
+    public List<int> UserPlayerID;
+    public List<string> UserPlayerName;
+    public List<int> UserPlayerNumber;
+    public List<int> UserGameID;
+    public List<string> UserGameDate;
+    public List<string> UserGameName;
 
     private void Awake(){
-        /*UserName = UserData.Instance.UserName; //後面要連伺服器
+        UserName = UserData.Instance.UserName; //後面要連伺服器
         numOfGame = UserData.Instance.numOfGame; // 後面要連伺服器
         numOfPlayer = UserData.Instance.numOfPlayer;
         UserID = UserData.Instance.UserID;
         User.text = "User: " + UserName;
-        CallUpdateUserData();*/
+        CallUpdateUserData();
     }
     private void Start()
     {
@@ -74,20 +73,27 @@ public class GameSelect : MonoBehaviour
         {
             // 透過Instantiate生成Prefab
             GameObject newGame = Instantiate(Game, GameContent);
-            GameObject newPlayer = Instantiate(Player, PlayerContent);
 
             Text[] GameTexts = newGame.GetComponentsInChildren<Text>();
 
             GameTexts[0].text = "2023/12/" + i;
             GameTexts[1].text = "Game" + i;
 
+            // 設定Prefab的位置
+            RectTransform rectTransform = newGame.GetComponent<RectTransform>();
+            rectTransform.anchoredPosition = new Vector2(0, -i * prefabHeight);
+        }
+        for (int i = 0; i < numOfPlayer; i++)
+        {
+
+            GameObject newPlayer = Instantiate(Player, PlayerContent);
             Text[] PlayerTexts = newPlayer.GetComponentsInChildren<Text>();
 
             PlayerTexts[0].text =  (i + 1).ToString();
             PlayerTexts[1].text = "Player" + (i+1);
 
             // 設定Prefab的位置
-            RectTransform rectTransform = newGame.GetComponent<RectTransform>();
+            RectTransform rectTransform = newPlayer.GetComponent<RectTransform>();
             rectTransform.anchoredPosition = new Vector2(0, -i * prefabHeight);
         }
         GameContent.sizeDelta = new Vector2(GameContent.sizeDelta.x, 0 * prefabHeight);
@@ -106,16 +112,38 @@ public class GameSelect : MonoBehaviour
     public void CallAddPlayer(){
 
         Regex regexNum = new Regex("^[0-9]+$");
-        Regex regexName = new Regex("^[a-zA-Z0-9_\\u4e00-\\u9fa5]+$");
-        if(!regexNum.IsMatch(PNum.text)){
-
+        Regex regexName = new Regex("^[\u4e00-\u9fa50-9A-Za-z_]+$");
+        if(string.IsNullOrEmpty(PName.text)){
+            PWarning.text = "球員名稱欄位不能為空";
+            Debug.Log("球員名稱欄位不能為空");
+            return;
         }
-        else{
+        string PNameIn = PName.text;
+        if(!regexName.IsMatch(PName.text)){
+            PWarning.text = "球員名稱只能輸入中文字數字或大小寫英文";
+            Debug.Log("球員名稱只能輸入中文字數字或大小寫英文");
+            return;
+        }
 
+        if(string.IsNullOrEmpty(PNum.text)){
+            PWarning.text = "背號欄位不能為空";
+            Debug.Log("背號欄位不能為空");
+            return;
+        }
+        if(!regexNum.IsMatch(PNum.text)){
+            PWarning.text = "背號只能輸入數字";
+            Debug.Log("背號只能輸入數字");
+            return;
         }
         int PNumIN = int.Parse(PNum.text);
-        string PNameIn = PName.text;
+        if(PNumIN<=0 || PNumIN >= 100){
+            PWarning.text = "背號請輸入 0 - 100!";
+            Debug.Log("背號請輸入 0 - 100!");
+            return;
+        }
+
         StartCoroutine(AddPlayer(PNumIN, PNameIn));
+        
     }
     public void CallAddGame(){
         //StartCoroutine(AddGame());
@@ -129,7 +157,12 @@ public class GameSelect : MonoBehaviour
     }
 
     public void LogOut(){
+        
+        GameObject[] dontDestroyObjects = GameObject.FindGameObjectsWithTag("DontDestroy");
+        foreach (GameObject obj in dontDestroyObjects)
+            Destroy(obj);
         SceneManager.LoadScene("StartMenu");
+    
     }
 
     public void ClickGame(){
@@ -140,7 +173,7 @@ public class GameSelect : MonoBehaviour
 
         WWWForm form = new WWWForm();
         form.AddField("account", UserName);
-        form.AddField("id", UserID);
+        form.AddField("UserID", UserID);
 
         UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/UpdateUserData", form);
 
@@ -148,17 +181,28 @@ public class GameSelect : MonoBehaviour
 
         if(www.result == UnityWebRequest.Result.Success){
             string response = www.downloadHandler.text;
-            
-            GameList = new List<GameData>();
-            PlayerList = new List<PlayerData>();
-
+            UserPlayerID = new List<int>();
+            UserPlayerName = new List<string>();
+            UserPlayerNumber = new List<int>();
+            UserGameID = new List<int>();
+            UserGameDate = new List<string>();
+            UserGameName = new List<string>();
             ServerToUser userRetuen = JsonUtility.FromJson<ServerToUser>(response);
+            Debug.Log(response);
+            if(userRetuen.success == true){
+                for(int i = 0; i < userRetuen.UserPlayerID.Count; i++){
+                    UserPlayerID.Add(userRetuen.UserPlayerID[i]);
+                    UserPlayerNumber.Add(userRetuen.UserPlayerNumber[i]);
+                    UserPlayerName.Add(userRetuen.UserPlayerName[i]);
+                }
+            }
+            else if(userRetuen.success == false){
+                switch (userRetuen.situation){
+                    case 1:
 
-            foreach(GameData game in userRetuen.GameList)
-                GameList.Add(game);   
-                    
-            foreach(PlayerData player in userRetuen.PlayerList)
-                PlayerList.Add(player);
+                        break;
+                }
+            }
         }
         
     }
@@ -175,23 +219,63 @@ public class GameSelect : MonoBehaviour
         Return result = new Return();
         if(www.result == UnityWebRequest.Result.Success){
             string response = www.downloadHandler.text;
-            
             result = JsonUtility.FromJson<Return>(response);
             if(result.success == false){
                 switch (result.situation){
-                    case 0:
-                        Debug.Log("Success!");
-                        CallUpdateUserData();
+                    
+                    case -1:
+                        Debug.Log("參數傳送錯誤!"); 
+                        PWarning.text = "參數傳送錯誤!";
+                        break;
+                    case -2:
+                        Debug.Log("資料庫錯誤!"); 
+                        PWarning.text = "資料庫錯誤!";
+                        break;
+                    case -3:
+                        Debug.Log("帳號不存在!"); 
+                        PWarning.text = "帳號不存在!";
+                        break;
+                    case -4:
+                        Debug.Log("該球員已存在!"); 
+                        PWarning.text = "該球員已存在!";
+                        break;
+                    case -5:
+                        Debug.Log("該背號已存在!"); 
+                        PWarning.text = "該背號已存在!";
                         break;
                 }
             }
-                
-            
+            else{
+                Debug.Log("Success!");
+                CallUpdateUserData();
+            }
+        }
+        else{
+            Debug.Log("未連接到伺服器!");
         }
 
     }
-    public IEnumerator AddGame(){
-        yield return null;
+    public IEnumerator AddGame(string GameDate, string GameName){
+        WWWForm form = new WWWForm();
+        form.AddField("account", UserName);
+        form.AddField("UserID", UserID);
+        form.AddField("GameDate", GameDate);
+        form.AddField("GameName", GameName);
+
+        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/AddGame", form);
+        yield return www.SendWebRequest();
+        Return result = new Return();
+        if(www.result == UnityWebRequest.Result.Success){
+            string response = www.downloadHandler.text;
+            result = JsonUtility.FromJson<Return>(response);
+            if(result.success == false){
+                switch (result.situation){
+
+
+
+                }
+            }
+        }
     }
 
     public void CallAdd(){
