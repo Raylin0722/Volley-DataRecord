@@ -199,7 +199,7 @@ public class dragPlayer : MonoBehaviour {
             setData(formation, null, null, dealDB.SCORE, -1);
             
         }
-        database.GetComponent<dealDB>().CallInsertData();
+        //database.GetComponent<dealDB>().CallInsertData();
     }
 
     public void deletednewData(){

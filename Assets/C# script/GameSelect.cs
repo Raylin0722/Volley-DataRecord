@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
+using System.Text.RegularExpressions;
+using UnityEngine.EventSystems;
 
 
 public class GameSelect : MonoBehaviour
@@ -16,6 +18,10 @@ public class GameSelect : MonoBehaviour
     public GameObject GameScrollview;
     public GameObject PlayerScrollview;
     public Text User;
+
+    public GameObject Main;
+    public GameObject AddPlayerObj;
+    public GameObject AddGameObj; 
 
     public class PlayerData{
         public int PlayerID;
@@ -46,15 +52,18 @@ public class GameSelect : MonoBehaviour
     public List<PlayerData> PlayerList;
 
     private void Awake(){
-        UserName = UserData.Instance.UserName; //後面要連伺服器
+        /*UserName = UserData.Instance.UserName; //後面要連伺服器
         numOfGame = UserData.Instance.numOfGame; // 後面要連伺服器
         numOfPlayer = UserData.Instance.numOfPlayer;
         UserID = UserData.Instance.UserID;
         User.text = "User: " + UserName;
-        CallUpdateUserData();
+        CallUpdateUserData();*/
     }
     private void Start()
     {
+        Main.SetActive(true);
+        AddPlayerObj.SetActive(false);
+        AddPlayerObj.SetActive(false);
         // 初始化ScrollView的滾動位置
         GameScrollview.GetComponent<ScrollRect>().verticalNormalizedPosition = 0f;
         PlayerScrollview.GetComponent<ScrollRect>().verticalNormalizedPosition = 0f;
@@ -82,15 +91,31 @@ public class GameSelect : MonoBehaviour
         }
         GameContent.sizeDelta = new Vector2(GameContent.sizeDelta.x, 0 * prefabHeight);
         PlayerContent.sizeDelta = new Vector2(PlayerContent.sizeDelta.x, 0 * prefabHeight);
+
+
+
     }
 
     public InputField PName;
     public InputField PNum;
     public InputField GName;
+    public InputField GDate;
+    public Text PWarning;
+    public Text GWarning;
     public void CallAddPlayer(){
-        StartCoroutine(AddPlayer(int.Parse(PNum.text), PName.text));
-    }
 
+        Regex regexNum = new Regex("^[0-9]+$");
+        Regex regexName = new Regex("^[a-zA-Z0-9_\\u4e00-\\u9fa5]+$");
+        if(!regexNum.IsMatch(PNum.text)){
+
+        }
+        else{
+
+        }
+        int PNumIN = int.Parse(PNum.text);
+        string PNameIn = PName.text;
+        StartCoroutine(AddPlayer(PNumIN, PNameIn));
+    }
     public void CallAddGame(){
         StartCoroutine(AddGame());
     }
@@ -163,6 +188,25 @@ public class GameSelect : MonoBehaviour
     }
     public IEnumerator AddGame(){
         yield return null;
+    }
+
+    public void CallAdd(){
+        GameObject obj = EventSystem.current.currentSelectedGameObject;
+        if(obj.tag == "AddPlayer"){
+            Main.SetActive(false);
+            AddPlayerObj.SetActive(true);
+            AddGameObj.SetActive(false);
+        }
+        else if(obj.tag == "AddGame"){
+            Main.SetActive(false);
+            AddPlayerObj.SetActive(false);
+            AddGameObj.SetActive(true);
+        }
+        else if(obj.tag == "GameSelect"){
+            Main.SetActive(true);
+            AddPlayerObj.SetActive(false);
+            AddGameObj.SetActive(false);
+        }
     }
 
 }

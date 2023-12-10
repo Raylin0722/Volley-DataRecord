@@ -11,6 +11,9 @@ TagManager:
   - block
   - blocking
   - outside
+  - AddPlayer
+  - AddGame
+  - GameSelect
   layers:
   - Default
   - TransparentFX
