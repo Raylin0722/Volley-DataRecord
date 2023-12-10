@@ -27,27 +27,40 @@ def login():
     account = request.form.get("account")
     password = request.form.get("password")
 
+    resultReturn = {"success" : False, "situation" : -1, "UserName" : None, "UserID" : None, "numOfGame" : None, "numOfPlayer" : None}
+
+
+    if account == None or password == None:
+        resultReturn['situation'] = -2
+        return resultReturn
+
+
     cnx = mysql.connector.connect(**config)
     cur = cnx.cursor(buffered=True)
 
-    resultReturn = {"success" : False, "situation" : -1}
     cur.execute("select * from users where account=%s;", (account, ))
     result = cur.fetchall()
 
-    print(password, result[0][1], sep='\n')
-
-    print(result)
-
     if len(result) == 1:
-        if password == result[0][2]:
-            resultReturn['success'] = True
-            resultReturn['situation'] = 0
-        else:
+        try:
+            if password == result[0][2]:
+                resultReturn['success'] = True
+                resultReturn['situation'] = 0
+                resultReturn['UserName'] = account
+                resultReturn['UserID'] = result[0][0]
+                cur.execute("select * from users where account=%s;", (account, ))
+                userID = int(cur.fetchall()[0][0])
+                cur.execute(f"SELECT COUNT(*) FROM userGame{userID};")
+                resultReturn['numOfGame'] = int(cur.fetchall()[0][0])
+                cur.execute(f"SELECT COUNT(*) FROM userPlayer{userID};")
+                resultReturn['numOfPlayer'] = int(cur.fetchall()[0][0])
+            else:
+                resultReturn['situation'] = -2
+        except:
             resultReturn['situation'] = -2
-
-
-    cur.close()
-    cnx.close()
+        finally:
+            cur.close()
+            cnx.close()
 
     return resultReturn
 
@@ -55,14 +68,20 @@ def login():
 def register():
     account = request.form.get("account")
     password = request.form.get("password")
-        
+    
+    resultReturn = {"success" : False, "situation" : -1, "UserName" : None, "UserID" : None, "numOfGame" : None, "numOfPlayer" : None}
+
+
+    if account == None or password == None:
+        resultReturn['situation'] = -3
+        return resultReturn
+
     cnx = mysql.connector.connect(**config)
     cur = cnx.cursor(buffered=True)
 
     cur.execute("select account from users where account=%s;", (account,))
     result = cur.fetchall()
 
-    returnResult = {"success" : False, "situation" : -1}
 
     if len(result) == 0:
         if re.match("^[a-zA-Z0-9]+$", account):
@@ -72,22 +91,27 @@ def register():
             cur.execute("SELECT COUNT(*) FROM users;")
             userId = int(cur.fetchall()[0][0])
             try:
-                cur.execute(f"create table user{userId} (ID INT AUTO_INCREMENT PRIMARY KEY, gameName VARCHAR(50));")
+                cur.execute(f"create table userGame{userId} (ID INT AUTO_INCREMENT PRIMARY KEY, time Date, gameName VARCHAR(50));")
+                cur.execute(f"create table userPlayer{userId} (ID INT AUTO_INCREMENT PRIMARY KEY, playerName VARCHAR(50));")
             except:
-                returnResult['success'] = False
-                returnResult['situation'] = -2
+                resultReturn['success'] = False
+                resultReturn['situation'] = -2
                 
             else:
-                returnResult['success'] = True
-                returnResult['situation'] = 0
+                resultReturn['success'] = True
+                resultReturn['situation'] = 0
+                resultReturn['UserID'] = userId
+                resultReturn['numOfGame'] = 0
+                resultReturn['numOfPlayer'] = 0
+                resultReturn['UserName'] = account
 
             finally:
                 cur.close()
                 cnx.close()
         else:
-            returnResult['situation'] = -3
+            resultReturn['situation'] = -3
 
-    return returnResult
+    return resultReturn
 
 @app.route("/initDB", methods=['GET', 'POST'])
 def initDB():

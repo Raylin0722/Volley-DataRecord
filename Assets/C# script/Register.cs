@@ -18,6 +18,15 @@ public class Register : MonoBehaviour
     public Button submitButton;
     public TMP_Text WarnMessage;
 
+    public class dataReturn{
+        public bool success;
+        public int situation;
+        public string UserName;
+        public int UserID;
+        public int numOfGame;
+        public int numOfPlayer;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -57,13 +66,19 @@ public class Register : MonoBehaviour
 
         UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/register", form);
         
-        dealDB.Return result = new dealDB.Return();
+        dataReturn result = new dataReturn();
 
         yield return www.SendWebRequest();
 
         if(www.result == UnityWebRequest.Result.Success){
             string response = www.downloadHandler.text;
-            result = JsonUtility.FromJson<dealDB.Return>(response);
+            result = JsonUtility.FromJson<dataReturn>(response);
+            if(result.success == true){
+                UserData.Instance.UserName = result.UserName;
+                UserData.Instance.UserID = result.UserID;
+                UserData.Instance.numOfGame = result.numOfGame;
+                UserData.Instance.numOfPlayer = result.numOfPlayer;
+            }
         }
         else{
             result.success = false;
@@ -75,6 +90,7 @@ public class Register : MonoBehaviour
             case 0:
                 Debug.Log("success!");
                 WarnMessage.text = "Success!";
+                SceneManager.LoadScene("GameSelect");
                 break;
             case -1:
                 Debug.Log("帳號已存在");
@@ -93,6 +109,8 @@ public class Register : MonoBehaviour
                 WarnMessage.text = "Server down!";
                 break;
         }
+
+        
 
     }
 

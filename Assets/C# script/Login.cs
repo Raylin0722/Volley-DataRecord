@@ -15,17 +15,20 @@ public class Login : MonoBehaviour
     public Button submitButton;
     public TMP_Text WarnMessage;
 
+    public class dataReturn{
+        public bool success;
+        public int situation;
+        public string UserName;
+        public int UserID;
+        public int numOfGame;
+        public int numOfPlayer;
+    }
+
 
     // Start is called before the first frame update
     void Start(){
         WarnMessage.text = "";
     }
-
-    // Update is called once per frame
-    void Update(){
-        
-    }
-
     public void CallLoginUser(){
         if(string.IsNullOrEmpty(accountField.text))
             WarnMessage.text = "Account can't be empty!";   
@@ -45,24 +48,32 @@ public class Login : MonoBehaviour
 
         UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/login", form);
         
-        dealDB.Return result = new dealDB.Return();
+        dataReturn result = new dataReturn();
 
         yield return www.SendWebRequest();
 
         if(www.result == UnityWebRequest.Result.Success){
             string response = www.downloadHandler.text;
-            result = JsonUtility.FromJson<dealDB.Return>(response);
+            Debug.Log(response);
+            result = JsonUtility.FromJson<dataReturn>(response);
+            if(result.success == true){
+                UserData.Instance.UserName = result.UserName;
+                UserData.Instance.UserID = result.UserID;
+                UserData.Instance.numOfGame = result.numOfGame;
+                UserData.Instance.numOfPlayer = result.numOfPlayer;
+            }
         }
         else{
             result.success = false;
             result.situation = -3;
         }
-        // 0 成功 -1 資料庫錯誤 -2 密碼錯誤 -3 request未成功
+        // 0 成功 -1 資料庫錯誤 -2 密碼錯誤 -3 request未成功 
 
         switch (result.situation){
             case 0:
                 Debug.Log("success!");
                 WarnMessage.text = "Success!";
+                SceneManager.LoadScene("GameSelect");
                 break;
             case -1:
                 Debug.Log("帳號不存在");
@@ -78,6 +89,7 @@ public class Login : MonoBehaviour
                 break;
         }
 
+        
     }
     private string CalculateSHA256Hash(string input)
     {
