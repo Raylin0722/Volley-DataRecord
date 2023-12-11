@@ -14,17 +14,16 @@ public class dealDB : MonoBehaviour
     [SerializeField] public TextMeshPro[] WPlayer;
     [SerializeField] public TextMeshPro[] BPlayer;
     
-    public string formation;
-
-    public const int CATCH = 0;
-    public const int SERVE = 1;
-    public const int ATTACK = 2;
-    public const int BLOCK = 3;
-    public const int SCORE = 4;
-    
-    public string gameName;
-    public string account;
-    public string hashPasswd;
+    public class ServerToUserData{
+        public bool success;
+        public int situation;
+        public List<int> UserPlayerID;
+        public List<string> UserPlayerName;
+        public List<int> UserPlayerNumber;
+        public List<int> UserGameID;
+        public List<string> UserGameDate;
+        public List<string> UserGameName;
+    }
     public struct Data{
         public string formation;
         public int round;
@@ -48,12 +47,35 @@ public class dealDB : MonoBehaviour
         public bool success;
         public int situation;
     }
+
+    public string formation;
+
+    public const int CATCH = 0;
+    public const int SERVE = 1;
+    public const int ATTACK = 2;
+    public const int BLOCK = 3;
+    public const int SCORE = 4;
+    
+    public string gameName;
+    public string account;
+    public string hashPasswd;
     public List<Data> saveData; // 儲存資料用 
     public List<Data> showData; // 顯示資料用
+
+    public int UserID;
+    public int GameID;
+    public string UserName;
+    public List<int> UserPlayerID;
+    public List<string> UserPlayerName;
+    public List<int> UserPlayerNumber;
+
 
     // Start is called before the first frame update
     void Awake(){
         saveData = new List<Data>(); // 儲存資料用
+        UserName = UserData.Instance.UserName; //後面要連伺服器
+        UserID = UserData.Instance.UserID;
+        CallUpdateUserData();
     }
 
     public void CallinitDB(string gameName){
@@ -135,6 +157,55 @@ public class dealDB : MonoBehaviour
 
         saveData.Clear();
     }
+    
+    public void CallUpdateUserData(){
+        StartCoroutine(UpdateUserData());
+    }
+
+    public IEnumerator UpdateUserData(){
+
+        WWWForm form = new WWWForm();
+        form.AddField("account", UserName);
+        form.AddField("UserID", UserID);
+
+        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/UpdateUserData", form);
+
+        yield return www.SendWebRequest();
+
+        if(www.result == UnityWebRequest.Result.Success){
+            string response = www.downloadHandler.text;
+            print(response);
+            UserPlayerID = new List<int>();
+            UserPlayerName = new List<string>();
+            UserPlayerNumber = new List<int>();
+
+            ServerToUserData userRetuen = JsonUtility.FromJson<ServerToUserData>(response);
+            Debug.Log(response);
+            if(userRetuen.success == true){
+                for(int i = 0; i < userRetuen.UserPlayerID.Count; i++){
+                    UserPlayerID.Add(userRetuen.UserPlayerID[i]);
+                    UserPlayerNumber.Add(userRetuen.UserPlayerNumber[i]);
+                    UserPlayerName.Add(userRetuen.UserPlayerName[i]);
+                }
+                Debug.Log("Success!");
+            }
+            else if(userRetuen.success == false){
+                switch (userRetuen.situation){
+                    case -1:
+                        Debug.Log("參數錯誤");
+                        break;
+                    case -2:
+                        Debug.Log("資料庫錯誤");
+                        break;
+                    case -3:
+                        Debug.Log("帳號不存在");
+                        break;
+                }
+            }
+        }
+        
+    }
+
 
 }
 
