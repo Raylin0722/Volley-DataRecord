@@ -101,7 +101,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 1
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 0}
+  m_fontAsset: {fileID: 11400000, guid: 55c0c577ec2d5d44bacfe4d0ae5efc4d, type: 2}
   m_sharedMaterial: {fileID: 0}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -168,7 +168,7 @@ MonoBehaviour:
   _SortingLayer: 0
   _SortingLayerID: 0
   _SortingOrder: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_renderer: {fileID: 5813090947036167820}
   m_maskType: 0
 --- !u!1 &6135484770048979813
@@ -185,7 +185,7 @@ GameObject:
   - component: {fileID: 3731718385525240048}
   m_Layer: 0
   m_Name: AllofEnemyPlayer1
-  m_TagString: Untagged
+  m_TagString: Right
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -305,9 +305,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0d8d2576f32a914ba1feadaae82a401, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allofPlayer: {fileID: 6135484770048979813}
   PlayerName: 01
+  PlayerNum: 
   typeofPlayer: 1
+  allofPlayer: {fileID: 6135484770048979813}
   WPlayer1: {fileID: 0}
   WPlayer2: {fileID: 0}
   WPlayer3: {fileID: 0}

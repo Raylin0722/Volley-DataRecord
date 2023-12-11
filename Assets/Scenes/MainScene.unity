@@ -1245,14 +1245,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bplayer1
       objectReference: {fileID: 0}
-    - target: {fileID: 6246454134735780804, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
-      propertyPath: m_TagString
-      value: Right
-      objectReference: {fileID: 0}
-    - target: {fileID: 8246317115666693576, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
-      propertyPath: m_text
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15109,8 +15101,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1973327731}
   m_HandleRect: {fileID: 1973327730}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.99999845
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -16604,7 +16596,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.0010098219, y: 0.0067920797}
+  m_AnchoredPosition: {x: 0.0010098219, y: 0.0011768453}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &908573765
@@ -20196,10 +20188,6 @@ PrefabInstance:
     - target: {fileID: 6985389947967242844, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_Name
       value: Wplayer1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6985389947967242844, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
-      propertyPath: m_TagString
-      value: Left
       objectReference: {fileID: 0}
     - target: {fileID: 7197761068637962010, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_Pivot.x
@@ -31745,6 +31733,14 @@ PrefabInstance:
       propertyPath: m_text
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 7336321284806466654, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 55c0c577ec2d5d44bacfe4d0ae5efc4d, type: 2}
+    - target: {fileID: 7336321284806466654, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -42702,10 +42698,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: AllofSelfPlayer1
       objectReference: {fileID: 0}
-    - target: {fileID: 6419598609958621135, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
-      propertyPath: m_TagString
-      value: Left
-      objectReference: {fileID: 0}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
       value: 
@@ -42810,10 +42802,6 @@ PrefabInstance:
     - target: {fileID: 6135484770048979813, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: m_Name
       value: AllofEnemyPlayer1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6135484770048979813, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
-      propertyPath: m_TagString
-      value: Right
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
