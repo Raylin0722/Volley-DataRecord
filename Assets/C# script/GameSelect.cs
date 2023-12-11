@@ -7,6 +7,7 @@ using UnityEngine.Networking;
 using System.Text.RegularExpressions;
 using UnityEngine.EventSystems;
 using TMPro;
+using System;
 
 
 public class GameSelect : MonoBehaviour
@@ -64,43 +65,7 @@ public class GameSelect : MonoBehaviour
         Main.SetActive(true);
         AddPlayerObj.SetActive(false);
         AddPlayerObj.SetActive(false);
-        // 初始化ScrollView的滾動位置
-        GameScrollview.GetComponent<ScrollRect>().verticalNormalizedPosition = 0f;
-        PlayerScrollview.GetComponent<ScrollRect>().verticalNormalizedPosition = 0f;
-
-        // 這裡演示創建3個Prefab的例子，實際上你可以根據需求生成不同數量的Prefab
-        for (int i = 0; i < numOfGame; i++)
-        {
-            // 透過Instantiate生成Prefab
-            GameObject newGame = Instantiate(Game, GameContent);
-
-            Text[] GameTexts = newGame.GetComponentsInChildren<Text>();
-
-            GameTexts[0].text = "2023/12/" + i;
-            GameTexts[1].text = "Game" + i;
-
-            // 設定Prefab的位置
-            RectTransform rectTransform = newGame.GetComponent<RectTransform>();
-            rectTransform.anchoredPosition = new Vector2(0, -i * prefabHeight);
-        }
-        for (int i = 0; i < numOfPlayer; i++)
-        {
-
-            GameObject newPlayer = Instantiate(Player, PlayerContent);
-            Text[] PlayerTexts = newPlayer.GetComponentsInChildren<Text>();
-
-            PlayerTexts[0].text =  (i + 1).ToString();
-            PlayerTexts[1].text = "Player" + (i+1);
-
-            // 設定Prefab的位置
-            RectTransform rectTransform = newPlayer.GetComponent<RectTransform>();
-            rectTransform.anchoredPosition = new Vector2(0, -i * prefabHeight);
-        }
-        GameContent.sizeDelta = new Vector2(GameContent.sizeDelta.x, 0 * prefabHeight);
-        PlayerContent.sizeDelta = new Vector2(PlayerContent.sizeDelta.x, 0 * prefabHeight);
-
-        
-
+        StartCoroutine(DealView());
     }
 
     public InputField PName;
@@ -110,7 +75,6 @@ public class GameSelect : MonoBehaviour
     public Text PWarning;
     public Text GWarning;
     public void CallAddPlayer(){
-
         Regex regexNum = new Regex("^[0-9]+$");
         Regex regexName = new Regex("^[\u4e00-\u9fa50-9A-Za-z_]+$");
         if(string.IsNullOrEmpty(PName.text)){
@@ -120,8 +84,8 @@ public class GameSelect : MonoBehaviour
         }
         string PNameIn = PName.text;
         if(!regexName.IsMatch(PName.text)){
-            PWarning.text = "球員名稱只能輸入中文字數字或大小寫英文";
-            Debug.Log("球員名稱只能輸入中文字數字或大小寫英文");
+            PWarning.text = "球員名稱只能輸入 中文 數字 大小寫英文";
+            Debug.Log("球員名稱只能輸入 中文 數字 大小寫英文");
             return;
         }
 
@@ -146,10 +110,23 @@ public class GameSelect : MonoBehaviour
         
     }
     public void CallAddGame(){
-        //StartCoroutine(AddGame());
-        if(!string.IsNullOrEmpty(GDate.text)){
-            
+        Regex regexName = new Regex("^[\u4e00-\u9fa50-9A-Za-z_]+$");
+        if(string.IsNullOrEmpty(GName.text)){
+            GWarning.text = "比賽名稱欄位不可為空!";
+            return;
         }
+        string GNameIN = GName.text;
+        if(!regexName.IsMatch(GNameIN)){
+            GWarning.text = "比賽名稱只能輸入 中文 數字 大小寫英文";
+            Debug.Log("比賽名稱只能輸入 中文 數字 大小寫英文");
+            return;
+        }
+        if(string.IsNullOrEmpty(GDate.text)){
+            GWarning.text = "比賽日期未輸入 自動設定為" + DateTime.Today.ToString("yyyy-MM-dd");
+            GDate.text = DateTime.Today.ToString("yyyy-MM-dd");
+        }
+
+        StartCoroutine(AddGame(GDate.text, GNameIN));
     }
 
     public void CallUpdateUserData(){
@@ -169,6 +146,10 @@ public class GameSelect : MonoBehaviour
 
     }
 
+    public void ClickPlayer(){
+
+    }
+
     public IEnumerator UpdateUserData(){
 
         WWWForm form = new WWWForm();
@@ -181,6 +162,7 @@ public class GameSelect : MonoBehaviour
 
         if(www.result == UnityWebRequest.Result.Success){
             string response = www.downloadHandler.text;
+            print(response);
             UserPlayerID = new List<int>();
             UserPlayerName = new List<string>();
             UserPlayerNumber = new List<int>();
@@ -195,11 +177,26 @@ public class GameSelect : MonoBehaviour
                     UserPlayerNumber.Add(userRetuen.UserPlayerNumber[i]);
                     UserPlayerName.Add(userRetuen.UserPlayerName[i]);
                 }
+                for(int i = 0; i < userRetuen.UserGameID.Count; i++){
+                    UserGameID.Add(userRetuen.UserGameID[i]);
+                    UserGameName.Add(userRetuen.UserGameName[i]);
+                    DateTimeOffset dateTimeOffset = DateTimeOffset.ParseExact(userRetuen.UserGameDate[i], "ddd, dd MMM yyyy HH:mm:ss 'GMT'", 
+                        System.Globalization.CultureInfo.InvariantCulture);
+                    string formattedDate = dateTimeOffset.ToString("yyyy-MM-dd");
+                    UserGameDate.Add(formattedDate);
+                }
+                Debug.Log("Success!");
             }
             else if(userRetuen.success == false){
                 switch (userRetuen.situation){
-                    case 1:
-
+                    case -1:
+                        Debug.Log("參數錯誤");
+                        break;
+                    case -2:
+                        Debug.Log("資料庫錯誤");
+                        break;
+                    case -3:
+                        Debug.Log("帳號不存在");
                         break;
                 }
             }
@@ -247,7 +244,12 @@ public class GameSelect : MonoBehaviour
             }
             else{
                 Debug.Log("Success!");
-                CallUpdateUserData();
+                yield return StartCoroutine(UpdateUserData());
+                GWarning.text = "新增成功!";
+                yield return StartCoroutine(DealView());
+                Main.SetActive(true);
+                AddPlayerObj.SetActive(false);
+                AddGameObj.SetActive(false);
             }
         }
         else{
@@ -256,6 +258,7 @@ public class GameSelect : MonoBehaviour
 
     }
     public IEnumerator AddGame(string GameDate, string GameName){
+        yield return new WaitForSeconds(1f);
         WWWForm form = new WWWForm();
         form.AddField("account", UserName);
         form.AddField("UserID", UserID);
@@ -270,31 +273,109 @@ public class GameSelect : MonoBehaviour
             result = JsonUtility.FromJson<Return>(response);
             if(result.success == false){
                 switch (result.situation){
-
-
-
+                    
+                    case -1:
+                        Debug.Log("參數傳送錯誤!"); 
+                        GWarning.text = "參數傳送錯誤!";
+                        break;
+                    case -2:
+                        Debug.Log("資料庫錯誤!"); 
+                        GWarning.text = "資料庫錯誤!";
+                        break;
+                    case -3:
+                        Debug.Log("帳號不存在!"); 
+                        GWarning.text = "帳號不存在!";
+                        break;
+                    case -4:
+                        Debug.Log("該比賽已存在!"); 
+                        GWarning.text = "該比賽已存在!";
+                        break;
                 }
             }
+            else{
+                Debug.Log("Success!");
+                yield return StartCoroutine(UpdateUserData());
+                print(numOfGame);
+                GWarning.text = "新增成功!";
+                yield return StartCoroutine(DealView());
+                Main.SetActive(true);
+                AddPlayerObj.SetActive(false);
+                AddGameObj.SetActive(false);
+
+            }
+        }
+        else{
+            Debug.Log("未連接到伺服器!");
         }
     }
-
     public void CallAdd(){
         GameObject obj = EventSystem.current.currentSelectedGameObject;
         if(obj.tag == "AddPlayer"){
             Main.SetActive(false);
             AddPlayerObj.SetActive(true);
             AddGameObj.SetActive(false);
+            PName.text = "";
+            PNum.text = "";
+            PWarning.text = "";
         }
         else if(obj.tag == "AddGame"){
             Main.SetActive(false);
             AddPlayerObj.SetActive(false);
             AddGameObj.SetActive(true);
+            GName.text = "";
+            GDate.text = "";
+            GWarning.text = "";
         }
         else if(obj.tag == "GameSelect"){
             Main.SetActive(true);
             AddPlayerObj.SetActive(false);
             AddGameObj.SetActive(false);
         }
+    }
+    public IEnumerator DealView(){
+        // 初始化ScrollView的滾動位置
+        for (int i = 0; i < GameContent.childCount; i++){
+            Destroy(GameContent.GetChild(i).gameObject);
+        }
+
+        for (int i = 0; i < PlayerContent.childCount; i++){
+            Destroy(PlayerContent.GetChild(i).gameObject);
+        }
+        GameScrollview.GetComponent<ScrollRect>().verticalNormalizedPosition = 0f;
+        PlayerScrollview.GetComponent<ScrollRect>().verticalNormalizedPosition = 0f;
+
+        // 這裡演示創建3個Prefab的例子，實際上你可以根據需求生成不同數量的Prefab
+        for (int i = 0; i < UserGameID.Count; i++)
+        {
+            // 透過Instantiate生成Prefab
+            GameObject newGame = Instantiate(Game, GameContent);
+
+            Text[] GameTexts = newGame.GetComponentsInChildren<Text>();
+
+            GameTexts[0].text = UserGameDate[i];
+            GameTexts[1].text = UserGameName[i];
+
+            // 設定Prefab的位置
+            RectTransform rectTransform = newGame.GetComponent<RectTransform>();
+            rectTransform.anchoredPosition = new Vector2(0, -i * prefabHeight);
+        }
+        for (int i = 0; i < UserPlayerID.Count; i++)
+        {
+
+            GameObject newPlayer = Instantiate(Player, PlayerContent);
+            Text[] PlayerTexts = newPlayer.GetComponentsInChildren<Text>();
+
+            PlayerTexts[0].text =  UserPlayerNumber[i].ToString();
+            PlayerTexts[1].text = UserPlayerName[i];
+
+            // 設定Prefab的位置
+            RectTransform rectTransform = newPlayer.GetComponent<RectTransform>();
+            rectTransform.anchoredPosition = new Vector2(0, -i * prefabHeight);
+        }
+        GameContent.sizeDelta = new Vector2(GameContent.sizeDelta.x, 0 * prefabHeight);
+        PlayerContent.sizeDelta = new Vector2(PlayerContent.sizeDelta.x, 0 * prefabHeight);
+
+        yield return null;
     }
 
 }

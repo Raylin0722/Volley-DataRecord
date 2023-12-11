@@ -91,8 +91,8 @@ def register():
             cur.execute("SELECT COUNT(*) FROM users;")
             userId = int(cur.fetchall()[0][0])
             try:
-                cur.execute(f"create table userGame{userId} (ID INT AUTO_INCREMENT PRIMARY KEY, time Date, gameName VARCHAR(50));")
-                cur.execute(f"create table userPlayer{userId} (ID INT AUTO_INCREMENT PRIMARY KEY, playerName VARCHAR(50), playerNumber int);")
+                cur.execute(f"create table userGame{userId} (ID INT AUTO_INCREMENT PRIMARY KEY, GameDate Date, GameName VARCHAR(50));")
+                cur.execute(f"create table userPlayer{userId} (ID INT AUTO_INCREMENT PRIMARY KEY, PlayerName VARCHAR(50), PlayerNumber int);")
             except:
                 resultReturn['success'] = False
                 resultReturn['situation'] = -2
@@ -176,7 +176,7 @@ def AddPlayer():
     PlayerName = request.form.get("PlayerName")
     PlayerNumber = request.form.get("PlayerNumber")
     
-    resultReturn = {"success" : False, "situation": -1} # 0 成功 -1 參數錯誤 -2 資料庫錯誤 -3 帳號不存在
+    resultReturn = {"success" : False, "situation": -1} # 0 成功 -1 參數錯誤 -2 資料庫錯誤 -3 帳號不存在 -4 該球員已存在 -5 該背號已存在
     
     if account == None or UserID == None or PlayerName == None or PlayerNumber == None:
         return resultReturn
@@ -217,7 +217,42 @@ def AddPlayer():
 
 @app.route("/AddGame", methods=['GET', 'POST'])
 def AddGame():
-    ()
+    account = request.form.get("account")
+    UserID = request.form.get("UserID")
+    GameDate = request.form.get("GameDate")
+    GameName = request.form.get("GameName")
+    
+    resultReturn = {"success" : False, "situation": -1} # 0 成功 -1 參數錯誤 -2 資料庫錯誤 -3 帳號不存在 -4 比賽名稱已存在
+    
+    if account == None or UserID == None or GameName == None or GameDate == None:
+        return resultReturn
+    cnx = mysql.connector.connect(**config)
+    cur = cnx.cursor(buffered=True)
+    cur.execute("select account from users where account=%s;", (account,))
+    result = cur.fetchall()
+    
+    cur.execute(f"select * from userGame{UserID} where GameName=%s;", (GameName, ))
+    check = cur.fetchall()
+    
+    if len(result) == 1 and len(check) == 0:
+        try:
+            GameDate = datetime.strptime(GameDate, "%Y-%m-%d")
+            cur.execute(f"insert into userGame{UserID}(GameDate, GameName) value(%s, %s)", (GameDate, GameName))
+            cnx.commit()
+            resultReturn['situation'] = 0
+            resultReturn['success'] = True
+        except Exception as ex:
+            resultReturn['situation'] = -2
+            print(ex)
+        finally:
+            cur.close()
+            cnx.close()
+    elif len(result) != 1:
+        resultReturn['situation'] = -3
+    elif len(check) != 0:
+        resultReturn['situation'] = -4
+    return resultReturn
+    
 
 @app.route("/UpdateUserData", methods=['GET', 'POST']) 
 def UpdateUserData():
@@ -243,9 +278,9 @@ def UpdateUserData():
     
     if len(result) == 1:
         try:
-            cur.execute(f"select * from userPlayer{UserID};")
+            cur.execute(f"select * from userPlayer{UserID} order by PlayerNumber;")
             Player = cur.fetchall()
-            cur.execute(f"select * from userGame{UserID};")
+            cur.execute(f"select * from userGame{UserID} order by GameDate;")
             Game = cur.fetchall()
             for i in Player:
                 UserPlayerID.append(i[0])
@@ -273,6 +308,8 @@ def UpdateUserData():
         finally:
             cur.close()
             cnx.close()
+    else:
+        resultReturn['situation'] = -3
     return resultReturn
         
 
