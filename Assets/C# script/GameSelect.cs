@@ -188,7 +188,7 @@ public class GameSelect : MonoBehaviour
         Text[] ObjTexts = CorrTarget.GetComponentsInChildren<Text>();
         PCorrNum.text = ObjTexts[0].text;
         PCorrName.text = ObjTexts[1].text;
-        PCWarning = "";
+        PCWarning.text = "";
         int PlayerID = CorrTarget.GetComponent<ID>().ObjID;
         print(PlayerID);
         print(ObjTexts[0].text);
