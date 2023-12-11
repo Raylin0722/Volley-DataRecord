@@ -298,6 +298,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AllofSelfPlayer4
       objectReference: {fileID: 0}
+    - target: {fileID: 6419598609958621135, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
+      propertyPath: m_TagString
+      value: Left
+      objectReference: {fileID: 0}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
       value: 
@@ -578,6 +582,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bplayer6
       objectReference: {fileID: 0}
+    - target: {fileID: 6246454134735780804, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
+      propertyPath: m_TagString
+      value: Right
+      objectReference: {fileID: 0}
     - target: {fileID: 8246317115666693576, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: m_text
       value: 
@@ -707,6 +715,10 @@ PrefabInstance:
     - target: {fileID: 6246454134735780804, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: m_Name
       value: Bplayer1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6246454134735780804, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
+      propertyPath: m_TagString
+      value: Right
       objectReference: {fileID: 0}
     - target: {fileID: 8246317115666693576, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: m_text
@@ -1449,6 +1461,10 @@ PrefabInstance:
     - target: {fileID: 6419598609958621135, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: m_Name
       value: AllofSelfPlayer11
+      objectReference: {fileID: 0}
+    - target: {fileID: 6419598609958621135, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
+      propertyPath: m_TagString
+      value: Left
       objectReference: {fileID: 0}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
@@ -4392,6 +4408,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AllofSelfPlayer3
       objectReference: {fileID: 0}
+    - target: {fileID: 6419598609958621135, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
+      propertyPath: m_TagString
+      value: Left
+      objectReference: {fileID: 0}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
       value: 
@@ -4836,6 +4856,8 @@ MonoBehaviour:
   PlayerSize: {x: 0, y: 0, z: 0}
   content: {fileID: 908573764}
   formation: 
+  leftTouch: 0
+  rightTouch: 0
 --- !u!1001 &376777918
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5275,12 +5297,6 @@ MonoBehaviour:
   UserID: 0
   GameID: 0
   UserName: 
-  UserPlayerID: 
-  UserPlayerName: []
-  UserPlayerNumber: 
-  UserGameID: 
-  UserGameDate: []
-  UserGameName: []
 --- !u!4 &386398053
 Transform:
   m_ObjectHideFlags: 0
@@ -7622,6 +7638,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AllofEnemyPlayer6
       objectReference: {fileID: 0}
+    - target: {fileID: 6135484770048979813, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: m_TagString
+      value: Right
+      objectReference: {fileID: 0}
     - target: {fileID: 7336321284806466654, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: m_text
       value: 6
@@ -9156,6 +9176,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AllofEnemyPlayer11
       objectReference: {fileID: 0}
+    - target: {fileID: 6135484770048979813, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: m_TagString
+      value: Right
+      objectReference: {fileID: 0}
     - target: {fileID: 7336321284806466654, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: m_text
       value: 11
@@ -9657,6 +9681,10 @@ PrefabInstance:
     - target: {fileID: 6135484770048979813, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: m_Name
       value: AllofEnemyPlayer9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6135484770048979813, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: m_TagString
+      value: Right
       objectReference: {fileID: 0}
     - target: {fileID: 7336321284806466654, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: m_text
@@ -10363,6 +10391,10 @@ PrefabInstance:
     - target: {fileID: 6985389947967242844, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_Name
       value: Wplayer3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6985389947967242844, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
+      propertyPath: m_TagString
+      value: Left
       objectReference: {fileID: 0}
     - target: {fileID: 7197761068637962010, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_Pivot.x
@@ -11547,6 +11579,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AllofEnemyPlayer7
       objectReference: {fileID: 0}
+    - target: {fileID: 6135484770048979813, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: m_TagString
+      value: Right
+      objectReference: {fileID: 0}
     - target: {fileID: 7336321284806466654, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: m_text
       value: 7
@@ -11919,7 +11955,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1973327730}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99999845
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -12251,6 +12287,10 @@ PrefabInstance:
     - target: {fileID: 6246454134735780804, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: m_Name
       value: Bplayer3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6246454134735780804, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
+      propertyPath: m_TagString
+      value: Right
       objectReference: {fileID: 0}
     - target: {fileID: 8246317115666693576, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: m_text
@@ -13191,6 +13231,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wplayer2
       objectReference: {fileID: 0}
+    - target: {fileID: 6985389947967242844, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
+      propertyPath: m_TagString
+      value: Left
+      objectReference: {fileID: 0}
     - target: {fileID: 7197761068637962010, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -13330,7 +13374,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.0010098219, y: 0.006120693}
+  m_AnchoredPosition: {x: 0.0010098219, y: 0.0057239644}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &908573765
@@ -13699,6 +13743,10 @@ PrefabInstance:
     - target: {fileID: 6419598609958621135, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: m_Name
       value: AllofSelfPlayer5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6419598609958621135, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
+      propertyPath: m_TagString
+      value: Left
       objectReference: {fileID: 0}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
@@ -15922,6 +15970,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wplayer1
       objectReference: {fileID: 0}
+    - target: {fileID: 6985389947967242844, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
+      propertyPath: m_TagString
+      value: Left
+      objectReference: {fileID: 0}
     - target: {fileID: 7197761068637962010, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -16190,6 +16242,10 @@ PrefabInstance:
     - target: {fileID: 6419598609958621135, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: m_Name
       value: AllofSelfPlayer12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6419598609958621135, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
+      propertyPath: m_TagString
+      value: Left
       objectReference: {fileID: 0}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
@@ -17575,6 +17631,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AllofSelfPlayer9
       objectReference: {fileID: 0}
+    - target: {fileID: 6419598609958621135, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
+      propertyPath: m_TagString
+      value: Left
+      objectReference: {fileID: 0}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
       value: 
@@ -17715,6 +17775,10 @@ PrefabInstance:
     - target: {fileID: 6135484770048979813, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: m_Name
       value: AllofEnemyPlayer8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6135484770048979813, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: m_TagString
+      value: Right
       objectReference: {fileID: 0}
     - target: {fileID: 7336321284806466654, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: m_text
@@ -18786,6 +18850,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AllofEnemyPlayer10
       objectReference: {fileID: 0}
+    - target: {fileID: 6135484770048979813, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: m_TagString
+      value: Right
+      objectReference: {fileID: 0}
     - target: {fileID: 7336321284806466654, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: m_text
       value: 10
@@ -19150,6 +19218,10 @@ PrefabInstance:
     - target: {fileID: 6135484770048979813, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: m_Name
       value: AllofEnemyPlayer5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6135484770048979813, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: m_TagString
+      value: Right
       objectReference: {fileID: 0}
     - target: {fileID: 7336321284806466654, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: m_text
@@ -20814,6 +20886,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AllofSelfPlayer8
       objectReference: {fileID: 0}
+    - target: {fileID: 6419598609958621135, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
+      propertyPath: m_TagString
+      value: Left
+      objectReference: {fileID: 0}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
       value: 
@@ -21423,6 +21499,10 @@ PrefabInstance:
     - target: {fileID: 6135484770048979813, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: m_Name
       value: AllofEnemyPlayer3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6135484770048979813, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: m_TagString
+      value: Right
       objectReference: {fileID: 0}
     - target: {fileID: 7336321284806466654, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: m_text
@@ -22685,6 +22765,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AllofSelfPlayer2
       objectReference: {fileID: 0}
+    - target: {fileID: 6419598609958621135, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
+      propertyPath: m_TagString
+      value: Left
+      objectReference: {fileID: 0}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
       value: 
@@ -22914,6 +22998,10 @@ PrefabInstance:
     - target: {fileID: 6135484770048979813, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: m_Name
       value: AllofEnemyPlayer12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6135484770048979813, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: m_TagString
+      value: Right
       objectReference: {fileID: 0}
     - target: {fileID: 7336321284806466654, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: m_text
@@ -23350,6 +23438,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bplayer4
       objectReference: {fileID: 0}
+    - target: {fileID: 6246454134735780804, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
+      propertyPath: m_TagString
+      value: Right
+      objectReference: {fileID: 0}
     - target: {fileID: 8246317115666693576, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: m_text
       value: 
@@ -23563,6 +23655,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AllofSelfPlayer6
       objectReference: {fileID: 0}
+    - target: {fileID: 6419598609958621135, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
+      propertyPath: m_TagString
+      value: Left
+      objectReference: {fileID: 0}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
       value: 
@@ -23655,6 +23751,10 @@ PrefabInstance:
     - target: {fileID: 6419598609958621135, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: m_Name
       value: AllofSelfPlayer7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6419598609958621135, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
+      propertyPath: m_TagString
+      value: Left
       objectReference: {fileID: 0}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
@@ -24190,6 +24290,10 @@ PrefabInstance:
     - target: {fileID: 6246454134735780804, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: m_Name
       value: Bplayer5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6246454134735780804, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
+      propertyPath: m_TagString
+      value: Right
       objectReference: {fileID: 0}
     - target: {fileID: 8246317115666693576, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: m_text
@@ -25175,6 +25279,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AllofSelfPlayer10
       objectReference: {fileID: 0}
+    - target: {fileID: 6419598609958621135, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
+      propertyPath: m_TagString
+      value: Left
+      objectReference: {fileID: 0}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
       value: 
@@ -26082,6 +26190,10 @@ PrefabInstance:
     - target: {fileID: 6985389947967242844, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_Name
       value: Wplayer5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6985389947967242844, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
+      propertyPath: m_TagString
+      value: Left
       objectReference: {fileID: 0}
     - target: {fileID: 7197761068637962010, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_Pivot.x
@@ -27273,6 +27385,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AllofEnemyPlayer4
       objectReference: {fileID: 0}
+    - target: {fileID: 6135484770048979813, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: m_TagString
+      value: Right
+      objectReference: {fileID: 0}
     - target: {fileID: 7336321284806466654, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: m_text
       value: 4
@@ -27393,6 +27509,10 @@ PrefabInstance:
     - target: {fileID: 6985389947967242844, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_Name
       value: Wplayer4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6985389947967242844, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
+      propertyPath: m_TagString
+      value: Left
       objectReference: {fileID: 0}
     - target: {fileID: 7197761068637962010, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_Pivot.x
@@ -28529,6 +28649,10 @@ PrefabInstance:
     - target: {fileID: 6135484770048979813, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: m_Name
       value: AllofEnemyPlayer2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6135484770048979813, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: m_TagString
+      value: Right
       objectReference: {fileID: 0}
     - target: {fileID: 7336321284806466654, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: m_text
@@ -30430,6 +30554,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wplayer6
       objectReference: {fileID: 0}
+    - target: {fileID: 6985389947967242844, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
+      propertyPath: m_TagString
+      value: Left
+      objectReference: {fileID: 0}
     - target: {fileID: 7197761068637962010, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -31042,6 +31170,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AllofSelfPlayer1
       objectReference: {fileID: 0}
+    - target: {fileID: 6419598609958621135, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
+      propertyPath: m_TagString
+      value: Left
+      objectReference: {fileID: 0}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
       value: 
@@ -31146,6 +31278,10 @@ PrefabInstance:
     - target: {fileID: 6135484770048979813, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: m_Name
       value: AllofEnemyPlayer1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6135484770048979813, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: m_TagString
+      value: Right
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -31323,6 +31459,10 @@ PrefabInstance:
     - target: {fileID: 6246454134735780804, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: m_Name
       value: Bplayer2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6246454134735780804, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
+      propertyPath: m_TagString
+      value: Right
       objectReference: {fileID: 0}
     - target: {fileID: 8246317115666693576, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: m_text

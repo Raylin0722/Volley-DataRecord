@@ -16,6 +16,8 @@ TagManager:
   - GameSelect
   - DontDestroy
   - CorrPlayer
+  - Left
+  - Right
   layers:
   - Default
   - TransparentFX
