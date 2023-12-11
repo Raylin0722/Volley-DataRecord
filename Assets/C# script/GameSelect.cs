@@ -181,7 +181,10 @@ public class GameSelect : MonoBehaviour
     }
 
     public void ClickGame(){
-        Debug.Log("ClickGame!");
+        GameObject obj = EventSystem.current.currentSelectedGameObject;
+        int GameID = obj.GetComponent<ID>().ObjID;
+        UserData.Instance.GameID = GameID;
+        SceneManager.LoadScene("MainScene");
     }
     public void ClickPlayer(){
         CorrTarget = EventSystem.current.currentSelectedGameObject;
