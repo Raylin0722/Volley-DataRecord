@@ -115,44 +115,38 @@ def register():
 
 @app.route("/initDB", methods=['GET', 'POST'])
 def initDB():
-    gameName = request.form.get("gameName")
-    account = request.form.get("account")
+    GameID = request.form.get("GameID")
+    UserID = request.form.get("UserID")
+    resultReturn = {"success" : False, "situation": -1}
     
-    resultReturn = {"success" : False, "situation" : -1}
-
-    if not re.match("^[a-zA-Z0-9]+$", account):
-        resultReturn['situation'] = -2
+    if GameID == None or UserID == None:
         return resultReturn
-    
-    if not re.match("^[a-zA-Z0-9]+$", gameName):
-        resultReturn['situation'] = -3
-        return resultReturn
-
 
     cnx = mysql.connector.connect(**config)
     cur = cnx.cursor(buffered=True)
-
-    try:
-        cur.execute(f"show tables like {account};")
-        result = cur.fetchall()
-        if result: 
-            cur.execute("select * from {account} where gameName=%s", (gameName, ))
-            checkGameExist = cur.fetchall()
-            if len(checkGameExist) == 0:
-                cur.execute("insert into `{account}`(`gameName`) value(%s);", (account+'_'+gameName, ))
-                cnx.commit()
+    
+    cur.execute("select * from users where id=%s;", (UserID, ))
+    check1 = cur.fetchall()
+    
+    if len(check1) == 1: # 帳號存在
+        cur.execute(f"select * from userGame{UserID} where ID=%s", (GameID, ))
+        check2 = cur.fetchall()
+        if len(check2) == 1: # 比賽存在
+            try:
+                cur.execute(f"create table GameData{UserID}{GameID}(BallID int auto_increment primary key, formation varchar(50)
+                            round int, role varchar(50), attackblock varchar(50), catchblock varchar(50), situation int, score int);")    
+                resultReturn['situation'] = 0
                 resultReturn['success'] = True
-            else:
-                resultReturn['situation'] = -4
-        else:
-            resultReturn['situation'] = -5
-
-        
-    except:
-        resultReturn['success'] = False
-    finally:
-        cur.close()
-        cnx.close()
+            except Exception as ec:
+                print(ec)
+                resultReturn['situation'] = -2
+            finally:
+                cur.close()
+                cnx.close()
+        else :
+            resultReturn['situation'] = -3
+    else:
+        resultReturn['situation'] = -4
         
     return resultReturn
     
