@@ -184,6 +184,15 @@ public class GameSelect : MonoBehaviour
         GameObject obj = EventSystem.current.currentSelectedGameObject;
         int GameID = obj.GetComponent<ID>().ObjID;
         UserData.Instance.GameID = GameID;
+        UserData.Instance.UserPlayerID = UserPlayerID;
+        UserData.Instance.UserPlayerName = UserPlayerName;
+        UserData.Instance.UserPlayerNumber = UserPlayerNumber;
+        for(int i = 0; i < UserGameID.Count; i++){
+            if(UserGameID[i] == GameID){
+                UserData.Instance.GameName = UserGameName[i];
+                break;
+            }
+        }
         SceneManager.LoadScene("MainScene");
     }
     public void ClickPlayer(){
