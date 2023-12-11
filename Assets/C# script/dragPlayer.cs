@@ -9,6 +9,7 @@ using System;
 using System.Linq;
 using TMPro;
 
+
 //int saveIndex = 0;
 
 public class dragPlayer : MonoBehaviour {
@@ -39,9 +40,10 @@ public class dragPlayer : MonoBehaviour {
     public RectTransform content;
     private Text LogText;
 
-    public dealDB.Data[] saveData;
-    public int[] saveIndex;
+    public List<dealDB.Data> saveData;
 
+    public string formation;
+    
     
 
     void Start(){
@@ -53,10 +55,8 @@ public class dragPlayer : MonoBehaviour {
         oldGameobject = null;
         oldPoisition = Vector2.zero;
         duringTime = 0f;
-
-        saveIndex = database.GetComponent<dealDB>().saveIndex;
         saveData = database.GetComponent<dealDB>().saveData;
-        
+        formation = "";
     }
     private void OnMouseDown() {
         initialPosition = transform.position;
@@ -114,7 +114,7 @@ public class dragPlayer : MonoBehaviour {
     }
     private void OnMouseUp() {
         AfterDragPosition = transform.position;
-        string formationLeft = "", formationRight = "", formation = "";
+        string formationLeft = "", formationRight = "";
         TextMeshPro[] WPlayer = database.GetComponent<dealDB>().WPlayer;
         TextMeshPro[] BPlayer = database.GetComponent<dealDB>().BPlayer;
         for(int i = 0; i < 6; i++){
@@ -158,8 +158,7 @@ public class dragPlayer : MonoBehaviour {
         changePosition = 1 - changePosition;
     }
     private int clickOrDrag() {
-        Debug.Log(blockTag);
-        if(saveIndex[0] == 0){ // serve
+        if(saveData.Count == 0){ // serve
             //Debug.Log("serve");
             return dealDB.SERVE;
         }
@@ -180,14 +179,10 @@ public class dragPlayer : MonoBehaviour {
 
     private void setData(string formation, string catchBlock, string attackBlock, int situation, int score){
         
-        saveData[saveIndex[0]].formation = formation;
-        saveData[saveIndex[0]].catchblock = catchBlock;
-        saveData[saveIndex[0]].attackblock = attackBlock;
-        saveData[saveIndex[0]].role = playerName;
-        saveData[saveIndex[0]].round = RefreshPoint.Self_Score + RefreshPoint.Enemy_Score + 1;
-        saveData[saveIndex[0]].situation = situation;
-        saveData[saveIndex[0]].score = score;
-        (saveIndex[0])++;
+        int round = RefreshPoint.Self_Score + RefreshPoint.Enemy_Score + 1;
+        dealDB.Data newData = new dealDB.Data(formation, round, playerName, attackBlock, catchBlock, situation, score);
+
+        saveData.Add(newData);
     }
     
     public void dealData(){
@@ -197,32 +192,28 @@ public class dragPlayer : MonoBehaviour {
         GameObject obj = EventSystem.current.currentSelectedGameObject;
         if(obj.tag == "SelfPoint"){
             LogText.text += "Self Score\n";
-            if(saveIndex[0] != 0){
-                saveData[saveIndex[0] - 1].score = 1;
-            }
+            setData(formation, null, null, dealDB.SCORE, 1);
         }
         else if(obj.tag == "EnemyPoint"){
             LogText.text += "Enemy Score\n";
-            if(saveIndex[0] != 0){
-                saveData[saveIndex[0] - 1].score = -1;
-            }
+            setData(formation, null, null, dealDB.SCORE, -1);
+            
         }
-        for(int i = 0; i < saveIndex[0]; i++){
-            database.GetComponent<dealDB>().insertData(saveData[i]);
-        }
-        saveIndex[0] = 0;
+        //database.GetComponent<dealDB>().CallInsertData();
     }
 
     public void deletednewData(){
-        if(saveIndex[0] > 0)
-            (saveIndex[0])--;
+        
+        if(saveData.Count > 0)
+            saveData.RemoveAt(saveData.Count - 1);
+        
         GenerateLogTable();
     }
 
     public void GenerateLogTable(){
         LogText = content.GetComponent<Text>();
         LogText.text = "";
-        for(int i = 0; i < saveIndex[0]; i++){
+        for(int i = 0; i < saveData.Count; i++){
             string roleColor = changeRoleColor(saveData[i].role);
             if(saveData[i].situation == 0){
                 LogText.text += $"R{saveData[i].round}, <color={roleColor}>{saveData[i].role}</color>, Situ: CATCHING\n";

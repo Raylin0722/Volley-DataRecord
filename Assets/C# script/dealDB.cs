@@ -5,6 +5,8 @@ using TMPro;
 using System.Data;
 using Mono.Data.Sqlite;
 using System;
+using UnityEngine.Networking;
+using Newtonsoft.Json;
 
 
 public class dealDB : MonoBehaviour
@@ -18,20 +20,21 @@ public class dealDB : MonoBehaviour
     public const int SERVE = 1;
     public const int ATTACK = 2;
     public const int BLOCK = 3;
+    public const int SCORE = 4;
     
     public string gameName;
+    public string account;
+    public string hashPasswd;
     public struct Data{
         public string formation;
-        public int index;
         public int round;
         public string role;
         public string attackblock, catchblock;
         public int score, situation;
 
-        public Data(string formation, int index, int round, string role, string attackblock,
+        public Data(string formation,  int round, string role, string attackblock,
                     string catchblock, int situation, int score){
             this.formation = formation;
-            this.index = index;
             this.round = round;
             this.role = role;
             this.attackblock = attackblock;
@@ -41,74 +44,96 @@ public class dealDB : MonoBehaviour
         }
 
     }
-    public Data[] saveData = new Data[300]; // 儲存資料用
-    public int[] saveIndex = new int[1]; // 儲存資料用
-    public string databasePath;
-    private string SApath = Application.streamingAssetsPath;
-    private string dbName = "database.db";
+    public class Return{
+        public bool success;
+        public int situation;
+    }
+    public List<Data> saveData; // 儲存資料用 
+    public List<Data> showData; // 顯示資料用
 
     // Start is called before the first frame update
     void Awake(){
-
-        saveData = new Data[300]; // 儲存資料用
-        saveIndex = new int[1]; // 儲存資料用
-
-        DateTime now = DateTime.Now;
-        gameName = now.ToString("yyyy_MM_dd");
-
-        databasePath = System.IO.Path.Combine(SApath, dbName);
-        //Debug.Log(databasePath);
-        databasePath = "URI=file:" + databasePath;
-        createDB();
+        saveData = new List<Data>(); // 儲存資料用
     }
 
-    public void createDB(){
-        using(var connection = new SqliteConnection(databasePath)){
-            connection.Open();
+    public void CallinitDB(string gameName){
+        StartCoroutine(initDB());
+    }
 
-            using(var command = connection.CreateCommand()){
-                command.CommandText = "CREATE TABLE IF NOT EXISTS '" + gameName + "_contestData' (ballID INTEGER PRIMARY KEY AUTOINCREMENT, formation VARCHAR(50),  round INTEGER, role VARCHAR(50), attackblock VARCHAR(30), catchblock VARCHAR(30), situation INTEGER, score INTEGER)";
-                //Debug.Log(command.CommandText);
-                command.ExecuteNonQuery();
-            }
+    IEnumerator initDB(){
+        WWWForm form = new WWWForm();
+        form.AddField("gameName", gameName);
+        form.AddField("account", account);
 
-            connection.Close();
+        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/initDB", form);
+        yield return www.SendWebRequest();
+
+        Return result = new Return();
+
+        if(www.result == UnityWebRequest.Result.Success){
+            string response = www.downloadHandler.text;
+            result = JsonUtility.FromJson<Return>(response);
+        }
+        else
+            result.success = false;
+
+        yield return result;
+
+    }
+
+    public void CallDisplayData(){
+        StartCoroutine(displayData());
+    }
+
+    IEnumerator displayData(){
+        WWWForm form = new WWWForm();
+        form.AddField("gameName", gameName);
+        form.AddField("account", account);
+
+        
+        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/displayData", form);
+        yield return www.SendWebRequest();
+
+        if(www.result == UnityWebRequest.Result.Success){
+            string response = www.downloadHandler.text;
+            showData = JsonConvert.DeserializeObject<List<Data>>(response);
         }
     }
 
-    public void displayData(){
-        using(var connection = new SqliteConnection(databasePath)){
-            connection.Open();
-            using(var command = connection.CreateCommand()){
-                command.CommandText = "SELECT * FROM contestData;";
-
-                using(IDataReader reader = command.ExecuteReader()){
-                    while(reader.Read()){
-                        Debug.Log("Index: " + reader["ballID"] + " Formation: " + reader["formation"] +  " Round: " + reader["round"] + " Role: " + reader["role"] + " Attackblock: " + reader["attackblock"] + " CatchBlock: " + reader["catchblock"] + " Situation: " + reader["situation"] + " Score: " + reader["score"] );
-                    }
-
-                    reader.Close();
-                }
-            }
-
-            connection.Close();
-        }
+    public void CallInsertData(){
+        StartCoroutine(insertData());
     }
 
-    public void insertData(Data data){
-        using(var connection = new SqliteConnection(databasePath)){
-            connection.Open();
+    IEnumerator insertData()
+    {
+        string data = JsonConvert.SerializeObject(saveData);
+        string serverUrl = "http://127.0.0.1:5000/insertData";
 
-            using (var command = connection.CreateCommand()){
-                command.CommandText = "INSERT INTO '" + gameName + "_contestData' (formation, round, role, attackblock, catchblock, situation, score) VALUES (\"" + data.formation + "\", " + 
-                data.round + ", \"" + data.role + "\", \"" + data.attackblock + "\",\"" +
-                data.catchblock + "\"," + data.situation + ", " + data.score + ");";
-                Debug.Log(command.CommandText);
-                command.ExecuteNonQuery();
+        // 创建 UnityWebRequest 对象
+        using (UnityWebRequest www = UnityWebRequest.PostWwwForm(serverUrl, ""))
+        {
+            // 设置请求头部为 application/json
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            // 将 JSON 数据放入请求的数据体
+            byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(data);
+            www.uploadHandler = new UploadHandlerRaw(jsonBytes);
+
+            // 发送网络请求
+            yield return www.SendWebRequest();
+
+            // 处理响应
+            if (www.result == UnityWebRequest.Result.Success)
+            {
+                Debug.Log("POST request successful");
             }
-
-            connection.Close();
+            else
+            {
+                Debug.LogError($"Error: {www.error}");
+            }
         }
+
+        saveData.Clear();
     }
 
 }
