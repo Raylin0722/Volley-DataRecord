@@ -133,7 +133,7 @@ def initDB():
         check2 = cur.fetchall()
         if len(check2) == 1: # 比賽存在
             try:
-                cur.execute(f"create table GameData{UserID}{GameID}(BallID int auto_increment primary key, formation varchar(50), "
+                cur.execute(f"create table if not exists GameData{UserID}{GameID}(BallID int auto_increment primary key, formation varchar(50), "
                              "round int, role varchar(50), attackblock varchar(50), catchblock varchar(50), situation int, score int);")    
                 resultReturn['situation'] = 0
                 resultReturn['success'] = True

@@ -18,6 +18,7 @@ TagManager:
   - CorrPlayer
   - Left
   - Right
+  - AssignPlayer
   layers:
   - Default
   - TransparentFX
