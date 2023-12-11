@@ -77,7 +77,7 @@ public class dealDB : MonoBehaviour
         CallinitDB();
     }
 
-    public void CallinitDB(string gameName){
+    public void CallinitDB(){
         StartCoroutine(initDB());
     }
 

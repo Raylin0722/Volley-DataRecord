@@ -133,8 +133,8 @@ def initDB():
         check2 = cur.fetchall()
         if len(check2) == 1: # 比賽存在
             try:
-                cur.execute(f"create table GameData{UserID}{GameID}(BallID int auto_increment primary key, formation varchar(50)
-                            round int, role varchar(50), attackblock varchar(50), catchblock varchar(50), situation int, score int);")    
+                cur.execute(f"create table GameData{UserID}{GameID}(BallID int auto_increment primary key, formation varchar(50), "
+                             "round int, role varchar(50), attackblock varchar(50), catchblock varchar(50), situation int, score int);")    
                 resultReturn['situation'] = 0
                 resultReturn['success'] = True
             except Exception as ec:
@@ -264,7 +264,6 @@ def UpdateUserData():
     
     cur.execute("select account from users where account=%s;", (account,))
     result = cur.fetchall()
-    print(result)
     # cur.execute(f"select * from userGame{UserID} where gameName=%s;", ())
     UserPlayerID = []; UserPlayerName = []; UserPlayerNumber = []
     UserGameID = []; UserGameDate = []; UserGameName = []
@@ -279,12 +278,10 @@ def UpdateUserData():
                 UserPlayerID.append(i[0])
                 UserPlayerName.append(i[1])
                 UserPlayerNumber.append(i[2])
-                print([i[0], i[1], i[2]])
             for i in Game:
                 UserGameID.append(i[0])
                 UserGameDate.append(i[1])
                 UserGameName.append(i[2])
-                print([i[0], i[1], i[2]])
             resultReturn['UserPlayerID'] = UserPlayerID
             resultReturn['UserPlayerName'] = UserPlayerName
             resultReturn['UserPlayerNumber'] = UserPlayerNumber
