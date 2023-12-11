@@ -44,7 +44,8 @@ public class dragPlayer : MonoBehaviour {
 
     public string formation;
     
-    
+    public int leftTouch;
+    public int rightTouch;
 
     void Start(){
         //Fetch the Raycaster from the GameObject (the Canvas)
@@ -57,6 +58,8 @@ public class dragPlayer : MonoBehaviour {
         duringTime = 0f;
         saveData = database.GetComponent<dealDB>().saveData;
         formation = "";
+        leftTouch = 0;
+        rightTouch = 0;
     }
     private void OnMouseDown() {
         initialPosition = transform.position;
