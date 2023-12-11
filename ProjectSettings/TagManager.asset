@@ -15,6 +15,7 @@ TagManager:
   - AddGame
   - GameSelect
   - DontDestroy
+  - CorrPlayer
   layers:
   - Default
   - TransparentFX

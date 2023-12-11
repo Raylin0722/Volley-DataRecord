@@ -21,9 +21,10 @@ public class GameSelect : MonoBehaviour
     public GameObject PlayerScrollview;
     public Text User;
 
-    public GameObject Main;
-    public GameObject AddPlayerObj;
-    public GameObject AddGameObj; 
+    public GameObject MainCanvas;
+    public GameObject AddPlayerCanvas;
+    public GameObject AddGameCanvas; 
+    public GameObject CorrPlayerCanvas;
 
     public class ServerToUser{
         public bool success;
@@ -62,9 +63,10 @@ public class GameSelect : MonoBehaviour
     }
     private void Start()
     {
-        Main.SetActive(true);
-        AddPlayerObj.SetActive(false);
-        AddPlayerObj.SetActive(false);
+        MainCanvas.SetActive(true);
+        AddPlayerCanvas.SetActive(false);
+        AddPlayerCanvas.SetActive(false);
+        CorrPlayerCanvas.SetActive(false);
         StartCoroutine(DealView());
     }
 
@@ -74,6 +76,7 @@ public class GameSelect : MonoBehaviour
     public TMP_InputField GDate;
     public Text PWarning;
     public Text GWarning;
+    public GameObject CorrTarget;
     public void CallAddPlayer(){
         Regex regexNum = new Regex("^[0-9]+$");
         Regex regexName = new Regex("^[\u4e00-\u9fa50-9A-Za-z_]+$");
@@ -128,7 +131,42 @@ public class GameSelect : MonoBehaviour
 
         StartCoroutine(AddGame(GDate.text, GNameIN));
     }
+    public void CallCorrPlayer(){
+        Regex regexNum = new Regex("^[0-9]+$");
+        Regex regexName = new Regex("^[\u4e00-\u9fa50-9A-Za-z_]+$");
+        if(string.IsNullOrEmpty(PCorrName.text)){
+            PCWarning.text = "球員名稱欄位不能為空";
+            Debug.Log("球員名稱欄位不能為空");
+            return;
+        }
+        string PCorrNameIn = PCorrName.text;
+        if(!regexName.IsMatch(PCorrName.text)){
+            PCWarning.text = "球員名稱只能輸入 中文 數字 大小寫英文";
+            Debug.Log("球員名稱只能輸入 中文 數字 大小寫英文");
+            return;
+        }
 
+        if(string.IsNullOrEmpty(PCorrNum.text)){
+            PCWarning.text = "背號欄位不能為空";
+            Debug.Log("背號欄位不能為空");
+            return;
+        }
+        if(!regexNum.IsMatch(PCorrNum.text)){
+            PCWarning.text = "背號只能輸入數字";
+            Debug.Log("背號只能輸入數字");
+            return;
+        }
+        int PCorrNumIN = int.Parse(PCorrNum.text);
+        if(PCorrNumIN<=0 || PCorrNumIN >= 100){
+            PCWarning.text = "背號請輸入 0 - 100!";
+            Debug.Log("背號請輸入 0 - 100!");
+            return;
+        }
+        int PlayerID = CorrTarget.GetComponent<ID>().ObjID;
+        StartCoroutine(CorrectPlayer(PCorrNumIN, PCorrNameIn, PlayerID));
+
+
+    }
     public void CallUpdateUserData(){
         StartCoroutine(UpdateUserData());
     }
@@ -143,13 +181,22 @@ public class GameSelect : MonoBehaviour
     }
 
     public void ClickGame(){
-
+        Debug.Log("ClickGame!");
     }
-
     public void ClickPlayer(){
-
+        CorrTarget = EventSystem.current.currentSelectedGameObject;
+        Text[] ObjTexts = CorrTarget.GetComponentsInChildren<Text>();
+        PCorrNum.text = ObjTexts[0].text;
+        PCorrName.text = ObjTexts[1].text;
+        PCWarning = "";
+        int PlayerID = CorrTarget.GetComponent<ID>().ObjID;
+        print(PlayerID);
+        print(ObjTexts[0].text);
+        print(ObjTexts[1].text);
+        MainCanvas.SetActive(false);
+        CorrPlayerCanvas.SetActive(true);
+        
     }
-
     public IEnumerator UpdateUserData(){
 
         WWWForm form = new WWWForm();
@@ -247,9 +294,10 @@ public class GameSelect : MonoBehaviour
                 yield return StartCoroutine(UpdateUserData());
                 GWarning.text = "新增成功!";
                 yield return StartCoroutine(DealView());
-                Main.SetActive(true);
-                AddPlayerObj.SetActive(false);
-                AddGameObj.SetActive(false);
+                yield return new WaitForSeconds(1f);
+                MainCanvas.SetActive(true);
+                AddPlayerCanvas.SetActive(false);
+                AddGameCanvas.SetActive(false);
             }
         }
         else{
@@ -295,12 +343,12 @@ public class GameSelect : MonoBehaviour
             else{
                 Debug.Log("Success!");
                 yield return StartCoroutine(UpdateUserData());
-                print(numOfGame);
                 GWarning.text = "新增成功!";
                 yield return StartCoroutine(DealView());
-                Main.SetActive(true);
-                AddPlayerObj.SetActive(false);
-                AddGameObj.SetActive(false);
+                yield return new WaitForSeconds(1f);
+                MainCanvas.SetActive(true);
+                AddPlayerCanvas.SetActive(false);
+                AddGameCanvas.SetActive(false);
 
             }
         }
@@ -311,28 +359,33 @@ public class GameSelect : MonoBehaviour
     public void CallAdd(){
         GameObject obj = EventSystem.current.currentSelectedGameObject;
         if(obj.tag == "AddPlayer"){
-            Main.SetActive(false);
-            AddPlayerObj.SetActive(true);
-            AddGameObj.SetActive(false);
+            MainCanvas.SetActive(false);
+            AddPlayerCanvas.SetActive(true);
+            AddGameCanvas.SetActive(false);
             PName.text = "";
             PNum.text = "";
             PWarning.text = "";
         }
         else if(obj.tag == "AddGame"){
-            Main.SetActive(false);
-            AddPlayerObj.SetActive(false);
-            AddGameObj.SetActive(true);
+            MainCanvas.SetActive(false);
+            AddPlayerCanvas.SetActive(false);
+            AddGameCanvas.SetActive(true);
             GName.text = "";
             GDate.text = "";
             GWarning.text = "";
         }
         else if(obj.tag == "GameSelect"){
-            Main.SetActive(true);
-            AddPlayerObj.SetActive(false);
-            AddGameObj.SetActive(false);
+            MainCanvas.SetActive(true);
+            AddPlayerCanvas.SetActive(false);
+            AddGameCanvas.SetActive(false);
+        }
+        else if(obj.tag == "CorrPlayer"){
+            MainCanvas.SetActive(true);
+            CorrPlayerCanvas.SetActive(false);
         }
     }
     public IEnumerator DealView(){
+
         // 初始化ScrollView的滾動位置
         for (int i = 0; i < GameContent.childCount; i++){
             Destroy(GameContent.GetChild(i).gameObject);
@@ -354,7 +407,8 @@ public class GameSelect : MonoBehaviour
 
             GameTexts[0].text = UserGameDate[i];
             GameTexts[1].text = UserGameName[i];
-
+            newGame.GetComponent<ID>().ObjID = UserGameID[i];
+            newGame.GetComponent<Button>().onClick.AddListener(ClickGame);
             // 設定Prefab的位置
             RectTransform rectTransform = newGame.GetComponent<RectTransform>();
             rectTransform.anchoredPosition = new Vector2(0, -i * prefabHeight);
@@ -367,6 +421,8 @@ public class GameSelect : MonoBehaviour
 
             PlayerTexts[0].text =  UserPlayerNumber[i].ToString();
             PlayerTexts[1].text = UserPlayerName[i];
+            newPlayer.GetComponent<ID>().ObjID = UserPlayerID[i];
+            newPlayer.GetComponent<Button>().onClick.AddListener(ClickPlayer);
 
             // 設定Prefab的位置
             RectTransform rectTransform = newPlayer.GetComponent<RectTransform>();
@@ -377,5 +433,66 @@ public class GameSelect : MonoBehaviour
 
         yield return null;
     }
+    
+    public InputField PCorrName;
+    public InputField PCorrNum;
+    public Text PCWarning;
+    public IEnumerator CorrectPlayer(int PlayerNumber, string PlayerName, int PlayerID){
+        WWWForm form = new WWWForm();
+        form.AddField("account", UserName);
+        form.AddField("UserID", UserID);
+        form.AddField("PlayerID", PlayerID);
+        form.AddField("PlayerNumber", PlayerNumber);
+        form.AddField("PlayerName", PlayerName);
 
+        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/CorrectPlayer", form);
+        yield return www.SendWebRequest();
+
+        Return result = new Return();
+        if(www.result == UnityWebRequest.Result.Success){
+            string response = www.downloadHandler.text;
+            result = JsonUtility.FromJson<Return>(response);
+            if(result.success == false){
+                switch (result.situation){
+                    
+                    case -1:
+                        Debug.Log("參數傳送錯誤!"); 
+                        PCWarning.text = "參數傳送錯誤!";
+                        break;
+                    case -2:
+                        Debug.Log("資料庫錯誤!"); 
+                        PCWarning.text = "資料庫錯誤!";
+                        break;
+                    case -3:
+                        Debug.Log("帳號不存在!"); 
+                        PCWarning.text = "帳號不存在!";
+                        break;
+                    case -4:
+                        Debug.Log("該球員名稱已被使用!"); 
+                        PCWarning.text = "該球員名稱已被使用!";
+                        break;
+                    case -5:
+                        Debug.Log("該背號已被使用!"); 
+                        PCWarning.text = "該背號已被使用!";
+                        break;
+                    case -6:
+                        Debug.Log("修該球員的資料不存在!");
+                        PCWarning.text = "修該球員的資料不存在!";
+                        break;
+                }
+            }
+            else{
+                Debug.Log("Success!");
+                yield return StartCoroutine(UpdateUserData());
+                GWarning.text = "修正成功!";
+                yield return StartCoroutine(DealView());
+                yield return new WaitForSeconds(1f);
+                MainCanvas.SetActive(true);
+                CorrPlayerCanvas.SetActive(false);
+            }
+        }
+        else{
+            Debug.Log("未連接到伺服器!");
+        }
+    }
 }

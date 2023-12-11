@@ -253,7 +253,6 @@ def AddGame():
         resultReturn['situation'] = -4
     return resultReturn
     
-
 @app.route("/UpdateUserData", methods=['GET', 'POST']) 
 def UpdateUserData():
     account = request.form.get("account")
@@ -311,7 +310,59 @@ def UpdateUserData():
     else:
         resultReturn['situation'] = -3
     return resultReturn
-        
 
+@app.route("/CorrectPlayer", methods=['GET', 'POST'])    
+def CorrectPlayer():
+    account = request.form.get("account")
+    UserID = request.form.get("UserID")
+    PlayerID = request.form.get("PlayerID")
+    PlayerName = request.form.get("PlayerName")
+    PlayerNumber = request.form.get("PlayerNumber")
+    
+    resultReturn = {"success" : False, "situation": -1} # 0 成功 -1 參數錯誤 -2 資料庫錯誤 -3 帳號不存在 -4 該球員已存在 -5 該背號已存在
+    
+    if account == None or UserID == None or PlayerName == None or PlayerNumber == None or PlayerID == None:
+        return resultReturn
+    cnx = mysql.connector.connect(**config)
+    cur = cnx.cursor(buffered=True)
+
+    cur.execute("select account from users where account=%s;", (account,))
+    result = cur.fetchall()
+    
+    cur.execute(f"select * from userPlayer{UserID} where ID=%s;", (PlayerID,))
+    check1 = cur.fetchall()
+    
+    cur.execute(f"select * from userPlayer{UserID} where PlayerName=%s and ID != %s;", (PlayerName, PlayerID))
+    check2 = cur.fetchall()
+    
+    cur.execute(f"select * from userPlayer{UserID} where PlayerNumber=%s and ID != %s;", (PlayerNumber, PlayerID))
+    check3 = cur.fetchall()
+    
+    if len(result) == 1 and len(check1) == 1 and len(check2) == 0 and len(check3) == 0:
+        try:
+            cur.execute(f"update userPlayer{UserID} set PlayerName=%s, PlayerNumber=%s where ID=%s;", (PlayerName, PlayerNumber, int(PlayerID)))
+            cnx.commit()
+            resultReturn['situation'] = 0
+            resultReturn['success'] = True
+        except Exception as ex:
+            resultReturn['situation'] = -2
+            print(ex)
+        finally:
+            cur.close()
+            cnx.close()
+    elif len(result) != 1:
+        resultReturn['situation'] = -3
+        print("-3")
+    elif len(check1) != 1:
+        resultReturn['situation'] = -6
+        print("-6")
+    elif len(result) == 1 and len(check2) != 0:
+        resultReturn['situation'] = -4
+        print("-4")
+    elif len(result) == 1 and len(check3) != 0:
+        resultReturn['situation'] = -5
+        print("-5")
+    return resultReturn
+    
 if __name__ == '__main__':
     app.run(port=5000, debug=True)   
