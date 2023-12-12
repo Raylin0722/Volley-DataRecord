@@ -25,7 +25,7 @@ public class SaveAndLoadName : MonoBehaviour
         }
         if(RefreshPoint.change_all == 1) {
             InputFieldText();
-            
+            Setting.show_change  = 0;
         }
 
         int showWarningMessage = 0;
@@ -44,7 +44,6 @@ public class SaveAndLoadName : MonoBehaviour
             WarningMessage.SetActive(false);
     }
     public void Start() {
-        Debug.Log("!11");
         SaveAndLoadName.TeamName[0] = "預設A";
         SaveAndLoadName.TeamName[1] = "預設B";
 
@@ -74,8 +73,8 @@ public class SaveAndLoadName : MonoBehaviour
         SaveAndLoadName.EnemyPlayerInfo[5,0] = "88";
         SaveAndLoadName.EnemyPlayerInfo[5,1] = "Ll";
 
-        InputFieldText();
         PlayerOnFieldInfo();
+        InputFieldText();
     }
     public void readTeamName() {
         TeamName[0] = SelfTeamName.text;

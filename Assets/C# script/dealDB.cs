@@ -85,7 +85,7 @@ public class dealDB : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("UserID", UserID);
         form.AddField("GameID", GameID);
-        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/initDB", form);
+        UnityWebRequest www = UnityWebRequest.Post("http://192.168.17.66:5000/initDB", form);
         yield return www.SendWebRequest();
 
         Return result = new Return();
@@ -130,7 +130,7 @@ public class dealDB : MonoBehaviour
         form.AddField("account", account);
 
         
-        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/displayData", form);
+        UnityWebRequest www = UnityWebRequest.Post("http://192.168.17.66:5000/displayData", form);
         yield return www.SendWebRequest();
 
         if(www.result == UnityWebRequest.Result.Success){
@@ -146,36 +146,59 @@ public class dealDB : MonoBehaviour
     public IEnumerator insertData()
     {
         string data = JsonConvert.SerializeObject(saveData);
-        string serverUrl = "http://127.0.0.1:5000/insertData";
+        string serverUrl = "http://192.168.17.66:5000/insertData";
+        
 
-        // 创建 UnityWebRequest 对象
-        using (UnityWebRequest www = UnityWebRequest.PostWwwForm(serverUrl, ""))
-        {
-            // 设置请求头部为 application/json
-            www.SetRequestHeader("Content-Type", "application/json");
+        UnityWebRequest www = UnityWebRequest.Post($"http://192.168.17.66:5000/insertData?GameID={GameID}&UserID={UserID}", new WWWForm());
+        www.SetRequestHeader("Content-Type", "application/json");
 
-            // 将 JSON 数据放入请求的数据体
-            byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(data);
-            www.uploadHandler = new UploadHandlerRaw(jsonBytes);
+        byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(data);
+        www.uploadHandler = new UploadHandlerRaw(jsonBytes);
+        yield return www.SendWebRequest();
 
-            // 发送网络请求
-            yield return www.SendWebRequest();
+        Return result = new Return();
+        if (www.result == UnityWebRequest.Result.Success){
+            string response = www.downloadHandler.text;
+            result = JsonUtility.FromJson<Return>(response);
 
-            // 处理响应
-            if (www.result == UnityWebRequest.Result.Success)
-            {
-                Debug.Log("POST request successful");
+            if(result.success == false){
+                switch (result.situation){
+                    case -1:
+                        Debug.Log("參數傳送錯誤!"); 
+                        break;
+                    case -2:
+                        Debug.Log("資料庫錯誤!"); 
+                        break;
+                    case -3:
+                        Debug.Log("資料表不存在!");
+                        break;
+                    case -4:
+                        Debug.Log("比賽不存在!"); 
+                        break;
+                    case -5:
+                        Debug.Log("帳號不存在!"); 
+                        break;
+                }
             }
-            else
-            {
-                Debug.LogError($"Error: {www.error}");
+            else{
+                Debug.Log("Success!");
+                
             }
         }
+        else{
+            Debug.Log("未連接到伺服器!");
+        }
+
+    
+
+        
 
         saveData.Clear();
     }
     
-   
+    public void initPlayer(){
+        
+    }
 }
 
 

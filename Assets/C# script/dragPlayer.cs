@@ -62,12 +62,16 @@ public class dragPlayer : MonoBehaviour {
         rightTouch = 0;
     }
     private void OnMouseDown() {
+        if(openSettingScene.interactable == 0)
+            return;
         initialPosition = transform.position;
         PlayerSize = transform.localScale;
         //Debug.Log(PlayerSize);
         difference = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position;
     }
     private void OnMouseDrag() {
+        if(openSettingScene.interactable == 0)
+            return;
         transform.position = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - difference;
         
         m_PointerEventData = new PointerEventData(m_EventSystem);
@@ -116,6 +120,8 @@ public class dragPlayer : MonoBehaviour {
         }
     }
     private void OnMouseUp() {
+        if(openSettingScene.interactable == 0)
+            return;
         AfterDragPosition = transform.position;
         string formationLeft = "", formationRight = "";
         TextMeshPro[] WPlayer = database.GetComponent<dealDB>().WPlayer;
@@ -123,9 +129,10 @@ public class dragPlayer : MonoBehaviour {
         for(int i = 0; i < 6; i++){
             formationLeft += $"L{WPlayer[i].text} ";
             formationRight += $"R{BPlayer[i].text} ";
+            print(WPlayer[i].text);
         }
         formation = formationLeft + formationRight;
-        
+        print(formation);
         int mode = clickOrDrag();
 
         if(changePosition == 0){
