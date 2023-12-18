@@ -85,7 +85,7 @@ public class dealDB : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("UserID", UserID);
         form.AddField("GameID", GameID);
-        UnityWebRequest www = UnityWebRequest.Post("http://192.168.17.66:5000/initDB", form);
+        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/initDB", form);
         yield return www.SendWebRequest();
 
         Return result = new Return();
@@ -130,7 +130,7 @@ public class dealDB : MonoBehaviour
         form.AddField("account", account);
 
         
-        UnityWebRequest www = UnityWebRequest.Post("http://192.168.17.66:5000/displayData", form);
+        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/displayData", form);
         yield return www.SendWebRequest();
 
         if(www.result == UnityWebRequest.Result.Success){
@@ -146,10 +146,10 @@ public class dealDB : MonoBehaviour
     public IEnumerator insertData()
     {
         string data = JsonConvert.SerializeObject(saveData);
-        string serverUrl = "http://192.168.17.66:5000/insertData";
+        string serverUrl = "http://127.0.0.1:5000/insertData";
         
 
-        UnityWebRequest www = UnityWebRequest.Post($"http://192.168.17.66:5000/insertData?GameID={GameID}&UserID={UserID}", new WWWForm());
+        UnityWebRequest www = UnityWebRequest.Post($"http://127.0.0.1:5000/insertData?GameID={GameID}&UserID={UserID}", new WWWForm());
         www.SetRequestHeader("Content-Type", "application/json");
 
         byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(data);

@@ -133,7 +133,7 @@ def initDB():
         check2 = cur.fetchall()
         if len(check2) == 1: # 比賽存在
             try:
-                cur.execute(f"create table if not exists GameData{UserID}{GameID}(BallID int auto_increment primary key, formation varchar(50), "
+                cur.execute(f"create table if not exists GameDataU{UserID}G{GameID}(BallID int auto_increment primary key, formation varchar(50), "
                              "round int, role varchar(50), attackblock varchar(50), catchblock varchar(50), situation int, score int);")    
                 resultReturn['situation'] = 0
                 resultReturn['success'] = True
@@ -171,12 +171,12 @@ def insertData():
         cur.execute(f"select * from userGame{UserID} where ID=%s", (GameID, ))
         check2 = cur.fetchall()
         if len(check2) == 1: # 比賽存在
-            cur.execute(f"SELECT * FROM information_schema.tables WHERE table_schema = 'Volleyball' AND table_name = %s;", (f'GameData{UserID}{GameID}',))
+            cur.execute(f"SELECT * FROM information_schema.tables WHERE table_schema = 'Volleyball' AND table_name = %s;", (f'GameDataU{UserID}G{GameID}',))
             check3 = cur.fetchall()
             if len(check3) == 1: # 資料表存在
                 try:
                     for i in range(len(data)):
-                        cur.execute(f"insert into GameData{UserID}{GameID}(formation, round, role, attackblock, catchblock, situation, score) value(%s, %s, %s, %s, %s, %s, %s);", 
+                        cur.execute(f"insert into GameDataU{UserID}G{GameID}(formation, round, role, attackblock, catchblock, situation, score) value(%s, %s, %s, %s, %s, %s, %s);", 
                                    (data[i]['formation'], data[i]['round'], data[i]['role'], data[i]['attackblock'], 
                                     data[i]['catchblock'], data[i]['situation'], data[i]['score']))
                         print(data[i])
@@ -210,11 +210,11 @@ def displayData():
         return None
     cnx = mysql.connector.connect(**config)
     cur = cnx.cursor(buffered=True)
-    cur.execute(f"SELECT * FROM information_schema.tables WHERE table_schema = 'Volleyball' AND table_name = %s;", (f'GameData{UserID}{GameID}',))
+    cur.execute(f"SELECT * FROM information_schema.tables WHERE table_schema = 'Volleyball' AND table_name = %s;", (f'GameDataU{UserID}G{GameID}',))
     result = cur.fetchall()
     dataReturn = []
     if len(result) == 1:
-        cur.execute(f"select * from GameData{UserID}{GameID};")
+        cur.execute(f"select * from GameDataU{UserID}G{GameID};")
         data = cur.fetchall()
         for i in range(len(data)):
             temp = {"formatiion":data[i][1], "round" : data[i][2], "role" : data[i][3], "attackblock": data[i][4], "catchblock":data[i][5], "situation":data[i][6], "score":data[i][7]}
@@ -416,4 +416,4 @@ def CorrectPlayer():
     return resultReturn
     
 if __name__ == '__main__':
-    app.run(port=5000, host="0.0.0.0")   
+    app.run(port=5000)   

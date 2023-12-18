@@ -46,7 +46,7 @@ public class Login : MonoBehaviour
         form.AddField("account", accountField.text);
         form.AddField("password", hashPwd);
 
-        UnityWebRequest www = UnityWebRequest.Post("http://192.168.17.66:5000/login", form);
+        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/login", form);
         
         dataReturn result = new dataReturn();
 

@@ -10,6 +10,7 @@ public class SaveAndLoadName : MonoBehaviour
     [SerializeField] Text SelfTeamNameText, EnemyTeamNameText;
     [SerializeField] GameObject[] WP, BP, SP, EP; // self/enemy player on field, all of self/enemy player
     [SerializeField] GameObject WarningMessage;
+    [SerializeField] GameObject InsertDataBtn;
     [SerializeField] public static string[] TeamName = new string[2];
     [SerializeField] public static string[,] SelfPlayerInfo = new string[12, 2];
     [SerializeField] public static string[,] EnemyPlayerInfo = new string[12, 2];
@@ -38,10 +39,14 @@ public class SaveAndLoadName : MonoBehaviour
                 showWarningMessage = 1;
         }
 
-        if(showWarningMessage == 1)
+        if(showWarningMessage == 1){
             WarningMessage.SetActive(true);
-        else
+            InsertDataBtn.SetActive(false);
+        }
+        else{
             WarningMessage.SetActive(false);
+            InsertDataBtn.SetActive(true);
+        }
     }
     public void Start() {
         SaveAndLoadName.TeamName[0] = "預設A";
@@ -73,6 +78,7 @@ public class SaveAndLoadName : MonoBehaviour
         SaveAndLoadName.EnemyPlayerInfo[5,0] = "88";
         SaveAndLoadName.EnemyPlayerInfo[5,1] = "Ll";
 
+        PlayerDataIn();
         PlayerOnFieldInfo();
         InputFieldText();
     }
@@ -141,4 +147,11 @@ public class SaveAndLoadName : MonoBehaviour
             EP[i].gameObject.GetComponent<dragPlayerToChange>().PlayerName = SaveAndLoadName.EnemyPlayerInfo[i,1];
         }
     }
+    public void PlayerDataIn(){
+        for(int i = 0; i < UserData.Instance.UserPlayerID.Count; i++){
+            SaveAndLoadName.SelfPlayerInfo[i,0] = UserData.Instance.UserPlayerNumber[i].ToString();
+            SaveAndLoadName.SelfPlayerInfo[i,1] = UserData.Instance.UserPlayerName[i];
+        }
+    }
+
 }
