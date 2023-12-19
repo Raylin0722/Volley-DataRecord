@@ -15,6 +15,8 @@ using TMPro;
 public class dragPlayer : MonoBehaviour {
     [SerializeField] GameObject SelfScore;
     [SerializeField] GameObject EnemyScore;
+    [SerializeField] Text LeftPoint;
+    [SerializeField] Text RightPoint;
     [SerializeField] GameObject database;
     [SerializeField] GameObject canvas;
     [SerializeField] public string playerName;
@@ -209,13 +211,30 @@ public class dragPlayer : MonoBehaviour {
             setData(formation, null, null, dealDB.SCORE, -1);
             
         }
-        //database.GetComponent<dealDB>().CallInsertData();
+        
     }
 
     public void deletednewData(){
         
-        if(saveData.Count > 0)
+        if(saveData.Count > 0){
+            if(saveData[saveData.Count - 1].score > 0){
+                if(int.Parse(LeftPoint.text) - 1 < 10){
+                    LeftPoint.text = "0" + (int.Parse(LeftPoint.text) - 1).ToString();
+                }
+                else
+                    LeftPoint.text = (int.Parse(LeftPoint.text) - 1).ToString();
+            }
+            else if(saveData[saveData.Count - 1].score < 0){
+                if(int.Parse(RightPoint.text) - 1 < 10){
+                    RightPoint.text = "0" + (int.Parse(RightPoint.text) - 1).ToString();
+                }
+                else
+                    RightPoint.text = (int.Parse(RightPoint.text) - 1).ToString();
+            }
+            
             saveData.RemoveAt(saveData.Count - 1);
+
+        }
         
         GenerateLogTable();
     }

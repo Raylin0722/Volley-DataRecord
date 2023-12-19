@@ -221,8 +221,14 @@ public class GameSelect : MonoBehaviour
         }
         string TeamNameIn = TeamName.text;
         if(!regexName.IsMatch(TeamName.text)){
-            TeamWarning.text = "隊伍名稱只能輸入 中文 數字 大小寫英文";
-            Debug.Log("隊伍名稱只能輸入 中文 數字 大小寫英文");
+            TeamWarning.text = "隊伍名稱只能輸入 中文 數字 大小寫英文 長度需小於20";
+            Debug.Log("隊伍名稱只能輸入 中文 數字 大小寫英文 長度需小於20");
+            return;
+        }
+
+        if(TeamName.text.Length >= 20){
+            TeamWarning.text = "隊伍名稱長度需小於20";
+            Debug.Log("隊伍名稱長度需小於20");
             return;
         }
 

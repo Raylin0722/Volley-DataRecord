@@ -7,6 +7,7 @@ using Mono.Data.Sqlite;
 using System;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
+using UnityEngine.UI;
 
 
 public class dealDB : MonoBehaviour
@@ -74,7 +75,13 @@ public class dealDB : MonoBehaviour
         UserName = UserData.Instance.UserName; //後面要連伺服器
         UserID = UserData.Instance.UserID;
         GameID = UserData.Instance.GameID;
+        
+
         CallinitDB();
+    }
+
+    void Start(){
+        
     }
 
     public void CallinitDB(){
@@ -138,8 +145,9 @@ public class dealDB : MonoBehaviour
             showData = JsonConvert.DeserializeObject<List<Data>>(response);
         }
     }
-
+    [SerializeField] GameObject content;
     public void CallInsertData(){
+        content.GetComponent<Text>().text = "";
         StartCoroutine(insertData());
     }
 
@@ -189,15 +197,8 @@ public class dealDB : MonoBehaviour
             Debug.Log("未連接到伺服器!");
         }
 
-    
-
-        
 
         saveData.Clear();
-    }
-    
-    public void initPlayer(){
-        
     }
 }
 

@@ -19,6 +19,8 @@ public class SaveAndLoadName : MonoBehaviour
     [SerializeField] InputField[] SPName;
     [SerializeField] InputField[] EPNumber;
     [SerializeField] InputField[] EPName;
+
+    
     void Update() {
         if(Setting.show_change == 1) {
             PlayerOnFieldInfo();
@@ -48,7 +50,7 @@ public class SaveAndLoadName : MonoBehaviour
             InsertDataBtn.SetActive(true);
         }
     }
-    public void Start() {
+    public void Awake() {
         SaveAndLoadName.TeamName[0] = "預設A";
         SaveAndLoadName.TeamName[1] = "預設B";
 
@@ -152,6 +154,7 @@ public class SaveAndLoadName : MonoBehaviour
             SaveAndLoadName.SelfPlayerInfo[i,0] = UserData.Instance.UserPlayerNumber[i].ToString();
             SaveAndLoadName.SelfPlayerInfo[i,1] = UserData.Instance.UserPlayerName[i];
         }
+        SaveAndLoadName.TeamName[0] = UserData.Instance.TeamName;
     }
 
 }

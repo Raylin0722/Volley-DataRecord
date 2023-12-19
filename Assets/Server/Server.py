@@ -30,8 +30,9 @@ def login():
     resultReturn = {"success" : False, "situation" : -1, "UserName" : None, "UserID" : None, "numOfGame" : None, "numOfPlayer" : None}
 
 
+    print(password)
+
     if account == None or password == None:
-        resultReturn['situation'] = -2
         return resultReturn
 
 
@@ -44,6 +45,7 @@ def login():
     if len(result) == 1:
         try:
             if password == result[0][2]:
+                print("a")
                 resultReturn['success'] = True
                 resultReturn['situation'] = 0
                 resultReturn['UserName'] = account
@@ -56,8 +58,9 @@ def login():
                 resultReturn['numOfPlayer'] = int(cur.fetchall()[0][0])
             else:
                 resultReturn['situation'] = -2
-        except:
-            resultReturn['situation'] = -2
+        except Exception as ec:
+            print(ec)
+            resultReturn['situation'] = -1
         finally:
             cur.close()
             cnx.close()
@@ -88,7 +91,7 @@ def register():
             
             cur.execute("insert into users(account, hash) value(%s, %s);", (account, password))
             cnx.commit()
-            cur.execute("SELECT COUNT(*) FROM users;")
+            cur.execute("select * from users;")
             userId = int(cur.fetchall()[0][0])
             try:
                 cur.execute(f"create table userGame{userId} (ID INT AUTO_INCREMENT PRIMARY KEY, GameDate Date, GameName VARCHAR(50));")
@@ -221,7 +224,6 @@ def displayData():
             dataReturn.append(temp)
         
     return dataReturn
-
    
 @app.route("/AddPlayer", methods=['GET', 'POST'])
 def AddPlayer():
