@@ -15,6 +15,7 @@ public class UserData : MonoBehaviour
     public List<int> UserPlayerID;
     public List<string> UserPlayerName;
     public List<int> UserPlayerNumber;
+    public string TeamName;
     void Awake(){
         if(Instance != null){
             Destroy(gameObject);

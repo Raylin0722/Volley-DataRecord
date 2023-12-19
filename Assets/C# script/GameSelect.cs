@@ -25,6 +25,8 @@ public class GameSelect : MonoBehaviour
     public GameObject AddPlayerCanvas;
     public GameObject AddGameCanvas; 
     public GameObject CorrPlayerCanvas;
+    public GameObject AssignCanvas;
+    public GameObject WarnCanvas;
 
     public class ServerToUser{
         public bool success;
@@ -67,6 +69,8 @@ public class GameSelect : MonoBehaviour
         AddPlayerCanvas.SetActive(false);
         AddPlayerCanvas.SetActive(false);
         CorrPlayerCanvas.SetActive(false);
+        AssignCanvas.SetActive(false);
+        WarnCanvas.SetActive(false);
         StartCoroutine(DealView());
     }
 
@@ -180,20 +184,83 @@ public class GameSelect : MonoBehaviour
     
     }
 
+    public IEnumerator waitsecond(float second){
+        yield return new WaitForSeconds(second);
+    }
+    public InputField TeamName;
+    public Text TeamWarning;
     public void ClickGame(){
+        
         GameObject obj = EventSystem.current.currentSelectedGameObject;
         int GameID = obj.GetComponent<ID>().ObjID;
-        UserData.Instance.GameID = GameID;
-        UserData.Instance.UserPlayerID = UserPlayerID;
-        UserData.Instance.UserPlayerName = UserPlayerName;
-        UserData.Instance.UserPlayerNumber = UserPlayerNumber;
         for(int i = 0; i < UserGameID.Count; i++){
             if(UserGameID[i] == GameID){
                 UserData.Instance.GameName = UserGameName[i];
                 break;
             }
         }
+        UserData.Instance.GameID = GameID;
+
+
+        NotAssignPlayerID = UserPlayerID;
+        NotAssignPlayerName = UserPlayerName;
+        NotAssignPlayerNumber = UserPlayerNumber;
+        MainCanvas.SetActive(false);
+        AssignCanvas.SetActive(true);
+        StartCoroutine(ShowNotAssign());
+        //SceneManager.LoadScene("MainScene");
+
+    }
+    public void GoToMainScene(){
+        
+        Regex regexName = new Regex("^[\u4e00-\u9fa50-9A-Za-z_]+$");
+        if(string.IsNullOrEmpty(TeamName.text)){
+            TeamWarning.text = "隊伍名稱欄位不能為空";
+            Debug.Log("隊伍名稱欄位不能為空");
+            return;
+        }
+        string TeamNameIn = TeamName.text;
+        if(!regexName.IsMatch(TeamName.text)){
+            TeamWarning.text = "隊伍名稱只能輸入 中文 數字 大小寫英文 長度需小於20";
+            Debug.Log("隊伍名稱只能輸入 中文 數字 大小寫英文 長度需小於20");
+            return;
+        }
+
+        if(TeamName.text.Length >= 20){
+            TeamWarning.text = "隊伍名稱長度需小於20";
+            Debug.Log("隊伍名稱長度需小於20");
+            return;
+        }
+
+        TeamWarning.text = "設定成功!";
+        UserData.Instance.TeamName = TeamNameIn;
+        waitsecond(1f);
+        
+        if(AssignPlayerID.Count != 12){
+            WarningMsg.text = "已設定人數不為12人 若選擇進入分析系統 需在系統內將人數 補足6人以上才可使用"; 
+            AssignCanvas.SetActive(false);
+            WarnCanvas.SetActive(true);
+        }
+        else{
+            UserData.Instance.UserPlayerID = AssignPlayerID;
+            UserData.Instance.UserPlayerName = AssignPlayerName;
+            UserData.Instance.UserPlayerNumber = AssignPlayerNumber;
+            SceneManager.LoadScene("MainScene");
+        }
+        
+
+        
+    }
+    public Text WarningMsg;
+    public void ComfirmEnter(){
+        UserData.Instance.UserPlayerID = AssignPlayerID;
+        UserData.Instance.UserPlayerName = AssignPlayerName;
+        UserData.Instance.UserPlayerNumber = AssignPlayerNumber;
         SceneManager.LoadScene("MainScene");
+    }
+    public void CancelEnter(){
+        AssignCanvas.SetActive(true);
+        WarnCanvas.SetActive(false);
     }
     public void ClickPlayer(){
         CorrTarget = EventSystem.current.currentSelectedGameObject;
@@ -304,7 +371,7 @@ public class GameSelect : MonoBehaviour
             else{
                 Debug.Log("Success!");
                 yield return StartCoroutine(UpdateUserData());
-                GWarning.text = "新增成功!";
+                PWarning.text = "新增成功!";
                 yield return StartCoroutine(DealView());
                 yield return new WaitForSeconds(1f);
                 MainCanvas.SetActive(true);
@@ -394,6 +461,10 @@ public class GameSelect : MonoBehaviour
         else if(obj.tag == "CorrPlayer"){
             MainCanvas.SetActive(true);
             CorrPlayerCanvas.SetActive(false);
+        }
+        else if(obj.tag == "AssignPlayer"){
+            MainCanvas.SetActive(true);
+            AssignCanvas.SetActive(false);
         }
     }
     public IEnumerator DealView(){
@@ -496,7 +567,7 @@ public class GameSelect : MonoBehaviour
             else{
                 Debug.Log("Success!");
                 yield return StartCoroutine(UpdateUserData());
-                GWarning.text = "修正成功!";
+                PCWarning.text = "修正成功!";
                 yield return StartCoroutine(DealView());
                 yield return new WaitForSeconds(1f);
                 MainCanvas.SetActive(true);
@@ -507,4 +578,103 @@ public class GameSelect : MonoBehaviour
             Debug.Log("未連接到伺服器!");
         }
     }
+    
+    public List<int> NotAssignPlayerID;
+    public List<string> NotAssignPlayerName;
+    public List<int> NotAssignPlayerNumber;
+    public List<int> AssignPlayerID;
+    public List<string> AssignPlayerName;
+    public List<int> AssignPlayerNumber;
+    public RectTransform AddContent;
+    public RectTransform NotAddContent;
+    public GameObject AssignScrollView;
+    public GameObject NotAssignScrollView;
+    
+    public IEnumerator ShowNotAssign(){
+        for (int i = 0; i < AddContent.childCount; i++){
+            Destroy(AddContent.GetChild(i).gameObject);
+        }
+
+        for (int i = 0; i < NotAddContent.childCount; i++){
+            Destroy(NotAddContent.GetChild(i).gameObject);
+        }
+        GameScrollview.GetComponent<ScrollRect>().verticalNormalizedPosition = 0f;
+        PlayerScrollview.GetComponent<ScrollRect>().verticalNormalizedPosition = 0f;
+        for (int i = 0; i < AssignPlayerID.Count; i++)
+        {
+
+            GameObject NewAssign = Instantiate(Player, AddContent);
+            Text[] PlayerTexts = NewAssign.GetComponentsInChildren<Text>();
+
+            PlayerTexts[0].text = i + 1 + ".   " + AssignPlayerNumber[i].ToString();
+            PlayerTexts[1].text = AssignPlayerName[i];
+            NewAssign.GetComponent<ID>().ObjID = AssignPlayerID[i];
+            NewAssign.GetComponent<Button>().onClick.AddListener(CancelAssign);
+
+            // 設定Prefab的位置
+            RectTransform rectTransform = NewAssign.GetComponent<RectTransform>();
+            rectTransform.anchoredPosition = new Vector2(0, -i * prefabHeight);
+        }
+        for (int i = 0; i < NotAssignPlayerID.Count; i++)
+        {
+
+            GameObject NewCanAssign = Instantiate(Player, NotAddContent);
+            Text[] PlayerTexts = NewCanAssign.GetComponentsInChildren<Text>();
+
+            PlayerTexts[0].text =  NotAssignPlayerNumber[i].ToString();
+            PlayerTexts[1].text = NotAssignPlayerName[i];
+            NewCanAssign.GetComponent<ID>().ObjID = NotAssignPlayerID[i];
+            NewCanAssign.GetComponent<Button>().onClick.AddListener(Assign);
+
+            // 設定Prefab的位置
+            RectTransform rectTransform = NewCanAssign.GetComponent<RectTransform>();
+            rectTransform.anchoredPosition = new Vector2(0, -i * prefabHeight);
+        }
+        AddContent.sizeDelta = new Vector2(GameContent.sizeDelta.x, 0 * prefabHeight);
+        NotAddContent.sizeDelta = new Vector2(PlayerContent.sizeDelta.x, 0 * prefabHeight);
+
+        yield return null;
+    }
+    public void Assign(){
+        print("Assign");
+        GameObject obj = EventSystem.current.currentSelectedGameObject;
+        int PlayerID = obj.GetComponent<ID>().ObjID;
+        for(int i = 0; i < NotAssignPlayerID.Count; i++){
+            if(PlayerID == NotAssignPlayerID[i]){
+                AssignPlayerID.Add(NotAssignPlayerID[i]);
+                AssignPlayerName.Add(NotAssignPlayerName[i]);
+                AssignPlayerNumber.Add(NotAssignPlayerNumber[i]);
+
+                NotAssignPlayerID.RemoveAt(i);
+                NotAssignPlayerName.RemoveAt(i);
+                NotAssignPlayerNumber.RemoveAt(i);
+
+                break;
+            }
+        }
+        StartCoroutine(ShowNotAssign());
+    }
+    public void CancelAssign(){
+        print("CancelAssign");
+        GameObject obj = EventSystem.current.currentSelectedGameObject;
+        int PlayerID = obj.GetComponent<ID>().ObjID;
+        for(int i = 0; i < AssignPlayerID.Count; i++){
+            if(PlayerID == AssignPlayerID[i]){
+                NotAssignPlayerID.Add(AssignPlayerID[i]);
+                NotAssignPlayerName.Add(AssignPlayerName[i]);
+                NotAssignPlayerNumber.Add(AssignPlayerNumber[i]);
+
+                AssignPlayerID.RemoveAt(i);
+                AssignPlayerName.RemoveAt(i);
+                AssignPlayerNumber.RemoveAt(i);
+
+                break;
+            }
+        }
+        StartCoroutine(ShowNotAssign());
+    }
+    public void CallDealView(){
+        StartCoroutine(DealView());
+    }
+
 }

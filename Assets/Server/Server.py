@@ -30,8 +30,9 @@ def login():
     resultReturn = {"success" : False, "situation" : -1, "UserName" : None, "UserID" : None, "numOfGame" : None, "numOfPlayer" : None}
 
 
+    print(password)
+
     if account == None or password == None:
-        resultReturn['situation'] = -2
         return resultReturn
 
 
@@ -44,6 +45,7 @@ def login():
     if len(result) == 1:
         try:
             if password == result[0][2]:
+                print("a")
                 resultReturn['success'] = True
                 resultReturn['situation'] = 0
                 resultReturn['UserName'] = account
@@ -56,8 +58,9 @@ def login():
                 resultReturn['numOfPlayer'] = int(cur.fetchall()[0][0])
             else:
                 resultReturn['situation'] = -2
-        except:
-            resultReturn['situation'] = -2
+        except Exception as ec:
+            print(ec)
+            resultReturn['situation'] = -1
         finally:
             cur.close()
             cnx.close()
@@ -88,7 +91,7 @@ def register():
             
             cur.execute("insert into users(account, hash) value(%s, %s);", (account, password))
             cnx.commit()
-            cur.execute("SELECT COUNT(*) FROM users;")
+            cur.execute("select * from users;")
             userId = int(cur.fetchall()[0][0])
             try:
                 cur.execute(f"create table userGame{userId} (ID INT AUTO_INCREMENT PRIMARY KEY, GameDate Date, GameName VARCHAR(50));")
@@ -133,7 +136,7 @@ def initDB():
         check2 = cur.fetchall()
         if len(check2) == 1: # 比賽存在
             try:
-                cur.execute(f"create table GameData{UserID}{GameID}(BallID int auto_increment primary key, formation varchar(50), "
+                cur.execute(f"create table if not exists GameDataU{UserID}G{GameID}(BallID int auto_increment primary key, formation varchar(50), "
                              "round int, role varchar(50), attackblock varchar(50), catchblock varchar(50), situation int, score int);")    
                 resultReturn['situation'] = 0
                 resultReturn['success'] = True
@@ -153,15 +156,74 @@ def initDB():
 @app.route("/insertData", methods=['GET', 'POST'])
 def insertData():
     data = request.get_json()
-    account = request.form.get("account")
-    gameName = request.form.get("gameName")
-    for i in range(len(data)):
-        print(data[i])
-    return "Test"
+    GameID = request.args.get("GameID")
+    UserID = request.args.get("UserID")
+
+    print(data); print(GameID); print(UserID)
+    resultReturn = {"success":False, "situation":-1}
+    if data == None or GameID == None or UserID == None:
+        return resultReturn
+    
+    cnx = mysql.connector.connect(**config)
+    cur = cnx.cursor(buffered=True)
+    
+    cur.execute("select * from users where id=%s;", (UserID, ))
+    check1 = cur.fetchall()
+
+    if len(check1) == 1: # 帳號存在
+        cur.execute(f"select * from userGame{UserID} where ID=%s", (GameID, ))
+        check2 = cur.fetchall()
+        if len(check2) == 1: # 比賽存在
+            cur.execute(f"SELECT * FROM information_schema.tables WHERE table_schema = 'Volleyball' AND table_name = %s;", (f'GameDataU{UserID}G{GameID}',))
+            check3 = cur.fetchall()
+            if len(check3) == 1: # 資料表存在
+                try:
+                    for i in range(len(data)):
+                        cur.execute(f"insert into GameDataU{UserID}G{GameID}(formation, round, role, attackblock, catchblock, situation, score) value(%s, %s, %s, %s, %s, %s, %s);", 
+                                   (data[i]['formation'], data[i]['round'], data[i]['role'], data[i]['attackblock'], 
+                                    data[i]['catchblock'], data[i]['situation'], data[i]['score']))
+                        print(data[i])
+                    cnx.commit()
+                    resultReturn['situation'] = 0
+                    resultReturn['success'] = True
+                except Exception as ec:
+                    print(ec)
+                    resultReturn['situation'] = -2
+                finally:
+                    cur.close()
+                    cnx.close()
+            else:
+                resultReturn['situation'] = -3
+
+        else:
+            resultReturn['situation'] = -4
+            
+    else:
+        resultReturn["situation"] = -5
+    
+    
+    return resultReturn
    
 @app.route("/displayData", methods=['GET', 'POST'])
 def displayData():
-    ()
+    UserID = request.form.get("UserID")
+    GameID = request.form.get("GameID")
+
+    if UserID == None or GameID == None:
+        return None
+    cnx = mysql.connector.connect(**config)
+    cur = cnx.cursor(buffered=True)
+    cur.execute(f"SELECT * FROM information_schema.tables WHERE table_schema = 'Volleyball' AND table_name = %s;", (f'GameDataU{UserID}G{GameID}',))
+    result = cur.fetchall()
+    dataReturn = []
+    if len(result) == 1:
+        cur.execute(f"select * from GameDataU{UserID}G{GameID};")
+        data = cur.fetchall()
+        for i in range(len(data)):
+            temp = {"formatiion":data[i][1], "round" : data[i][2], "role" : data[i][3], "attackblock": data[i][4], "catchblock":data[i][5], "situation":data[i][6], "score":data[i][7]}
+            dataReturn.append(temp)
+        
+    return dataReturn
    
 @app.route("/AddPlayer", methods=['GET', 'POST'])
 def AddPlayer():
@@ -356,4 +418,4 @@ def CorrectPlayer():
     return resultReturn
     
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)   
+    app.run(port=5000)   
