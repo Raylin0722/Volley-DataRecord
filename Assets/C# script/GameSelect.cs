@@ -282,7 +282,7 @@ public class GameSelect : MonoBehaviour
         form.AddField("account", UserName);
         form.AddField("UserID", UserID);
 
-        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/UpdateUserData", form);
+        UnityWebRequest www = UnityWebRequest.Post("https://volley.csie.ntnu.edu.tw/UpdateUserData", form);
 
         yield return www.SendWebRequest();
 
@@ -336,7 +336,7 @@ public class GameSelect : MonoBehaviour
         form.AddField("PlayerNumber", PlayerNumber);
         form.AddField("PlayerName", PlayerName);
 
-        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/AddPlayer", form);
+        UnityWebRequest www = UnityWebRequest.Post("https://volley.csie.ntnu.edu.tw/AddPlayer", form);
         yield return www.SendWebRequest();
 
         Return result = new Return();
@@ -392,7 +392,7 @@ public class GameSelect : MonoBehaviour
         form.AddField("GameDate", GameDate);
         form.AddField("GameName", GameName);
 
-        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/AddGame", form);
+        UnityWebRequest www = UnityWebRequest.Post("https://volley.csie.ntnu.edu.tw/AddGame", form);
         yield return www.SendWebRequest();
         Return result = new Return();
         if(www.result == UnityWebRequest.Result.Success){
@@ -528,7 +528,7 @@ public class GameSelect : MonoBehaviour
         form.AddField("PlayerNumber", PlayerNumber);
         form.AddField("PlayerName", PlayerName);
 
-        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/CorrectPlayer", form);
+        UnityWebRequest www = UnityWebRequest.Post("https://volley.csie.ntnu.edu.tw/CorrectPlayer", form);
         yield return www.SendWebRequest();
 
         Return result = new Return();

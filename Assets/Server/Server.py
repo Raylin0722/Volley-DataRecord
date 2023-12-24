@@ -96,7 +96,8 @@ def register():
             try:
                 cur.execute(f"create table userGame{userId} (ID INT AUTO_INCREMENT PRIMARY KEY, GameDate Date, GameName VARCHAR(50));")
                 cur.execute(f"create table userPlayer{userId} (ID INT AUTO_INCREMENT PRIMARY KEY, PlayerName VARCHAR(50), PlayerNumber int);")
-            except:
+            except Exception as ec:
+                print(ec)
                 resultReturn['success'] = False
                 resultReturn['situation'] = -2
                 
