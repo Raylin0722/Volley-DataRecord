@@ -72,6 +72,9 @@ public class dragPlayer : MonoBehaviour {
         difference = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position;
     }
     private void OnMouseDrag() {
+        //Debug.Log("allow is:" + allowMouseActions);
+        if (!allowMouseActions) // 如果全局变量为false，返回
+            return;
         if(openSettingScene.interactable == 0)
             return;
         transform.position = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - difference;
@@ -122,6 +125,9 @@ public class dragPlayer : MonoBehaviour {
         }
     }
     private void OnMouseUp() {
+        //Debug.Log("allow is:" + allowMouseActions);
+        if (!allowMouseActions)
+            return;
         if(openSettingScene.interactable == 0)
             return;
         AfterDragPosition = transform.position;
@@ -131,7 +137,7 @@ public class dragPlayer : MonoBehaviour {
         for(int i = 0; i < 6; i++){
             formationLeft += $"L{WPlayer[i].text} ";
             formationRight += $"R{BPlayer[i].text} ";
-            print(WPlayer[i].text);
+            //print(WPlayer[i].text);
         }
         formation = formationLeft + formationRight;
         print(formation);
@@ -286,6 +292,37 @@ public class dragPlayer : MonoBehaviour {
 
         if(playerName != null)
             playerName = null;    
+    }
+    public Button[] buttonsToToggle;
+    private bool isDisabled = false;
+    public static bool allowMouseActions = true;
+    // 当这个按钮被点击时调用
+    public void OnButtonClick(){
+        if (isDisabled){
+            EnableButtons();
+            allowMouseActions = true; 
+            isDisabled = false;
+            //Debug.Log("Buttons enabled, allowMouseActions set to " + allowMouseActions);
+        }
+        else{
+            DisableButtons();
+            allowMouseActions = false;
+            isDisabled = true;
+            //Debug.Log("Buttons enabled, allowMouseActions set to " + allowMouseActions);
+        }
+    }
+
+    private void DisableButtons(){
+        foreach (Button button in buttonsToToggle){
+            button.interactable = false;
+        }
+    }
+
+    private void EnableButtons(){
+        foreach (Button button in buttonsToToggle)
+        {
+            button.interactable = true;
+        }
     }
 }
 
