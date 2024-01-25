@@ -46,8 +46,13 @@ public class dragPlayer : MonoBehaviour {
 
     public string formation;
     
-    public int leftTouch;
-    public int rightTouch;
+    static public GameObject leftTouch;
+    static public GameObject rightTouch;
+    static public int leftTouchCount;
+    static public int rightTouchCount;
+    static public bool leftServerLock;
+    static public bool rightServerLock;
+
 
     void Start(){
         //Fetch the Raycaster from the GameObject (the Canvas)
@@ -60,18 +65,38 @@ public class dragPlayer : MonoBehaviour {
         duringTime = 0f;
         saveData = database.GetComponent<dealDB>().saveData;
         formation = "";
-        leftTouch = 0;
-        rightTouch = 0;
+        leftTouchCount = 0;
+        rightTouchCount = 0;
+        leftTouch = null;
+        rightTouch = null;
+        leftServerLock = false;
+        rightServerLock = false;
+    
     }
     private void OnMouseDown() {
-        if(openSettingScene.interactable == 0)
+        if(!(this.gameObject == leftTouch || this.gameObject == rightTouch)){
+            if(openSettingScene.interactable == 0)
+                return;
+            if(this.gameObject.tag == "Left" && leftServerLock)
+                return
+            else if(this.gameObject.tag == "Right" && rightServerLock)
+                return;
+
+            initialPosition = transform.position;
+            PlayerSize = transform.localScale;
+            //Debug.Log(PlayerSize);
+            difference = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position;
+        }
+        else{
+            Debug.Log("Can't drag this player(down)!");
             return;
-        initialPosition = transform.position;
-        PlayerSize = transform.localScale;
-        //Debug.Log(PlayerSize);
-        difference = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position;
+        }
     }
     private void OnMouseDrag() {
+        if(this.gameObject == leftTouch || this.gameObject == rightTouch ){
+            Debug.Log("Can't drag this player(drag)!");
+            return;
+        }
         //Debug.Log("allow is:" + allowMouseActions);
         if (!allowMouseActions) // 如果全局变量为false，返回
             return;
@@ -125,6 +150,37 @@ public class dragPlayer : MonoBehaviour {
         }
     }
     private void OnMouseUp() {
+        // 相同球員不能重複拉
+        if(!(this.gameObject == leftTouch || this.gameObject == rightTouch)){
+            if(this.gameObject.tag == "Left"){
+                if(leftTouchCount <= 4){
+                    leftTouch = this.gameObject;
+                    rightTouch = null;
+                    leftTouchCount += 1;
+                    rightTouchCount = 0;
+                }
+                else{
+                    print("Left side touch more than 3 times!");
+                    return;
+                }
+            }
+            else{
+                if(rightTouchCount <= 4){
+                    rightTouch = this.gameObject;
+                    leftTouch = null;
+                    rightTouchCount += 1;
+                    leftTouchCount = 0;
+                }
+                else{
+                    print("Right side touch more than 3 times!");
+                    return;
+                }
+            }
+        }
+        else{
+            Debug.Log("Can't drag this player(up)!");
+            return;
+        }
         //Debug.Log("allow is:" + allowMouseActions);
         if (!allowMouseActions)
             return;
@@ -145,21 +201,27 @@ public class dragPlayer : MonoBehaviour {
 
         if(changePosition == 0){
             
-            if(mode == dealDB.CATCH){
-                setData(formation, block, null, dealDB.CATCH, 0);
-            }
-            else if(mode == dealDB.ATTACK){
-               
-                setData(formation, null, block, dealDB.ATTACK, 0);
-
-            }
-            else if(mode == dealDB.SERVE){
-                
-                setData(formation, null, block, dealDB.SERVE, 0);
-                
+            if(leftTouchCount < 4 && rightTouchCount < 4){
+                if(mode == dealDB.CATCH){
+                    setData(formation, block, null, dealDB.CATCH, 0);
+                }
+                else if(mode == dealDB.ATTACK){
+                    setData(formation, null, block, dealDB.ATTACK, 0);
+                }
+                else if(mode == dealDB.SERVE){
+                    if(this.gameObject.tag == "Left")
+                        leftServerLock = true;
+                    else
+                        rightServerLock = true;
+                    setData(formation, null, block, dealDB.SERVE, 0);
+                    
+                }
             }
             else if(mode == dealDB.BLOCK){
-                
+                leftTouch = null;
+                rightTouch = null; // 攔網不算觸球 且對方觸球清除
+                leftTouchCount = 0;
+                rightTouchCount = 0;
                 setData(formation, null, block, dealDB.BLOCK, 0);
             }   
             //Debug.Log(PlayerSize);
@@ -196,7 +258,7 @@ public class dragPlayer : MonoBehaviour {
     }
 
     private void setData(string formation, string catchBlock, string attackBlock, int situation, int score){
-        
+        Debug.Log(playerName);
         int round = RefreshPoint.Self_Score + RefreshPoint.Enemy_Score + 1;
         dealDB.Data newData = new dealDB.Data(formation, round, playerName, attackBlock, catchBlock, situation, score);
 
@@ -239,7 +301,28 @@ public class dragPlayer : MonoBehaviour {
             }
             
             saveData.RemoveAt(saveData.Count - 1);
-
+            leftTouch = null; 
+            rightTouch = null;
+            dragPlayer[] prefabs = FindObjectsOfType<dragPlayer>();
+            foreach (dragPlayer prefab in prefabs){
+                // 檢查內部變數是否符合要求
+                if(saveData.Count == 0){
+                    break;
+                }
+                    
+                if (prefab.playerName == (saveData[saveData.Count - 1]).role)
+                {
+                    if(prefab.tag == "Left"){
+                        leftTouch = prefab.gameObject;
+                    }
+                    else{
+                        rightTouch = prefab.gameObject;
+                    }
+                    break;
+                }
+            }
+            print(leftTouch);
+            print(rightTouch);
         }
         
         GenerateLogTable();
