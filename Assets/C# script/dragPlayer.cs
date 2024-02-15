@@ -78,7 +78,7 @@ public class dragPlayer : MonoBehaviour {
             if(openSettingScene.interactable == 0)
                 return;
             if(this.gameObject.tag == "Left" && leftServerLock)
-                return
+                return;
             else if(this.gameObject.tag == "Right" && rightServerLock)
                 return;
 
