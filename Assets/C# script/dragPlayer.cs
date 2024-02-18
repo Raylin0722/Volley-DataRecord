@@ -13,12 +13,7 @@ using TMPro;
 //int saveIndex = 0;
 
 public class dragPlayer : MonoBehaviour {
-    [SerializeField] GameObject SelfScore;
-    [SerializeField] GameObject EnemyScore;
-    [SerializeField] Text LeftPoint;
-    [SerializeField] Text RightPoint;
-    [SerializeField] GameObject database;
-    [SerializeField] GameObject canvas;
+    
     [SerializeField] public string playerName;
     [SerializeField] public string playerNum;
     static int changePosition = 0; //更換位子變數判斷
@@ -53,8 +48,10 @@ public class dragPlayer : MonoBehaviour {
     static public bool leftServerLock;
     static public bool rightServerLock;
 
-
-    void Start(){
+    void OnMouseDown(){
+        print(this.tag);
+    }
+    /*void Start(){
         //Fetch the Raycaster from the GameObject (the Canvas)
         m_Raycaster = canvas.GetComponent<GraphicRaycaster>();
         //Fetch the Event System from the Scene
@@ -406,7 +403,7 @@ public class dragPlayer : MonoBehaviour {
         {
             button.interactable = true;
         }
-    }
+    }*/
 }
 
 
