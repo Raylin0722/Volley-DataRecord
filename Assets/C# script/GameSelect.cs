@@ -107,9 +107,9 @@ public class GameSelect : MonoBehaviour
             return;
         }
         int PNumIN = int.Parse(PNum.text);
-        if(PNumIN<=0 || PNumIN >= 100){
-            PWarning.text = "背號請輸入 0 - 100!";
-            Debug.Log("背號請輸入 0 - 100!");
+        if(PNumIN<0 || PNumIN >= 100){
+            PWarning.text = "背號請輸入 0 - 99!";
+            Debug.Log("背號請輸入 0 - 99!");
             return;
         }
 
@@ -161,9 +161,9 @@ public class GameSelect : MonoBehaviour
             return;
         }
         int PCorrNumIN = int.Parse(PCorrNum.text);
-        if(PCorrNumIN<=0 || PCorrNumIN >= 100){
-            PCWarning.text = "背號請輸入 0 - 100!";
-            Debug.Log("背號請輸入 0 - 100!");
+        if(PCorrNumIN<0 || PCorrNumIN >= 100){
+            PCWarning.text = "背號請輸入 0 - 99!";
+            Debug.Log("背號請輸入 0 - 99!");
             return;
         }
         int PlayerID = CorrTarget.GetComponent<ID>().ObjID;
