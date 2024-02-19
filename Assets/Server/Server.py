@@ -94,8 +94,8 @@ def register():
             cur.execute("select * from users;")
             userId = int(cur.fetchall()[0][0])
             try:
-                cur.execute(f"create table userGame{userId} (ID INT AUTO_INCREMENT PRIMARY KEY, GameDate Date, GameName VARCHAR(50));")
-                cur.execute(f"create table userPlayer{userId} (ID INT AUTO_INCREMENT PRIMARY KEY, PlayerName VARCHAR(50), PlayerNumber int);")
+                cur.execute(f"create table userGame{userId} (ID INT AUTO_INCREMENT PRIMARY KEY, GameDate Date, GameName VARCHAR(50)) engine = InnoDB default charset=utf8mb4 collate=utf8mb4_bin;")
+                cur.execute(f"create table userPlayer{userId} (ID INT AUTO_INCREMENT PRIMARY KEY, PlayerName VARCHAR(50), PlayerNumber int) engine = InnoDB default charset=utf8mb4 collate=utf8mb4_bin;")
             except Exception as ec:
                 print(ec)
                 resultReturn['success'] = False
@@ -138,7 +138,7 @@ def initDB():
         if len(check2) == 1: # 比賽存在
             try:
                 cur.execute(f"create table if not exists GameDataU{UserID}G{GameID}(BallID int auto_increment primary key, formation varchar(50), "
-                             "round int, role varchar(50), attackblock varchar(50), catchblock varchar(50), situation int, score int);")    
+                             "round int, role varchar(50), attackblock varchar(50), catchblock varchar(50), situation int, score int) engine = InnoDB default charset=utf8mb4 collate=utf8mb4_bin;")    
                 resultReturn['situation'] = 0
                 resultReturn['success'] = True
             except Exception as ec:

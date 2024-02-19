@@ -30,10 +30,17 @@ public class dragPlayer : MonoBehaviour {
     void Start(){
         pressTime = 0f;
         clickCount = 0;
+        print(LastClick);
+        print(NowClick);
     }
     void OnMouseDown(){
         //print(this.tag);
         NowClick = DateTime.Now;
+        if(clickCount == 0)
+            clickCount++;
+        else if(clickCount == 1){
+
+        }
 
     }
     void OnMouseDrag(){
