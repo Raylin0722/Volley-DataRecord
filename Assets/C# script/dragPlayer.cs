@@ -14,42 +14,33 @@ using TMPro;
 
 public class dragPlayer : MonoBehaviour {
     
+    const float LONGPRESS = 0.4f, DOUBLECLICK = 0.2f;
     [SerializeField] public string playerName;
     [SerializeField] public string playerNum;
-    static int changePosition = 0; //更換位子變數判斷
     private Vector3 initialPosition; // 球員初始位置
     private Vector3 AfterDragPosition; // 球員移動後位置
-    public Vector3 PlayerSize; //球員大小
     Vector2 difference = Vector2.zero;
-
-    static string block; // 儲存動作 block
-
-    static string blockTag;
-    static string oldblock; // 更新block顏色用
-
-    GraphicRaycaster m_Raycaster; // 判斷block用
-    PointerEventData m_PointerEventData; // 判斷block用
-    EventSystem m_EventSystem; // 判斷block用
-
-    static GameObject oldGameobject; // 更新block顏色用
     static Vector2 oldPoisition; // 判斷動作用
     static float duringTime; // 判斷動作用
     public RectTransform content;
     private Text LogText;
-
-    public List<dealDB.Data> saveData;
-
-    public string formation;
-    
-    static public GameObject leftTouch;
-    static public GameObject rightTouch;
-    static public int leftTouchCount;
-    static public int rightTouchCount;
-    static public bool leftServerLock;
-    static public bool rightServerLock;
-
+    public float pressTime;
+    public DateTime LastClick, NowClick;
+    public int clickCount;
+    void Start(){
+        pressTime = 0f;
+        clickCount = 0;
+    }
     void OnMouseDown(){
-        print(this.tag);
+        //print(this.tag);
+        NowClick = DateTime.Now;
+
+    }
+    void OnMouseDrag(){
+        
+    }
+    void OnMouseUp(){
+
     }
     /*void Start(){
         //Fetch the Raycaster from the GameObject (the Canvas)

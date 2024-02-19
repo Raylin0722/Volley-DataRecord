@@ -75,7 +75,7 @@ public class ClickRecord : MonoBehaviour
     }
     void GetClickTarget(){
 
-        //
+        
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
 
@@ -84,8 +84,7 @@ public class ClickRecord : MonoBehaviour
         {
             // 獲取2D物體的標籤
             if(hit.collider.gameObject.tag == "Left" || hit.collider.gameObject.tag == "Right")
-                Debug.Log("Clicked on 2D object with name: " + hit.collider.gameObject.tag);
-            return;
+                return;
         }
 
         // 地板
