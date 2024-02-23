@@ -984,6 +984,10 @@ PrefabInstance:
       value: 06
       objectReference: {fileID: 0}
     - target: {fileID: 494475276491014076, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
+      propertyPath: BeGameObject
+      value: 
+      objectReference: {fileID: 2044950599}
+    - target: {fileID: 494475276491014076, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: block.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -1177,6 +1181,10 @@ PrefabInstance:
       propertyPath: RightPoint
       value: 
       objectReference: {fileID: 621324857}
+    - target: {fileID: 494475276491014076, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
+      propertyPath: BeGameObject
+      value: 
+      objectReference: {fileID: 2044950599}
     - target: {fileID: 2901413900856689188, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3267,7 +3275,6 @@ GameObject:
   - component: {fileID: 239530301}
   - component: {fileID: 239530300}
   - component: {fileID: 239530299}
-  - component: {fileID: 239530298}
   m_Layer: 5
   m_Name: Stop
   m_TagString: Untagged
@@ -3295,23 +3302,6 @@ RectTransform:
   m_AnchoredPosition: {x: -1168, y: 537.82}
   m_SizeDelta: {x: 310.71, y: 137.65}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &239530298
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 239530296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7294d9149fd646ec92ce979a1da6958, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerName: 
-  playerNum: 
-  PlayerSize: {x: 0, y: 0, z: 0}
-  content: {fileID: 908573764}
-  formation: 
 --- !u!114 &239530299
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3356,7 +3346,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 239530298}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: dragPlayer, Assembly-CSharp
         m_MethodName: OnButtonClick
         m_Mode: 1
@@ -5496,7 +5486,6 @@ GameObject:
   - component: {fileID: 372302193}
   - component: {fileID: 372302192}
   - component: {fileID: 372302191}
-  - component: {fileID: 372302194}
   m_Layer: 5
   m_Name: Scroll View
   m_TagString: Untagged
@@ -5594,23 +5583,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 372302189}
   m_CullTransparentMesh: 1
---- !u!114 &372302194
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 372302189}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7294d9149fd646ec92ce979a1da6958, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerName: 
-  playerNum: 
-  PlayerSize: {x: 0, y: 0, z: 0}
-  content: {fileID: 908573764}
-  formation: 
 --- !u!1001 &376777918
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10760,6 +10732,10 @@ PrefabInstance:
       value: W03
       objectReference: {fileID: 0}
     - target: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
+      propertyPath: BeGameObject
+      value: 
+      objectReference: {fileID: 2044950599}
+    - target: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: block.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -12079,8 +12055,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1973327731}
   m_HandleRect: {fileID: 1973327730}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.99999845
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -12285,6 +12261,10 @@ PrefabInstance:
       propertyPath: playerName
       value: B03
       objectReference: {fileID: 0}
+    - target: {fileID: 494475276491014076, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
+      propertyPath: BeGameObject
+      value: 
+      objectReference: {fileID: 2044950599}
     - target: {fileID: 494475276491014076, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: block.Array.size
       value: 1
@@ -13277,6 +13257,10 @@ PrefabInstance:
       value: W02
       objectReference: {fileID: 0}
     - target: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
+      propertyPath: BeGameObject
+      value: 
+      objectReference: {fileID: 2044950599}
+    - target: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: block.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -13459,7 +13443,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.0010098219, y: 0.0010986328}
+  m_AnchoredPosition: {x: 0.0010098219, y: 0.0065307617}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &908573765
@@ -15841,6 +15825,10 @@ PrefabInstance:
       propertyPath: RightPoint
       value: 
       objectReference: {fileID: 621324857}
+    - target: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
+      propertyPath: BeGameObject
+      value: 
+      objectReference: {fileID: 2044950599}
     - target: {fileID: 6985389947967242844, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: m_Name
       value: Wplayer1
@@ -25946,6 +25934,10 @@ PrefabInstance:
       value: B04
       objectReference: {fileID: 0}
     - target: {fileID: 494475276491014076, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
+      propertyPath: BeGameObject
+      value: 
+      objectReference: {fileID: 2044950599}
+    - target: {fileID: 494475276491014076, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: block.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -26559,6 +26551,10 @@ PrefabInstance:
       propertyPath: playerName
       value: 05
       objectReference: {fileID: 0}
+    - target: {fileID: 494475276491014076, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
+      propertyPath: BeGameObject
+      value: 
+      objectReference: {fileID: 2044950599}
     - target: {fileID: 494475276491014076, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: block.Array.size
       value: 1
@@ -28783,6 +28779,10 @@ PrefabInstance:
       value: W05
       objectReference: {fileID: 0}
     - target: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
+      propertyPath: BeGameObject
+      value: 
+      objectReference: {fileID: 2044950599}
+    - target: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: block.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -30596,6 +30596,10 @@ PrefabInstance:
       propertyPath: playerName
       value: W04
       objectReference: {fileID: 0}
+    - target: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
+      propertyPath: BeGameObject
+      value: 
+      objectReference: {fileID: 2044950599}
     - target: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: block.Array.size
       value: 1
@@ -34351,6 +34355,10 @@ PrefabInstance:
       value: W06
       objectReference: {fileID: 0}
     - target: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
+      propertyPath: BeGameObject
+      value: 
+      objectReference: {fileID: 2044950599}
+    - target: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: block.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -35327,6 +35335,10 @@ PrefabInstance:
       propertyPath: playerName
       value: B02
       objectReference: {fileID: 0}
+    - target: {fileID: 494475276491014076, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
+      propertyPath: BeGameObject
+      value: 
+      objectReference: {fileID: 2044950599}
     - target: {fileID: 494475276491014076, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: block.Array.size
       value: 1
