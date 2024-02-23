@@ -72,9 +72,9 @@ public class dealDB : MonoBehaviour
     // Start is called before the first frame update
     void Awake(){
         saveData = new List<Data>(); // 儲存資料用
-        UserName = UserData.Instance.UserName; //後面要連伺服器
-        UserID = UserData.Instance.UserID;
-        GameID = UserData.Instance.GameID;
+        //UserName = UserData.Instance.UserName; //後面要連伺服器
+        //UserID = UserData.Instance.UserID;
+        //GameID = UserData.Instance.GameID;
         
 
         CallinitDB();

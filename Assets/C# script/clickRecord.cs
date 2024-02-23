@@ -19,9 +19,10 @@ public class ClickRecord : MonoBehaviour
         public bool complete; // 是否記錄完成
         public int behavior; // 動作 發球:-1 接球:0 舉球:1 攻擊:2 攔網:3 
         public int touchFieldCount;
+        public int clickType;
         
     };
-    List<ClickData> Behavior;
+    public List<ClickData> Behavior;
     [SerializeField] GameObject canvas;
     [SerializeField] GameObject database;
     [SerializeField] GameObject systemData;
@@ -37,9 +38,11 @@ public class ClickRecord : MonoBehaviour
     
     
     // Start is called before the first frame update
+    void Awake(){
+        Behavior = new List<ClickData>();
+    }
     void Start()
     {
-        Behavior = new List<ClickData>();
         leftTouchCount = 0;
         rightTouchCount = 0;
         NetLocateXY = new Vector3[NetLocate.Length];
@@ -55,9 +58,7 @@ public class ClickRecord : MonoBehaviour
 
         //Debug.Log("UI World Position: " + uiWorldPosition);
         //Debug.Log("Prefab World Position: " + prefabWorldPosition);
-
-
-
+        
     }
     Vector3 GetWorldPositionFromUI(RectTransform uiElement)
     {
@@ -71,7 +72,10 @@ public class ClickRecord : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GetClickTarget();
+        if(Input.GetMouseButtonDown(0)){
+            //print(Behavior.Any() == false);
+            GetClickTarget();
+        }
     }
     void GetClickTarget(){
 
@@ -83,8 +87,10 @@ public class ClickRecord : MonoBehaviour
         if (hit.collider != null)
         {
             // 獲取2D物體的標籤
-            if(hit.collider.gameObject.tag == "Left" || hit.collider.gameObject.tag == "Right")
+            if(hit.collider.gameObject.tag == "Left" || hit.collider.gameObject.tag == "Right"){
+                print("Player!");
                 return;
+            }
         }
 
         // 地板
@@ -196,6 +202,7 @@ public class ClickRecord : MonoBehaviour
             else if(checkBehavior.touchFieldCount >= 2)
                 return false;
         }
+        
         
         return true; 
     }
