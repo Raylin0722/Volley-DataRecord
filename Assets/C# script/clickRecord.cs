@@ -17,47 +17,49 @@ public class ClickRecord : MonoBehaviour
         public List<Vector2> clicks;
         public int side; // 左右方 左:0 右:1
         public bool complete; // 是否記錄完成
-        public int behavior; // 動作 發球:-1 接球:0 舉球:1 攻擊:2 攔網:3 
+        public int behavior; // 動作 發球:-1 接球:0 舉球:1 攻擊:2 吊球:3 攔網:4 
         public int touchFieldCount;
         public int clickType;
         
     };
+    const int LEFT = 0, RIGHT = 1;
+    const float doubleClick = 0.1f, LongClick = 0.5f;
     public List<ClickData> Behavior;
     [SerializeField] GameObject canvas;
     [SerializeField] GameObject database;
     [SerializeField] GameObject systemData;
     [SerializeField] GameObject[] CanBlock;
     [SerializeField] GameObject[] NetLocate;
-    static public int leftTouchCount;
-    static public int rightTouchCount;
+    [SerializeField] GameObject selectBlock;
     Vector3[] NetLocateXY; 
-    const int LEFT = 1, RIGHT = 2;
-    const float doubleClick = 0.1f, LongClick = 0.5f;
-    
-    // 轉成世界座標只有Z座標不同
-    
-    
-    // Start is called before the first frame update
+    public int[] touchCount;
+    private int playerTouch;
+    private bool isDrag;
+    Vector3 startWorldPos, endWorldPos, startPos, endPos;
     void Awake(){
         Behavior = new List<ClickData>();
+        ClickData Serve = new ClickData();
+        Serve.behavior = -1;
+        Serve.complete = false;
+        Serve.clickType = -1;
+        Serve.players = new List<GameObject>();
+        Serve.clicks = new List<Vector2>();
+        Serve.side = 0;
+        Serve.touchFieldCount = 0;
+        Behavior.Add(Serve);
+        selectBlock.SetActive(false);
+        isDrag = false;
+        touchCount = new int[2];
     }
     void Start()
     {
-        leftTouchCount = 0;
-        rightTouchCount = 0;
         NetLocateXY = new Vector3[NetLocate.Length];
-
+        playerTouch = 0;
+        
         // 前2網 後4左上右上左下右下
         for(int i = 0; i < NetLocate.Length; i++){
             NetLocateXY[i] = NetLocate[i].transform.position;
         }
-        //Vector3 uiWorldPosition = GetWorldPositionFromUI(TestImage);
-
-        // 將 Prefab 座標轉換為世界座標
-        //Vector3 prefabWorldPosition = TestPlayer.transform.position;
-
-        //Debug.Log("UI World Position: " + uiWorldPosition);
-        //Debug.Log("Prefab World Position: " + prefabWorldPosition);
         
     }
     Vector3 GetWorldPositionFromUI(RectTransform uiElement)
@@ -73,32 +75,107 @@ public class ClickRecord : MonoBehaviour
     void Update()
     {
         if(Input.GetMouseButtonDown(0)){
-            //print(Behavior.Any() == false);
-            GetClickTarget();
+            print(Behavior.Count);
+            if(Behavior.Count > 1){ // 發球不能進行攔網
+                isDrag = true;
+                selectBlock.SetActive(true);
+            }
+            startWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            startPos = Input.mousePosition;
+            //print(startPos);
+            print(isDrag);
+        }
+        if(Input.GetMouseButtonUp(0)){
+            isDrag = false;
+            selectBlock.SetActive(false);
+            endWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            endPos = Input.mousePosition;
+            //selectBlock.SetActive(false);
+            if(Math.Abs(startWorldPos.x - endWorldPos.x) > 5f || Math.Abs(startWorldPos.y - endWorldPos.y) > 5f){ // 有拖曳選取
+                
+            }
+            else{ // 非拖曳選取 
+                GetClickTarget();
+            }
+        }
+        if(isDrag){
+            endWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            endPos = Input.mousePosition;
+            selectBlock.SetActive(true);
+            Vector3 tmp = new Vector3((startPos.x + endPos.x) / 2, (startPos.y + endPos.y) / 2, 0);
+            Vector3 size = new Vector3((startPos.x - endPos.x) / 100, (startPos.y - endPos.y) / 100, selectBlock.transform.localScale.z);
+            tmp = Camera.main.ScreenToWorldPoint(tmp);
+            //print(tmp);
+            tmp.z = 0;
+            selectBlock.transform.position = tmp;
+            selectBlock.transform.localScale = size;
+            
         }
     }
     void GetClickTarget(){
 
-        
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
-
         // 球員
         if (hit.collider != null)
         {
-            // 獲取2D物體的標籤
-            if(hit.collider.gameObject.tag == "Left" || hit.collider.gameObject.tag == "Right"){
-                print("Player!");
-                return;
-            }
+            playerTouch++;
+            return;
         }
 
         // 地板
         if (IsPointerOverUI())
         {
-            // 获取UI元素的标签
-            string tagUI = GetUITagUnderPointer();
-            Debug.Log("Clicked on UI with tag: " + tagUI);
+            if(Behavior.Last().complete == true)
+                return;
+            
+            int side = leftOrRight(mousePosition);
+            bool inOrout = inField(mousePosition);
+            string clickSide = (side == LEFT) ? "Left" : "Right";
+            ClickData target = Behavior[Behavior.Count - 1];
+
+            if(Behavior.Last().behavior == -1 && inOrout){ // 發球
+                print("Serve finish");
+                target.complete = true;
+                target.clicks.Add(new Vector2(mousePosition.x, mousePosition.y));
+                target.behavior = -1;
+                Behavior.RemoveAt(Behavior.Count - 1);
+                Behavior.Add(target);
+            }
+            else if(inOrout){ //場內 紀錄
+                // 依照點擊類型 地板點擊次數 球員點擊次數判斷動作
+                if(target.clickType == 1){ // CLICK
+                    if(clickSide == target.players.Last().tag){ // 單擊一次 同側 接球
+                        //print("Catch");
+                        target.behavior = 0;
+                    }
+                    else{  // 單擊一次 異側 攻擊
+                        //print("Attack");
+                        target.behavior = 2;
+                    }     
+                }
+                else if(target.clickType == 2){ // DOUBLE CLICK
+                    if(clickSide == target.players.Last().tag){ // 雙擊 同側 舉球
+                        //print("Set");
+                        target.behavior = 1;
+                    }
+                    else{  // 雙擊 異側 吊球
+                        //print("Tip");
+                        target.behavior = 3;
+                    }
+                }
+                else if(target.clickType == 3){ // PRESS
+
+                }
+                target.clicks.Add(new Vector2(mousePosition.x, mousePosition.y));
+                target.complete = true;
+                touchCount[side]++; 
+
+                Behavior.RemoveAt(Behavior.Count - 1);
+                Behavior.Add(target);
+                
+            }
+            
         }
         else
             print("None");
@@ -129,56 +206,17 @@ public class ClickRecord : MonoBehaviour
 
         return string.Empty; // 如果没有找到对应标签的 UI 元素，返回空字符串
     }
-    bool PCheckComplete(){ // 用在點擊球員時
-        if(Behavior.Count == 0)
-            return true;
-        
-        if((Behavior.Last()).complete == false)
-            return false;
-        
-        return true;
-    }
-    bool PCheckValid(GameObject playerClick){ // 點球員使用
-        if(PCheckComplete() == false){ // 攔網:OK 其餘:NO
-            ClickData nowBehavior = Behavior.Last(); 
-            if(nowBehavior.behavior != 3) // 非攔網
-                return false;
-            if(Behavior.Count <= 2) // 發球不能攔網 or 第一個動作不能是攔網
-                return false;
-            if(Behavior[Behavior.Count - 2].players.Last().tag == playerClick.tag) // 檢查上個動作是否為敵方
-                return false;
-            if(nowBehavior.players.Last().tag != playerClick.tag) // 攔網選取的所有球員皆須同隊
-                return false;
-            if(System.Array.Exists(CanBlock, obj => obj == playerClick) == false) // 選取的球員在後排
-                return false;
-            if(nowBehavior.players.Count > 3) // 攔網但球員數錯誤
-                return false;
-
-            return true;
-        }
-        else{ // 判別左右方 連擊 擊球數
-            ClickData prevBehavior = Behavior.Last(); 
-            if(prevBehavior.players.Contains(playerClick) == true && 
-               prevBehavior.behavior != 3) // 相同球員連擊 且非攔網
-                return false;
-            if((playerClick.tag == "Left" && leftTouchCount > 3) ||
-               (playerClick.tag == "Right" && rightTouchCount > 3)) // 擊球數超過3
-                return false;
-
-            return true;
-        }
-    }
-    bool FCheckValid(float x, float y){
+    bool FCheckValid(Vector3 pos){
         if(Behavior.Count == 0) // 沒有前置資料點擊地板無效
             return false;
         ClickData checkBehavior = Behavior.Last();
         if(checkBehavior.complete == true) // 前置資料已完成點擊地板無效
             return false;
-        if(inField(x, y) == false) // 點擊區域不在場內
+        if(inField(pos) == false) // 點擊區域不在場內
             return false;
         
         // 檢查動作是否合法
-        int sideClicked = leftOrRight(x, y), behavior = checkBehavior.behavior;
+        int sideClicked = leftOrRight(pos), behavior = checkBehavior.behavior;
         if(behavior == -1 && checkBehavior.touchFieldCount == 0){ // 發球
             return true;
         }
@@ -191,7 +229,10 @@ public class ClickRecord : MonoBehaviour
         else if(behavior == 2 && checkBehavior.touchFieldCount == 0){ // 攻擊
             return true;
         }
-        else if(behavior == 3){ // 攔網
+        else if(behavior == 3 && checkBehavior.touchFieldCount == 0){ // 吊球
+            return true;
+        }
+        else if(behavior == 4){ // 攔網
             if(checkBehavior.touchFieldCount == 0 && 
                checkBehavior.players.Last().tag != (sideClicked == LEFT ? "Left" : "Right")){
                 return false;
@@ -206,17 +247,23 @@ public class ClickRecord : MonoBehaviour
         
         return true; 
     }
-    bool inField(float x, float y){
-        if(x > NetLocateXY[2].x && x < NetLocateXY[3].x && y < NetLocateXY[2].y && y > NetLocateXY[4].y)
+    bool inField(Vector3 pos){
+        if(pos.x > NetLocateXY[2].x && pos.x < NetLocateXY[3].x && pos.y < NetLocateXY[2].y && pos.y > NetLocateXY[4].y)
             return true;
 
         return false;
     }
-    int leftOrRight(float x, float y){
-        if(x >= NetLocateXY[0].x)
+    int leftOrRight(Vector3 pos){
+        if(pos.x >= NetLocateXY[0].x)
             return RIGHT;
         
         return LEFT;
     }
+    bool checkBehaviorValid(){
+        return false;
+    }
 
 }
+
+
+
