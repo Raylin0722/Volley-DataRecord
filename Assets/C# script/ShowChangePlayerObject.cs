@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class ShowshowListPlayerObject : MonoBehaviour
 {
-    [SerializeField] GameObject List;
+    /*[SerializeField] GameObject List;
     [SerializeField] GameObject ShowSelfPlayerButtom;
     [SerializeField] GameObject ShowEnemyPlayerButtom;
     [SerializeField] GameObject[] AllofSelfPlayer;
@@ -66,5 +66,5 @@ public class ShowshowListPlayerObject : MonoBehaviour
             for(int i = 0;i < 12;i++)
                 AllofEnemyPlayer[i].SetActive(false);
         }
-    }
+    }*/
 }

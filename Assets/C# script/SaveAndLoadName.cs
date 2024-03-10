@@ -7,7 +7,7 @@ using TMPro;
 
 public class SaveAndLoadName : MonoBehaviour
 {
-    [SerializeField] Text SelfTeamNameText, EnemyTeamNameText;
+    /*[SerializeField] Text SelfTeamNameText, EnemyTeamNameText;
     [SerializeField] GameObject[] WP, BP, SP, EP; // self/enemy player on field, all of self/enemy player
     [SerializeField] GameObject WarningMessage;
     [SerializeField] GameObject InsertDataBtn;
@@ -155,6 +155,6 @@ public class SaveAndLoadName : MonoBehaviour
             SaveAndLoadName.SelfPlayerInfo[i,1] = UserData.Instance.UserPlayerName[i];
         }
         SaveAndLoadName.TeamName[0] = UserData.Instance.TeamName;
-    }
+    }*/
 
 }

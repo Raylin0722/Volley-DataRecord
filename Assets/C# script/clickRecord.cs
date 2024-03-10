@@ -32,6 +32,7 @@ public class ClickRecord : MonoBehaviour
     [SerializeField] GameObject[] NetLocate;
     [SerializeField] GameObject selectBlock;
     Vector3[] NetLocateXY; 
+    Vector3[] CanBlockXY;
     public int[] touchCount;
     private int playerTouch;
     private bool isDrag;
@@ -54,12 +55,16 @@ public class ClickRecord : MonoBehaviour
     void Start()
     {
         NetLocateXY = new Vector3[NetLocate.Length];
+        CanBlockXY = new Vector3[CanBlock.Length];
         playerTouch = 0;
         
         // 前2網 後4左上右上左下右下
         for(int i = 0; i < NetLocate.Length; i++){
             NetLocateXY[i] = NetLocate[i].transform.position;
         }
+        for(int i = 0; i < CanBlock.Length; i++){
+            CanBlockXY[i] = CanBlock[i].transform.position;
+        }   
         
     }
     Vector3 GetWorldPositionFromUI(RectTransform uiElement)

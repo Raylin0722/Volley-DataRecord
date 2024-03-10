@@ -13443,7 +13443,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.0010098219, y: 0.0020751953}
+  m_AnchoredPosition: {x: 0.0010098219, y: 0.0036621094}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &908573765
@@ -33451,7 +33451,13 @@ MonoBehaviour:
   canvas: {fileID: 895018766}
   database: {fileID: 386398051}
   systemData: {fileID: 0}
-  CanBlock: []
+  CanBlock:
+  - {fileID: 1512382898}
+  - {fileID: 998208265}
+  - {fileID: 1886248336}
+  - {fileID: 1121326184}
+  - {fileID: 1464556583}
+  - {fileID: 1005157243}
   NetLocate:
   - {fileID: 442470855}
   - {fileID: 1296604260}

@@ -7,31 +7,24 @@ using TMPro;
 
 public class RefreshPoint : MonoBehaviour
 {
-    [SerializeField] public static int Self_Point;
-    [SerializeField] Text Self_Point_Text;
-    [SerializeField] public static int Enemy_Point;
-    [SerializeField] Text Enemy_Point_Text;
-    [SerializeField] public static int Self_Score;
-    [SerializeField] Text Self_Score_Text;
-    [SerializeField] public static int Enemy_Score;
-    [SerializeField] Text Enemy_Score_Text;
-    [SerializeField] Text Self_Team_Name;
-    [SerializeField] Text Enemy_Team_Name;
+    /*const int LEFT = 0, RIGHT = 1;
+    [SerializeField] public GameObject serverData;
     [SerializeField] public GameObject[] Self_Player;
     [SerializeField] public GameObject[] Enemy_Player;
-    [SerializeField] GameObject Self_Serve;
-    [SerializeField] GameObject Enemy_Serve;
-    [SerializeField] public static bool FirstTimeOpen = false;
+    [SerializeField] GameObject leftServe;
+    [SerializeField] GameObject rightServe;
     [SerializeField] public static int whoWin = 0; //每回合勝方 -1,0,1
     [SerializeField] public static int setServe = 0; //每回合發球方 0,1
     [SerializeField] public static Vector3[] Self_Player_Default_Position = new Vector3[6];
     [SerializeField] public static Vector3[] Enemy_Player_Default_Position = new Vector3[6];
+    SystemData allData;
     // Start is called before the first frame update
     void Start() {
         getDefaultPosition();
         changeServe(0);
         changeSideServe();
         FirstTimeOpen = true;
+        allData = serverData.GetComponent<SystemData>();
     }
     void Update() {
         if(Setting.serve_change == 1) {
@@ -49,53 +42,53 @@ public class RefreshPoint : MonoBehaviour
     }
     public void add_point() {
         GameObject obj = EventSystem.current.currentSelectedGameObject;
-        if(obj.tag == "SelfPoint"){
-            Self_Point++;
-            if(Self_Point < 10){
-                Self_Point_Text.text = "0" + Self_Point.ToString();
+        if(obj.tag == "LeftPoint"){
+            (allData.point[LEFT])++;
+            if((allData.point[LEFT]) < 10){
+                allData.leftPointText.text = "0" + allData.point[LEFT].ToString();
             }
             else{
-                Self_Point_Text.text = Self_Point.ToString();
+                allData.leftPointText.text = allData.point[LEFT].ToString();
             }
-            changeServe(-1); //-1=left win
-            whoWin = -1;
+            changeServe(LEFT); //-1=left win
+            whoWin = LEFT;
             add_score();
         }
         else{
-            Enemy_Point++;
-            if(Enemy_Point < 10){
-                Enemy_Point_Text.text = "0" + Enemy_Point.ToString();
+            (allData.point[RIGHT])++;
+            if(allData.point[RIGHT] < 10){
+                allData.rightPointText.text = "0" + allData.point[RIGHT].ToString();
             }
             else{
-                Enemy_Point_Text.text = Enemy_Point.ToString();
+                allData.rightPointText.text = allData.point[RIGHT].ToString();
             }
-            changeServe(1); //1=right win
-            whoWin = 1;
+            changeServe(RIGHT); //1=right win
+            whoWin = RIGHT;
             add_score();   
         }
     }
     public void add_score() {
         int winPoints = 25;
-        if(Self_Score + Enemy_Score >= 4)
+        if(allData.score[LEFT] + allData.score[RIGHT] >= 4)
             winPoints = 15;
-        if(Self_Point >= winPoints && ((Self_Point - Enemy_Point) >= 2)){
-            Self_Score++;
-            Self_Score_Text.text = Self_Score.ToString();
-            Self_Point_Text.text = "00";
-            Enemy_Point_Text.text = "00";
-            Self_Point = 0;
-            Enemy_Point = 0;
+        if(allData.point[LEFT] >= winPoints && ((allData.point[LEFT] - allData.point[RIGHT]) >= 2)){
+            allData.score[LEFT]++;
+            allData.leftScoreText.text = allData.score[LEFT].ToString();
+            allData.leftScoreText.text = "00";
+            allData.rightPointText.text = "00";
+            allData.point[LEFT] = 0;
+            allData.point[RIGHT] = 0;
             changeAll();
             changeSideServe();
             backToDefaultPosition(0);
         }
-        else if(Enemy_Point >= winPoints && ((Enemy_Point - Self_Point) >= 2)){
-            Enemy_Score++;
-            Enemy_Score_Text.text = Enemy_Score.ToString();
-            Enemy_Point_Text.text = "00";
-            Self_Point_Text.text = "00";
-            Enemy_Point = 0;
-            Self_Point = 0;
+        else if(allData.point[RIGHT] >= winPoints && ((allData.point[RIGHT] - allData.point[LEFT]) >= 2)){
+            allData.score[RIGHT]++;
+            allData.rightScoreText.text = allData.score[RIGHT].ToString();
+            allData.leftPointText.text = "00";
+            allData.rightPointText.text = "00";
+            allData.point[RIGHT] = 0;
+            allData.point[LEFT] = 0;
             changeAll();
             changeSideServe();
             backToDefaultPosition(0);
@@ -105,20 +98,20 @@ public class RefreshPoint : MonoBehaviour
     //setServe 0,1
     public void changeServe(int whoWin) {
         if(whoWin == 0) {
-            if(setServe == 1)
-                Self_Serve.SetActive(false);
-            else if(setServe == 0)
-                Enemy_Serve.SetActive(false);
+            if(setServe == RIGHT)
+                leftServe.SetActive(false);
+            else if(setServe == LEFT)
+                rightServe.SetActive(false);
         }
         if(whoWin == -1 && setServe == 1) { //self win and enemy serve
-            Self_Serve.SetActive(true);
-            Enemy_Serve.SetActive(false);
+            leftServe.SetActive(true);
+            rightServe.SetActive(false);
             setServe = 0;
             selfRotation();
         }
         if(whoWin == 1 && setServe == 0) { //enemy win and self serve
-            Self_Serve.SetActive(false);
-            Enemy_Serve.SetActive(true);
+            leftServe.SetActive(false);
+            rightServe.SetActive(true);
             setServe = 1;
             enemyRotation();
         }
@@ -127,13 +120,13 @@ public class RefreshPoint : MonoBehaviour
         if(Self_Point != 0 && Enemy_Point != 0)
             return;
         if(Setting.whoServe == 0){
-            Self_Serve.SetActive(true);
-            Enemy_Serve.SetActive(false);
+            leftServe.SetActive(true);
+            rightServe.SetActive(false);
             setServe = 0;
         }
         else if(Setting.whoServe == 1){
-            Self_Serve.SetActive(false);
-            Enemy_Serve.SetActive(true);
+            leftServe.SetActive(false);
+            rightServe.SetActive(true);
             setServe = 1;
         }
     }
@@ -215,14 +208,131 @@ public class RefreshPoint : MonoBehaviour
         Self_Team_Name.text = Enemy_Team_Name.text;
         Enemy_Team_Name.text = teamName_tmp;
 
-        int teamScore = Self_Score;
-        Self_Score = Enemy_Score;
+        int teamScore = allData.score[LEFT];
+        allData.score[LEFT] = Enemy_Score;
         Enemy_Score = teamScore;
 
-        string teamScore_tmp = Self_Score_Text.text;
-        Self_Score_Text.text = Enemy_Score_Text.text;
+        string teamScore_tmp = allData.leftScoreText.text;
+        allData.leftScoreText.text = Enemy_Score_Text.text;
         Enemy_Score_Text.text = teamScore_tmp;
 
         change_all = 1;
+    }*/
+
+    const int LEFT = 0, RIGHT = 1;
+    public int whoServe, startServe, reWhoServe,  reClick;
+    [SerializeField] GameObject serverData;
+    [SerializeField] GameObject leftServeTag;
+    [SerializeField] GameObject rightServeTag;
+    private SystemData serverDataScript;
+
+    void Start(){
+        serverDataScript = serverData.GetComponent<SystemData>();
+        whoServe = 0; // 跟伺服器拿資料
+        startServe = 0; // 跟伺服器拿資料
     }
+
+    void addPoint(){ // 小比分加分
+        GameObject obj = EventSystem.current.currentSelectedGameObject;
+        if(obj.tag == "LeftPoint"){
+            serverDataScript.point[LEFT]++;
+            reClick = LEFT;
+            reWhoServe = whoServe;
+            if(whoServe == RIGHT){
+                rightServeTag.SetActive(false);
+                leftServeTag.SetActive(true);
+                whoServe = LEFT;
+                rotate(LEFT);
+            }
+            serverDataScript.leftPointText.text = serverDataScript.point[LEFT] > 10 
+                ? serverDataScript.point[LEFT].ToString() : "0" + serverDataScript.point[LEFT].ToString();
+        }
+        else if(obj.tag == "RightPoint"){
+            serverDataScript.point[RIGHT]++;
+            reClick = RIGHT;
+            reWhoServe = whoServe;
+            if(whoServe == LEFT){
+                leftServeTag.SetActive(false);
+                rightServeTag.SetActive(true);
+                whoServe = RIGHT;
+                rotate(RIGHT);
+            }
+        }
+        serverDataScript.rightPointText.text = serverDataScript.point[RIGHT] > 10 
+                ? serverDataScript.point[RIGHT].ToString() : "0" + serverDataScript.point[RIGHT].ToString();
+
+    }
+    void addScore(){ // 大比分加分 插入資料再判斷
+        int endPoint = 25;
+        bool clear = false;
+        if(serverDataScript.score[LEFT] + serverDataScript.score[RIGHT] >= 4)
+            endPoint = 15;
+        
+        if(serverDataScript.point[LEFT] >= endPoint && serverDataScript.point[LEFT] - serverDataScript.point[RIGHT] >= 2){
+            serverDataScript.score[LEFT]++;
+            clear = true;
+        }
+        else if(serverDataScript.point[RIGHT] >= endPoint && serverDataScript.point[RIGHT] - serverDataScript.point[LEFT] >= 2){
+            serverDataScript.score[RIGHT]++;
+            clear = true;
+        }
+        if(clear){
+            serverDataScript.point[LEFT] = 0;
+            serverDataScript.point[RIGHT] = 0;
+            serverDataScript.leftPointText.text = "00";
+            serverDataScript.rightPointText.text = "00";
+            serverDataScript.leftScoreText.text = serverDataScript.score[LEFT].ToString();
+            serverDataScript.rightScoreText.text = serverDataScript.score[RIGHT].ToString();
+        }
+        
+    }
+    void rotate(int side){ // 輪轉
+        GameObject tmp;
+        Vector2 tmpPos;
+        if(side == LEFT){
+            tmp = serverDataScript.leftPlayers[0];
+            tmpPos = serverDataScript.leftPLayersPos[0];
+            for(int i = 0; i < 5; i++){
+                serverDataScript.leftPlayers[i] = serverDataScript.leftPlayers[i + 1];
+                serverDataScript.leftPLayersPos[i] = serverDataScript.leftPLayersPos[i + 1];
+            }
+            serverDataScript.leftPlayers[5] = tmp;
+            serverDataScript.leftPLayersPos[5] = tmpPos;
+        }
+        else if(side == RIGHT){
+            tmp = serverDataScript.rightPlayers[0];
+            tmpPos = serverDataScript.rightPlayersPos[0];
+            for(int i = 0; i < 5; i++){
+                serverDataScript.rightPlayers[i] = serverDataScript.rightPlayers[i + 1];
+                serverDataScript.rightPlayersPos[i] = serverDataScript.rightPlayersPos[i + 1];
+            }
+            serverDataScript.rightPlayers[5] = tmp;
+            serverDataScript.rightPlayersPos[5] = tmpPos;
+        }
+    }
+    void changeSideServe(){ // 局換發
+        if((serverDataScript.score[LEFT] + serverDataScript.score[RIGHT]) % 2 != 0)
+            whoServe = 1 - whoServe;
+        if(whoServe == LEFT){
+            leftServeTag.SetActive(true);
+            rightServeTag.SetActive(false);
+        }
+        else{
+            leftServeTag.SetActive(false);
+            rightServeTag.SetActive(true);
+        }
+    }
+    void back(){ // 回復比分
+        if(reClick == LEFT){
+            serverDataScript.point[LEFT]--;
+            whoServe = reWhoServe;
+        }
+        else if(reClick == RIGHT){
+            serverDataScript.point[RIGHT]--;
+            whoServe = reWhoServe;
+        }
+    }
+    void LRChange(){
+        
+    }     
 }
