@@ -75,8 +75,6 @@ public class dealDB : MonoBehaviour
         //UserName = UserData.Instance.UserName; //後面要連伺服器
         //UserID = UserData.Instance.UserID;
         //GameID = UserData.Instance.GameID;
-        
-
         CallinitDB();
     }
 

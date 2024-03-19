@@ -107,7 +107,7 @@ public class GameSelect : MonoBehaviour
             return;
         }
         int PNumIN = int.Parse(PNum.text);
-        if(PNumIN<=0 || PNumIN >= 100){
+        if(PNumIN<0 || PNumIN > 100){
             PWarning.text = "背號請輸入 0 - 100!";
             Debug.Log("背號請輸入 0 - 100!");
             return;
@@ -208,7 +208,6 @@ public class GameSelect : MonoBehaviour
         MainCanvas.SetActive(false);
         AssignCanvas.SetActive(true);
         StartCoroutine(ShowNotAssign());
-        //SceneManager.LoadScene("MainScene");
 
     }
     public void GoToMainScene(){
@@ -233,7 +232,7 @@ public class GameSelect : MonoBehaviour
         }
 
         TeamWarning.text = "設定成功!";
-        UserData.Instance.TeamName = TeamNameIn;
+        UserData.Instance.UserTeamName = TeamNameIn;
         waitsecond(1f);
         
         if(AssignPlayerID.Count != 12){

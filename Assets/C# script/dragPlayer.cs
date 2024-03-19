@@ -20,6 +20,7 @@ public class dragPlayer : MonoBehaviour {
     [SerializeField] public string playerName;
     [SerializeField] public string playerNum;
     [SerializeField] GameObject BeGameObject;
+    [SerializeField] GameObject system;
     Color orginColor;
     private Vector3 initialPosition; // 球員初始位置
     private Vector3 AfterDragPosition; // 球員移動後位置
@@ -29,8 +30,10 @@ public class dragPlayer : MonoBehaviour {
     public float pressTime;
     public DateTime LastClick, StartClick, EndClick;
     bool isPress, isClick, isDoubleClick;
+    public bool[] isSelect;
     
     ClickRecord DataScript;
+    SystemData SystemScript;
     void Start(){
         pressTime = 0f;
         LastClick = DateTime.Now.AddHours(-1);
@@ -41,11 +44,15 @@ public class dragPlayer : MonoBehaviour {
         isDoubleClick = false;
         orginColor = this.gameObject.GetComponent<SpriteRenderer>().color;
         DataScript = BeGameObject.GetComponent<ClickRecord>();
-        print(DataScript.Behavior.Count);
+        SystemScript = system.GetComponent<SystemData>();
+        isSelect = new bool[1];
+        isSelect[0] = false;
+    }
+    void Update(){
+        
+        
     }
     void OnMouseDown(){
-        //ShowRecord(DataScript.Behavior);
-        print(DataScript.Behavior.Count);
         CancelInvoke();
         StartClick = DateTime.Now;
         TimeSpan twoClickDuring = StartClick - LastClick;
@@ -68,6 +75,16 @@ public class dragPlayer : MonoBehaviour {
     void OnMouseUp(){
         EndClick = DateTime.Now;
         TimeSpan pressTime = EndClick - StartClick;
+        print(isClick);
+        if(isSelect[0]){
+            for(int i = 0; i < 6; i++){
+                SystemScript.leftPlayers[i].SetActive(true);
+                SystemScript.rightPlayers[i].SetActive(true);
+            }
+            DataScript.Behavior.RemoveAt(DataScript.Behavior.Count - 1);
+            isSelect[0] = false;
+            return;
+        }
         if(pressTime.TotalSeconds <= LONGPRESS){
             Invoke("checkClickType", DOUBLECLICKTIME);
         }
@@ -81,19 +98,21 @@ public class dragPlayer : MonoBehaviour {
 
     void checkClickType(){
         if(isClick && !isDoubleClick && !isPress){
-            //print("Click! ");
-            this.gameObject.GetComponent<SpriteRenderer>().color = new Color(255, 0, 0, 1);
-            Invoke("colorBack", 1f);
+            print("Click! ");
+            //this.gameObject.GetComponent<SpriteRenderer>().color = new Color(255, 0, 0, 1);
+            isSelect[0] = true;
+            hideOther();
             Record(CLICK);
         }
         else if(!isClick && isDoubleClick && !isPress){
-            //print("Double Click ");
-            this.gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 255, 0, 1);
-            Invoke("colorBack", 1f);
+            print("Double Click ");
+            //this.gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 255, 0, 1);
+            isSelect[0] = true;
+            hideOther();
             Record(DOUBLECLICK);
         }
         else if(!isClick && !isDoubleClick && isPress){
-            //print("Press ");
+            print("Press ");
             Record(PRESS);
         }
     }   
@@ -133,6 +152,13 @@ public class dragPlayer : MonoBehaviour {
         this.gameObject.GetComponent<SpriteRenderer>().color = orginColor;
     }
 
+    void hideOther(){
+        for(int i = 0; i < 6; i++){
+            SystemScript.leftPlayers[i].SetActive(false);
+            SystemScript.rightPlayers[i].SetActive(false);
+        }
+        this.gameObject.SetActive(true);
+    }
     public void ShowRecord(){
         foreach (GameObject i in DataScript.Behavior.Last().players){
             print(i);

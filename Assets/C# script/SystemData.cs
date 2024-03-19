@@ -10,8 +10,8 @@ public class SystemData : MonoBehaviour
     public string formation; // 紀錄當前陣容
     [SerializeField] public GameObject[] leftPlayers; // 左方球員
     [SerializeField] public GameObject[] rightPlayers; // 右方球員
-    [SerializeField] public GameObject[] initLeftPlayers;
-    [SerializeField] public GameObject[] initRightPlayers;
+    [SerializeField] public int[] initLeftPlayers;
+    [SerializeField] public int[] initRightPlayers;
     
     public Vector2[] leftPLayersPos;
     public Vector2[] rightPlayersPos;
@@ -24,7 +24,7 @@ public class SystemData : MonoBehaviour
     public Text leftTeamName;
     public Text rightTeamName;
     public int whoWin;
-    public int serServe;
+    public int setServe;
     public List<dealDB.Data> saveData; // 資料儲存
     public bool changePosition; //更換位子變數判斷
 
@@ -36,11 +36,31 @@ public class SystemData : MonoBehaviour
         rightPointText.text = "00";
         saveData = new List<dealDB.Data>();
         changePosition = false;
-        leftPLayersPos = new Vector2[6];
-        rightPlayersPos = new Vector2[6];
-        for(int i = 0; i < 6; i++){
-            
+        if(true){ // 使用者 left 0 right -1
+            leftTeamName.text = UserData.Instance.UserTeamName;
+            rightTeamName.text = UserData.Instance.EnemyTeamName;
+            for(int i = 0 ; i < 6; i++){
+                leftPlayers[i].GetComponent<dragPlayer>().playerName = UserData.Instance.UserPlayerName[i];
+                rightPlayers[i].GetComponent<dragPlayer>().playerName = UserData.Instance.EnemyPlayerName[i];
+                leftPlayers[i].GetComponent<dragPlayer>().playerNum = UserData.Instance.UserPlayerNumber[i].ToString();
+                rightPlayers[i].GetComponent<dragPlayer>().playerNum = UserData.Instance.EnemyPlayerNumber[i].ToString();
+                initLeftPlayers[i] = UserData.Instance.UserPlayerNumber[i];
+                initRightPlayers[i] = UserData.Instance.EnemyPlayerNumber[i];
+            }
         }
+        else{
+            rightTeamName.text = UserData.Instance.UserTeamName;
+            leftTeamName.text = UserData.Instance.EnemyTeamName;
+            for(int i = 0 ; i < 6; i++){
+                rightPlayers[i].GetComponent<dragPlayer>().playerName = UserData.Instance.UserPlayerName[i];
+                leftPlayers[i].GetComponent<dragPlayer>().playerName = UserData.Instance.EnemyPlayerName[i];
+                rightPlayers[i].GetComponent<dragPlayer>().playerNum = UserData.Instance.UserPlayerNumber[i].ToString();
+                leftPlayers[i].GetComponent<dragPlayer>().playerNum = UserData.Instance.EnemyPlayerNumber[i].ToString();
+                initRightPlayers[i] = UserData.Instance.UserPlayerNumber[i];
+                initLeftPlayers[i] = UserData.Instance.EnemyPlayerNumber[i];
+            }
+        }
+        
     }
 
 }
