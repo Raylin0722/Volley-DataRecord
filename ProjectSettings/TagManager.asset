@@ -19,6 +19,8 @@ TagManager:
   - Left
   - Right
   - AssignPlayer
+  - LeftPoint
+  - RightPoint
   layers:
   - Default
   - TransparentFX

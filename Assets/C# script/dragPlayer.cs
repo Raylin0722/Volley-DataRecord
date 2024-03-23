@@ -47,6 +47,16 @@ public class dragPlayer : MonoBehaviour {
         SystemScript = system.GetComponent<SystemData>();
         isSelect = new bool[1];
         isSelect[0] = false;
+
+        // 設定名稱顯示
+        TextMeshPro textMeshPro = gameObject.transform.GetChild(0).gameObject.GetComponent<TextMeshPro>();
+        if (textMeshPro != null)
+            textMeshPro.text = playerName;
+        
+        else
+            Debug.LogWarning("未找到TextMeshPro组件");
+        
+
     }
     void Update(){
         

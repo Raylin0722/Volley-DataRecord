@@ -80,7 +80,6 @@ public class ClickRecord : MonoBehaviour
     void Update()
     {
         if(Input.GetMouseButtonDown(0)){
-            print(Behavior.Count);
             if(Behavior.Count > 1){ // 發球不能進行攔網
                 isDrag = true;
                 selectBlock.SetActive(true);
