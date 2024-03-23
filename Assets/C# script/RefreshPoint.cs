@@ -228,8 +228,8 @@ public class RefreshPoint : MonoBehaviour
 
     void Start(){
         serverDataScript = serverData.GetComponent<SystemData>();
-        whoServe = 0; // 跟伺服器拿資料
-        startServe = 0; // 跟伺服器拿資料
+        whoServe = UserData.Instance.whoServe; // 跟伺服器拿資料
+        startServe = whoServe; // 跟伺服器拿資料
     }
 
     void addPoint(){ // 小比分加分
