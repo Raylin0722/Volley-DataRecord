@@ -11706,9 +11706,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 968367309}
-        m_TargetAssemblyTypeName: dragPlayer, Assembly-CSharp
-        m_MethodName: startChangePosition
+      - m_Target: {fileID: 895018771}
+        m_TargetAssemblyTypeName: ChangePositionButtonColor, Assembly-CSharp
+        m_MethodName: changeButtonColor
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11718,9 +11718,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 895018771}
-        m_TargetAssemblyTypeName: ChangePositionButtonColor, Assembly-CSharp
-        m_MethodName: changeButtonColor
+      - m_Target: {fileID: 386398054}
+        m_TargetAssemblyTypeName: SystemData, Assembly-CSharp
+        m_MethodName: changePlayerPos
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11851,7 +11851,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1973327730}
   m_Direction: 2
   m_Value: 1
-  m_Size: 1
+  m_Size: 0.9999984
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -13149,7 +13149,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.0010098219, y: 0}
+  m_AnchoredPosition: {x: 0.0010098219, y: 0.0021972656}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &908573765
@@ -13846,17 +13846,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 951892658}
   m_CullTransparentMesh: 1
---- !u!114 &968367309 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 494475276491014076, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
-  m_PrefabInstance: {fileID: 40758791}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 754452191}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7294d9149fd646ec92ce979a1da6958, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &968903861
 GameObject:
   m_ObjectHideFlags: 0

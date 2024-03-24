@@ -79,39 +79,41 @@ public class ClickRecord : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown(0)){
-            if(Behavior.Count > 1){ // 發球不能進行攔網
-                isDrag = true;
-                selectBlock.SetActive(true);
-            }
-            startWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            startPos = Input.mousePosition;
+        if(!SystemScript.changePosition){
+            if(Input.GetMouseButtonDown(0)){
+                if(Behavior.Count > 1){ // 發球不能進行攔網
+                    isDrag = true;
+                    selectBlock.SetActive(true);
+                }
+                startWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                startPos = Input.mousePosition;
 
-        }
-        if(Input.GetMouseButtonUp(0)){
-            isDrag = false;
-            selectBlock.SetActive(false);
-            endWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            endPos = Input.mousePosition;
-            //selectBlock.SetActive(false);
-            if(Math.Abs(startWorldPos.x - endWorldPos.x) > 5f || Math.Abs(startWorldPos.y - endWorldPos.y) > 5f){ // 有拖曳選取
-                
             }
-            else{ // 非拖曳選取 
-                GetClickTarget();
+            if(Input.GetMouseButtonUp(0)){
+                isDrag = false;
+                selectBlock.SetActive(false);
+                endWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                endPos = Input.mousePosition;
+                //selectBlock.SetActive(false);
+                if(Math.Abs(startWorldPos.x - endWorldPos.x) > 5f || Math.Abs(startWorldPos.y - endWorldPos.y) > 5f){ // 有拖曳選取
+                    
+                }
+                else{ // 非拖曳選取 
+                    GetClickTarget();
+                }
             }
-        }
-        if(isDrag){
-            endWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            endPos = Input.mousePosition;
-            selectBlock.SetActive(true);
-            Vector3 tmp = new Vector3((startPos.x + endPos.x) / 2, (startPos.y + endPos.y) / 2, 0);
-            Vector3 size = new Vector3((startPos.x - endPos.x) / 100, (startPos.y - endPos.y) / 100, selectBlock.transform.localScale.z);
-            tmp = Camera.main.ScreenToWorldPoint(tmp);
-            //print(tmp);
-            tmp.z = 0;
-            selectBlock.transform.position = tmp;
-            selectBlock.transform.localScale = size;       
+            if(isDrag){
+                endWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                endPos = Input.mousePosition;
+                selectBlock.SetActive(true);
+                Vector3 tmp = new Vector3((startPos.x + endPos.x) / 2, (startPos.y + endPos.y) / 2, 0);
+                Vector3 size = new Vector3((startPos.x - endPos.x) / 100, (startPos.y - endPos.y) / 100, selectBlock.transform.localScale.z);
+                tmp = Camera.main.ScreenToWorldPoint(tmp);
+                //print(tmp);
+                tmp.z = 0;
+                selectBlock.transform.position = tmp;
+                selectBlock.transform.localScale = size;       
+            }
         }
     }
     void GetClickTarget(){

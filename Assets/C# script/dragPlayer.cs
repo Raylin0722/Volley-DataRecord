@@ -53,9 +53,6 @@ public class dragPlayer : MonoBehaviour {
         if (textMeshPro != null)
             textMeshPro.text = playerName;
         
-        else
-            Debug.LogWarning("未找到TextMeshPro组件");
-        
 
     }
     void Update(){
@@ -63,47 +60,52 @@ public class dragPlayer : MonoBehaviour {
         
     }
     void OnMouseDown(){
-        CancelInvoke();
-        StartClick = DateTime.Now;
-        TimeSpan twoClickDuring = StartClick - LastClick;
-        print(twoClickDuring.TotalSeconds);
-        if(twoClickDuring.TotalSeconds <= DOUBLECLICKTIME){ // double click
-            isDoubleClick = true;
-            isClick = false;
-            isPress = false;
-        }
-        else if(twoClickDuring.TotalSeconds > DOUBLECLICKTIME){
-            isDoubleClick = false;
-            isClick = true;
-            isPress = false;
+        if(!SystemScript.changePosition){
+            CancelInvoke();
+            StartClick = DateTime.Now;
+            TimeSpan twoClickDuring = StartClick - LastClick;
+            if(twoClickDuring.TotalSeconds <= DOUBLECLICKTIME){ // double click
+                isDoubleClick = true;
+                isClick = false;
+                isPress = false;
+            }
+            else if(twoClickDuring.TotalSeconds > DOUBLECLICKTIME){
+                isDoubleClick = false;
+                isClick = true;
+                isPress = false;
+            }
         }
 
     }
     void OnMouseDrag(){
-        
+        if(SystemScript.changePosition){
+
+        }
     }
     void OnMouseUp(){
-        EndClick = DateTime.Now;
-        TimeSpan pressTime = EndClick - StartClick;
-        print(isClick);
-        if(isSelect[0]){
-            for(int i = 0; i < 6; i++){
-                SystemScript.leftPlayers[i].SetActive(true);
-                SystemScript.rightPlayers[i].SetActive(true);
+        if(!SystemScript.changePosition){
+            EndClick = DateTime.Now;
+            TimeSpan pressTime = EndClick - StartClick;
+            print(isClick);
+            if(isSelect[0]){
+                for(int i = 0; i < 6; i++){
+                    SystemScript.leftPlayers[i].SetActive(true);
+                    SystemScript.rightPlayers[i].SetActive(true);
+                }
+                DataScript.Behavior.RemoveAt(DataScript.Behavior.Count - 1);
+                isSelect[0] = false;
+                return;
             }
-            DataScript.Behavior.RemoveAt(DataScript.Behavior.Count - 1);
-            isSelect[0] = false;
-            return;
+            if(pressTime.TotalSeconds <= LONGPRESS){
+                Invoke("checkClickType", DOUBLECLICKTIME);
+            }
+            else{
+                //print("Press ");
+                this.gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 0, 255, 1);
+                Invoke("colorBack", 1f);
+            }
+            LastClick = DateTime.Now;
         }
-        if(pressTime.TotalSeconds <= LONGPRESS){
-            Invoke("checkClickType", DOUBLECLICKTIME);
-        }
-        else{
-            //print("Press ");
-            this.gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 0, 255, 1);
-            Invoke("colorBack", 1f);
-        }
-        LastClick = DateTime.Now;
     }
 
     void checkClickType(){

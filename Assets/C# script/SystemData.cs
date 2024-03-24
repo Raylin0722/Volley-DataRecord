@@ -67,4 +67,11 @@ public class SystemData : MonoBehaviour
         
     }
 
+    public void changePlayerPos(){
+        if(!changePosition)
+            changePosition = true;
+        else
+            changePosition = false;
+    }
+
 }
