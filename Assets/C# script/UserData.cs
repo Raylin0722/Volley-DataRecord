@@ -27,6 +27,9 @@ public class UserData : MonoBehaviour
     public string EnemyTeamName;
     public int whoServe;
     public int leftRight;
+    public UserData(){
+        
+    }
     void Awake(){
         /*if(Instance != null){
             Destroy(gameObject);

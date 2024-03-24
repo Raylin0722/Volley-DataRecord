@@ -121,7 +121,8 @@ public class ClickRecord : MonoBehaviour
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
         // 球員
-        if (hit.collider != null)
+        print(Behavior.Count);
+        if (hit.collider != null && Behavior.Count != 1)
         {
             return;
         }
@@ -178,6 +179,8 @@ public class ClickRecord : MonoBehaviour
                 SystemScript.leftPlayers[i].SetActive(true);
                 SystemScript.rightPlayers[i].SetActive(true);
             }
+            if(Behavior.Last().players.Count == 1)
+                Behavior.Last().players[0].SetActive(false);
         }
         else
             print("None");

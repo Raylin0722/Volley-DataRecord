@@ -31,7 +31,7 @@ public class dragPlayer : MonoBehaviour {
     public DateTime LastClick, StartClick, EndClick;
     bool isPress, isClick, isDoubleClick;
     public bool[] isSelect;
-    
+    bool updata;
     ClickRecord DataScript;
     SystemData SystemScript;
     void Start(){
@@ -47,20 +47,25 @@ public class dragPlayer : MonoBehaviour {
         SystemScript = system.GetComponent<SystemData>();
         isSelect = new bool[1];
         isSelect[0] = false;
+        updata = false;
 
         // 設定名稱顯示
-        TextMeshPro textMeshPro = gameObject.transform.GetChild(0).gameObject.GetComponent<TextMeshPro>();
-        if (textMeshPro != null)
-            textMeshPro.text = playerName;
         
-
     }
     void Update(){
-        
+        if(!updata){
+            TextMeshPro textMeshPro = gameObject.transform.GetChild(0).gameObject.GetComponent<TextMeshPro>();
+            if (textMeshPro != null)
+                textMeshPro.text = playerName;
+            updata = true;
+        }
         
     }
     void OnMouseDown(){
+        if(DataScript.Behavior.Last().complete == false && DataScript.Behavior.Last().behavior == -1)
+            return;
         if(!SystemScript.changePosition){
+            
             CancelInvoke();
             StartClick = DateTime.Now;
             TimeSpan twoClickDuring = StartClick - LastClick;
@@ -74,6 +79,11 @@ public class dragPlayer : MonoBehaviour {
                 isClick = true;
                 isPress = false;
             }
+            if(DataScript.Behavior.Count == 1){
+                isClick = true;
+                isDoubleClick = false;
+                isPress = false;
+            }
         }
 
     }
@@ -83,11 +93,12 @@ public class dragPlayer : MonoBehaviour {
         }
     }
     void OnMouseUp(){
+        if(DataScript.Behavior.Last().complete == false && DataScript.Behavior.Last().behavior == -1)
+            return;
         if(!SystemScript.changePosition){
             EndClick = DateTime.Now;
             TimeSpan pressTime = EndClick - StartClick;
-            print(isClick);
-            if(isSelect[0]){
+            if(isSelect[0] && !isDoubleClick){
                 for(int i = 0; i < 6; i++){
                     SystemScript.leftPlayers[i].SetActive(true);
                     SystemScript.rightPlayers[i].SetActive(true);
@@ -100,7 +111,6 @@ public class dragPlayer : MonoBehaviour {
                 Invoke("checkClickType", DOUBLECLICKTIME);
             }
             else{
-                //print("Press ");
                 this.gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 0, 255, 1);
                 Invoke("colorBack", 1f);
             }
@@ -111,16 +121,16 @@ public class dragPlayer : MonoBehaviour {
     void checkClickType(){
         if(isClick && !isDoubleClick && !isPress){
             print("Click! ");
-            //this.gameObject.GetComponent<SpriteRenderer>().color = new Color(255, 0, 0, 1);
+            this.gameObject.GetComponent<SpriteRenderer>().color = new Color(255, 0, 0, 1);
             isSelect[0] = true;
-            hideOther();
+            hideOtherCick();
             Record(CLICK);
         }
         else if(!isClick && isDoubleClick && !isPress){
             print("Double Click ");
-            //this.gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 255, 0, 1);
+            this.gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 255, 0, 1);
             isSelect[0] = true;
-            hideOther();
+            hideOtherBlock();
             Record(DOUBLECLICK);
         }
         else if(!isClick && !isDoubleClick && isPress){
@@ -159,17 +169,38 @@ public class dragPlayer : MonoBehaviour {
                 DataScript.Behavior.Last().players.Any()){
             DataScript.Behavior.Last().players.Add(this.gameObject);
         }
+        for(int i = 0; i < DataScript.Behavior.Last().players.Count; i++)
+            print(DataScript.Behavior.Last().players[i]);
     }
     void colorBack(){
         this.gameObject.GetComponent<SpriteRenderer>().color = orginColor;
     }
 
-    void hideOther(){
+    void hideOtherCick(){
         for(int i = 0; i < 6; i++){
             SystemScript.leftPlayers[i].SetActive(false);
             SystemScript.rightPlayers[i].SetActive(false);
         }
         this.gameObject.SetActive(true);
+    }
+    void hideOtherBlock(){
+        print(this.gameObject.tag);
+        if(this.gameObject.tag == "Left"){
+            for(int i = 0; i < 6; i++){
+                SystemScript.rightPlayers[i].SetActive(false);
+            }
+            SystemScript.leftPlayers[0].SetActive(false);
+            SystemScript.leftPlayers[4].SetActive(false);
+            SystemScript.leftPlayers[5].SetActive(false);
+        }
+        else{
+            for(int i = 0; i < 6; i++){
+                SystemScript.leftPlayers[i].SetActive(false);
+            }
+            SystemScript.rightPlayers[0].SetActive(false);
+            SystemScript.rightPlayers[4].SetActive(false);
+            SystemScript.rightPlayers[5].SetActive(false);
+        }
     }
     public void ShowRecord(){
         foreach (GameObject i in DataScript.Behavior.Last().players){

@@ -28,7 +28,7 @@ public class SystemData : MonoBehaviour
     public bool changePosition; //更換位子變數判斷
     public int leftRight;
 
-    void Awake(){
+    void Start(){
         score = new int[2];
         point = new int[2];
         leftScoreText.text = "0";
