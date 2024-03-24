@@ -56,7 +56,7 @@ public class RefreshPoint : MonoBehaviour
                 leftServeTag.SetActive(true);
                 whoServe = LEFT;
             }
-            systemDataScript.leftPointText.text = systemDataScript.point[LEFT] > 10 
+            systemDataScript.leftPointText.text = systemDataScript.point[LEFT] >= 10 
                 ? systemDataScript.point[LEFT].ToString() : "0" + systemDataScript.point[LEFT].ToString();
         }
         else if(obj.tag == "RightPoint"){
@@ -69,7 +69,7 @@ public class RefreshPoint : MonoBehaviour
                 rightServeTag.SetActive(true);
                 whoServe = RIGHT;
             }
-            systemDataScript.rightPointText.text = systemDataScript.point[RIGHT] > 10 
+            systemDataScript.rightPointText.text = systemDataScript.point[RIGHT] >= 10 
                 ? systemDataScript.point[RIGHT].ToString() : "0" + systemDataScript.point[RIGHT].ToString();
         }
         
@@ -100,28 +100,40 @@ public class RefreshPoint : MonoBehaviour
         }
         
     }
-    public void rotate(int side){ // 輪轉
-        GameObject tmp;
-        Vector2 tmpPos;
-        if(side == LEFT){
-            tmp = systemDataScript.leftPlayers[0];
-            tmpPos = systemDataScript.leftPLayersPos[0];
+    public void rotate(){ // 輪轉
+        string tmpName, tmpNum;
+        Vector2 tmpNamePos;
+        if(reClick == LEFT && reWhoServe == RIGHT){
+            tmpName = systemDataScript.leftPlayers[0].GetComponent<dragPlayer>().playerName;
+            tmpNum = systemDataScript.leftPlayers[0].GetComponent<dragPlayer>().playerNum;
+            //tmpNamePos = systemDataScript.leftPLayersPos[0];
             for(int i = 0; i < 5; i++){
-                systemDataScript.leftPlayers[i] = systemDataScript.leftPlayers[i + 1];
-                systemDataScript.leftPLayersPos[i] = systemDataScript.leftPLayersPos[i + 1];
+                systemDataScript.leftPlayers[i].GetComponent<dragPlayer>().playerName = systemDataScript.leftPlayers[i + 1].GetComponent<dragPlayer>().playerName;
+                systemDataScript.leftPlayers[i].GetComponent<dragPlayer>().playerNum = systemDataScript.leftPlayers[i + 1].GetComponent<dragPlayer>().playerNum;
+                //systemDataScript.leftPLayersPos[i] = systemDataScript.leftPLayersPos[i + 1];
             }
-            systemDataScript.leftPlayers[5] = tmp;
-            systemDataScript.leftPLayersPos[5] = tmpPos;
+            systemDataScript.leftPlayers[5].GetComponent<dragPlayer>().playerName = tmpName;
+            systemDataScript.leftPlayers[5].GetComponent<dragPlayer>().playerNum = tmpNum;
+            //systemDataScript.leftPLayersPos[5] = tmpNamePos;
         }
-        else if(side == RIGHT){
-            tmp = systemDataScript.rightPlayers[0];
-            tmpPos = systemDataScript.rightPlayersPos[0];
+        else if(reClick == RIGHT && reWhoServe == LEFT){
+            tmpName = systemDataScript.rightPlayers[0].GetComponent<dragPlayer>().playerName;
+            tmpNum = systemDataScript.rightPlayers[0].GetComponent<dragPlayer>().playerNum;
+            //tmpNamePos = systemDataScript.rightPlayersPos[0];
             for(int i = 0; i < 5; i++){
-                systemDataScript.rightPlayers[i] = systemDataScript.rightPlayers[i + 1];
-                systemDataScript.rightPlayersPos[i] = systemDataScript.rightPlayersPos[i + 1];
+                systemDataScript.rightPlayers[i].GetComponent<dragPlayer>().playerName = systemDataScript.rightPlayers[i + 1].GetComponent<dragPlayer>().playerName;
+                systemDataScript.rightPlayers[i].GetComponent<dragPlayer>().playerNum = systemDataScript.rightPlayers[i + 1].GetComponent<dragPlayer>().playerNum;
+                //systemDataScript.rightPlayersPos[i] = systemDataScript.rightPlayersPos[i + 1];
             }
-            systemDataScript.rightPlayers[5] = tmp;
-            systemDataScript.rightPlayersPos[5] = tmpPos;
+            systemDataScript.rightPlayers[5].GetComponent<dragPlayer>().playerName = tmpName;
+            systemDataScript.rightPlayers[5].GetComponent<dragPlayer>().playerNum = tmpNum;
+            //systemDataScript.rightPlayersPos[5] = tmpPos;
+        }
+        for(int i = 0; i < 6; i++){
+            systemDataScript.leftPlayers[i].GetComponent<dragPlayer>().updata[0] = false;
+            systemDataScript.rightPlayers[i].GetComponent<dragPlayer>().updata[0] = false;
+            systemDataScript.leftPlayers[i].SetActive(true);
+            systemDataScript.rightPlayers[i].SetActive(true);
         }
     }
     public void changeSideServe(){ // 局換發

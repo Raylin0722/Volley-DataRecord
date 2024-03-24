@@ -31,7 +31,7 @@ public class dragPlayer : MonoBehaviour {
     public DateTime LastClick, StartClick, EndClick;
     bool isPress, isClick, isDoubleClick;
     public bool[] isSelect;
-    bool updata;
+    public bool[] updata;
     ClickRecord DataScript;
     SystemData SystemScript;
     void Start(){
@@ -47,17 +47,17 @@ public class dragPlayer : MonoBehaviour {
         SystemScript = system.GetComponent<SystemData>();
         isSelect = new bool[1];
         isSelect[0] = false;
-        updata = false;
-
-        // 設定名稱顯示
+        updata = new bool[1];
+        updata[0] = false;
         
     }
     void Update(){
-        if(!updata){
+        if(!updata[0]){
             TextMeshPro textMeshPro = gameObject.transform.GetChild(0).gameObject.GetComponent<TextMeshPro>();
             if (textMeshPro != null)
                 textMeshPro.text = playerName;
-            updata = true;
+            updata[0] = true;
+            
         }
         
     }
@@ -89,7 +89,11 @@ public class dragPlayer : MonoBehaviour {
     }
     void OnMouseDrag(){
         if(SystemScript.changePosition){
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePosition.z = 0f; // 如果物体是在平面上移动，可以将 z 坐标设为固定值，例如 0
 
+            // 将物体的位置设置为鼠标当前位置
+            transform.position = mousePosition;
         }
     }
     void OnMouseUp(){

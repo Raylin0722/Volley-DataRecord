@@ -173,6 +173,13 @@ public class ClickRecord : MonoBehaviour
                 }
                 Behavior.RemoveAt(Behavior.Count - 1);
                 Behavior.Add(target);
+                for(int i = 0; i < Behavior.Last().players.Count; i++){
+                    if(Behavior.Last().players[i].tag == "Left")
+                        Behavior.Last().players[i].GetComponent<SpriteRenderer>().color = new Color(255, 255, 255, 255);
+                    else
+                        Behavior.Last().players[i].GetComponent<SpriteRenderer>().color = new Color(0, 213, 248, 255);
+
+                }
                 
             }
             for(int i = 0; i < 6; i++){
