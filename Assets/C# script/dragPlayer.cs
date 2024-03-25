@@ -19,6 +19,7 @@ public class dragPlayer : MonoBehaviour {
     const float LONGPRESS = 0.4f, DOUBLECLICKTIME= 0.2f;
     [SerializeField] public string playerName;
     [SerializeField] public string playerNum;
+    [SerializeField] public int playerPlayPos;
     [SerializeField] GameObject BeGameObject;
     [SerializeField] GameObject system;
     Color orginColor;

@@ -49,9 +49,11 @@ public class UserData : MonoBehaviour
         UserPlayerID = new List<int>{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
         UserPlayerName = new List<string>{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"};
         UserPlayerNumber = new List<int>{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+        UserPlayerPlayPos = new List<int>{1, 3, 2, 1, 5, 1, 1, 1, 1, 3, 5, 1}; // 主攻: 1 攔中: 2 舉球: 3 輔舉: 4 自由: 5
         EnemyPlayerID = new List<int>{13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24};
         EnemyPlayerName = new List<string>{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"};
         EnemyPlayerNumber = new List<int>{13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24};
+        EnemyPlayerPlayPos = new List<int>{1, 3, 2, 1, 5, 1, 1, 1, 1, 3, 5, 1};
         UserTeamName = "Team A";
         EnemyTeamName = "Team B";
         whoServe = 0; // 0 Left 1 Right
