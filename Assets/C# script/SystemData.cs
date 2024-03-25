@@ -14,7 +14,7 @@ public class SystemData : MonoBehaviour
     [SerializeField] public GameObject[] initRightPlayers;
     [SerializeField] public GameObject[] changeLeftPlayers;
     [SerializeField] public GameObject[] changeRightPlayers;
-    public Vector2[] leftPLayersPos;
+    public Vector2[] leftPlayersPos;
     public Vector2[] rightPlayersPos;
     public int[] point; // 小分
     public int[] score; // 大分
@@ -41,11 +41,12 @@ public class SystemData : MonoBehaviour
         leftRight = UserData.Instance.leftRight;
         initLeftPlayers = new GameObject[6];
         initRightPlayers = new GameObject[6];
+        leftPlayersPos = new Vector2[6];
+        rightPlayersPos = new Vector2[6];
         changePosition = false;
         if(leftRight == 0){ // 使用者 left 0 right 1
             leftTeamName.text = UserData.Instance.UserTeamName;
             rightTeamName.text = UserData.Instance.EnemyTeamName;
-            print(changeLeftPlayers[0]);
             for(int i = 0 ; i < 6; i++){
                 leftPlayers[i].GetComponent<dragPlayer>().playerName = UserData.Instance.UserPlayerName[i];
                 rightPlayers[i].GetComponent<dragPlayer>().playerName = UserData.Instance.EnemyPlayerName[i];
@@ -56,12 +57,12 @@ public class SystemData : MonoBehaviour
                 leftPlayers[i].GetComponent<dragPlayer>().playerPlayPos = UserData.Instance.UserPlayerPlayPos[i];
                 rightPlayers[i].GetComponent<dragPlayer>().playerPlayPos = UserData.Instance.EnemyPlayerPlayPos[i];
 
-                changeLeftPlayers[i].GetComponent<dragPlayer>().playerName = UserData.Instance.UserPlayerName[i + 6];
-                changeRightPlayers[i].GetComponent<dragPlayer>().playerName = UserData.Instance.EnemyPlayerName[i + 6];
-                changeLeftPlayers[i].GetComponent<dragPlayer>().playerNum = UserData.Instance.UserPlayerNumber[i + 6].ToString();
-                changeRightPlayers[i].GetComponent<dragPlayer>().playerNum = UserData.Instance.EnemyPlayerNumber[i + 6].ToString();
-                changeLeftPlayers[i].GetComponent<dragPlayer>().playerPlayPos = UserData.Instance.UserPlayerPlayPos[i + 6];
-                changeRightPlayers[i].GetComponent<dragPlayer>().playerPlayPos = UserData.Instance.EnemyPlayerPlayPos[i + 6];
+                //changeLeftPlayers[i].GetComponent<dragPlayer>().playerName = UserData.Instance.UserPlayerName[i + 6];
+                //changeRightPlayers[i].GetComponent<dragPlayer>().playerName = UserData.Instance.EnemyPlayerName[i + 6];
+                //changeLeftPlayers[i].GetComponent<dragPlayer>().playerNum = UserData.Instance.UserPlayerNumber[i + 6].ToString();
+                //changeRightPlayers[i].GetComponent<dragPlayer>().playerNum = UserData.Instance.EnemyPlayerNumber[i + 6].ToString();
+                //changeLeftPlayers[i].GetComponent<dragPlayer>().playerPlayPos = UserData.Instance.UserPlayerPlayPos[i + 6];
+                //changeRightPlayers[i].GetComponent<dragPlayer>().playerPlayPos = UserData.Instance.EnemyPlayerPlayPos[i + 6];
 
 
             }
@@ -80,12 +81,12 @@ public class SystemData : MonoBehaviour
                 rightPlayers[i].GetComponent<dragPlayer>().playerPlayPos = UserData.Instance.UserPlayerPlayPos[i];
                 leftPlayers[i].GetComponent<dragPlayer>().playerPlayPos = UserData.Instance.EnemyPlayerPlayPos[i];
 
-                changeLeftPlayers[i].GetComponent<dragPlayer>().playerName = UserData.Instance.EnemyPlayerName[i + 6];
-                changeRightPlayers[i].GetComponent<dragPlayer>().playerName = UserData.Instance.UserPlayerName[i + 6];
-                changeLeftPlayers[i].GetComponent<dragPlayer>().playerNum = UserData.Instance.EnemyPlayerNumber[i + 6].ToString();
-                changeRightPlayers[i].GetComponent<dragPlayer>().playerNum = UserData.Instance.UserPlayerNumber[i + 6].ToString();
-                changeLeftPlayers[i].GetComponent<dragPlayer>().playerPlayPos = UserData.Instance.EnemyPlayerPlayPos[i + 6];
-                changeRightPlayers[i].GetComponent<dragPlayer>().playerPlayPos = UserData.Instance.UserPlayerPlayPos[i + 6];
+                //changeLeftPlayers[i].GetComponent<dragPlayer>().playerName = UserData.Instance.EnemyPlayerName[i + 6];
+                //changeRightPlayers[i].GetComponent<dragPlayer>().playerName = UserData.Instance.UserPlayerName[i + 6];
+                //changeLeftPlayers[i].GetComponent<dragPlayer>().playerNum = UserData.Instance.EnemyPlayerNumber[i + 6].ToString();
+                //changeRightPlayers[i].GetComponent<dragPlayer>().playerNum = UserData.Instance.UserPlayerNumber[i + 6].ToString();
+                //changeLeftPlayers[i].GetComponent<dragPlayer>().playerPlayPos = UserData.Instance.EnemyPlayerPlayPos[i + 6];
+                //changeRightPlayers[i].GetComponent<dragPlayer>().playerPlayPos = UserData.Instance.UserPlayerPlayPos[i + 6];
 
             }
             

@@ -22,7 +22,6 @@ public class dragPlayer : MonoBehaviour {
     [SerializeField] public int playerPlayPos;
     [SerializeField] GameObject BeGameObject;
     [SerializeField] GameObject system;
-    Color orginColor;
     private Vector3 initialPosition; // 球員初始位置
     private Vector3 AfterDragPosition; // 球員移動後位置
     Vector2 difference = Vector2.zero;
@@ -35,6 +34,7 @@ public class dragPlayer : MonoBehaviour {
     public bool[] updata;
     ClickRecord DataScript;
     SystemData SystemScript;
+    public Color  orginColor;
     void Start(){
         pressTime = 0f;
         LastClick = DateTime.Now.AddHours(-1);
@@ -43,13 +43,17 @@ public class dragPlayer : MonoBehaviour {
         isPress = false;
         isClick = false;
         isDoubleClick = false;
-        orginColor = this.gameObject.GetComponent<SpriteRenderer>().color;
+        if(this.gameObject.tag == "Right")
+            orginColor = this.gameObject.GetComponent<SpriteRenderer>().color;
+        else
+            orginColor = new Color(255, 255, 255, 255);
         DataScript = BeGameObject.GetComponent<ClickRecord>();
         SystemScript = system.GetComponent<SystemData>();
         isSelect = new bool[1];
         isSelect[0] = false;
         updata = new bool[1];
         updata[0] = false;
+        
         
     }
     void Update(){

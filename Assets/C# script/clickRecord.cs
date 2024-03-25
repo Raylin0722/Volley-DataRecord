@@ -31,6 +31,9 @@ public class ClickRecord : MonoBehaviour
     [SerializeField] GameObject[] CanBlock;
     [SerializeField] GameObject[] NetLocate;
     [SerializeField] GameObject selectBlock;
+    [SerializeField] GameObject pin;
+
+
     Vector3[] NetLocateXY; 
     Vector3[] CanBlockXY;
     public int[] touchCount;
@@ -38,6 +41,7 @@ public class ClickRecord : MonoBehaviour
     Vector3 startWorldPos, endWorldPos, startPos, endPos;
     SystemData SystemScript;
     void Awake(){
+        SystemScript = system.GetComponent<SystemData>();
         Behavior = new List<ClickData>();
         ClickData Serve = new ClickData();
         Serve.behavior = -1;
@@ -45,13 +49,22 @@ public class ClickRecord : MonoBehaviour
         Serve.clickType = -1;
         Serve.players = new List<GameObject>();
         Serve.clicks = new List<Vector2>();
-        Serve.side = 0;
+        Serve.side = canvas.GetComponent<RefreshPoint>().whoServe;
+        if(Serve.side == LEFT){
+            Serve.players.Add(SystemScript.leftPlayers[0]);
+            SystemScript.leftPlayers[0].GetComponent<SpriteRenderer>().color = new Color(255, 0, 0, 255);
+        }
+        else{
+            Serve.players.Add(SystemScript.rightPlayers[0]);
+            SystemScript.rightPlayers[0].GetComponent<SpriteRenderer>().color = new Color(255, 0, 0, 255);
+        
+        }
         Serve.touchFieldCount = 0;
         Behavior.Add(Serve);
         selectBlock.SetActive(false);
         isDrag = false;
         touchCount = new int[2];
-        SystemScript = system.GetComponent<SystemData>();
+        
     }
     void Start()
     {
@@ -119,6 +132,7 @@ public class ClickRecord : MonoBehaviour
     void GetClickTarget(){
 
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePosition.z = 0f;
         RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
         // 球員
         print(Behavior.Count);
@@ -128,11 +142,20 @@ public class ClickRecord : MonoBehaviour
         }
 
         // 地板
-        if (IsPointerOverUI())
+        if (IsPointerOverUI() && inField(mousePosition))
         {
             if(Behavior.Last().complete == true)
                 return;
             
+            pin.SetActive(true);
+            Vector3 tmpPos = mousePosition;
+            RectTransform pinRect = pin.GetComponent<RectTransform>();
+            tmpPos.y += pinRect.rect.height / 200f;
+            if(inField(tmpPos))
+                pinRect.position = tmpPos;
+            else
+                pin.SetActive(false);
+
             int side = leftOrRight(mousePosition);
             bool inOrout = inField(mousePosition);
             string clickSide = (side == LEFT) ? "Left" : "Right";
@@ -145,6 +168,8 @@ public class ClickRecord : MonoBehaviour
                 target.behavior = -1;
                 Behavior.RemoveAt(Behavior.Count - 1);
                 Behavior.Add(target);
+                Behavior.Last().players[0].GetComponent<SpriteRenderer>().color = Behavior.Last().players[0].GetComponent<dragPlayer>().orginColor;
+
             }
             else if(inOrout){ //場內 紀錄
                 // 依照點擊類型 地板點擊次數 球員點擊次數判斷動作
@@ -174,11 +199,9 @@ public class ClickRecord : MonoBehaviour
                 Behavior.RemoveAt(Behavior.Count - 1);
                 Behavior.Add(target);
                 for(int i = 0; i < Behavior.Last().players.Count; i++){
-                    if(Behavior.Last().players[i].tag == "Left")
-                        Behavior.Last().players[i].GetComponent<SpriteRenderer>().color = new Color(255, 255, 255, 255);
-                    else
-                        Behavior.Last().players[i].GetComponent<SpriteRenderer>().color = new Color(0, 213, 248, 255);
-
+                    
+                    Behavior.Last().players[i].GetComponent<SpriteRenderer>().color = Behavior.Last().players[i].GetComponent<dragPlayer>().orginColor;
+                    
                 }
                 
             }
@@ -280,6 +303,43 @@ public class ClickRecord : MonoBehaviour
             return -1;
         
         return 0;
+    }
+
+    public void clickInsert(){
+        canvas.gameObject.GetComponent<RefreshPoint>().rotate();
+        pin.SetActive(false);
+        Behavior.Clear();
+        ClickData Serve = new ClickData();
+        Serve.behavior = -1;
+        Serve.complete = false;
+        Serve.clickType = -1;
+        Serve.players = new List<GameObject>();
+        Serve.clicks = new List<Vector2>();
+        Serve.side = canvas.GetComponent<RefreshPoint>().whoServe;
+        Serve.touchFieldCount = 0;
+        
+
+        if(Serve.side == LEFT){
+            Serve.players.Add(SystemScript.leftPlayers[0]);
+            SystemScript.leftPlayers[0].GetComponent<SpriteRenderer>().color = new Color(255, 0, 0, 255);
+            SystemScript.leftPlayers[0].SetActive(true);
+        }
+        else{
+            Serve.players.Add(SystemScript.rightPlayers[0]);
+            SystemScript.rightPlayers[0].GetComponent<SpriteRenderer>().color = new Color(255, 0, 0, 255);
+            SystemScript.rightPlayers[0].SetActive(true);
+        }
+        Behavior.Add(Serve);
+        
+    }
+
+    public void refreshPlayer(){
+        for(int i = 0; i < 6; i++){
+            SystemScript.leftPlayers[i].SetActive(true);
+            SystemScript.rightPlayers[i].SetActive(true);
+            SystemScript.leftPlayers[i].GetComponent<SpriteRenderer>().color = SystemScript.leftPlayers[i].GetComponent<dragPlayer>().orginColor;
+            SystemScript.rightPlayers[i].GetComponent<SpriteRenderer>().color = SystemScript.rightPlayers[i].GetComponent<dragPlayer>().orginColor;
+        }
     }
 
 }
