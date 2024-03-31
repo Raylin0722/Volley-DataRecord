@@ -13,12 +13,12 @@ using TMPro;
 public class ClickRecord : MonoBehaviour
 {
     public struct ClickData{
+        public string formation;
         public List<GameObject> players; // 動作球員
         public List<Vector2> clicks;
         public int side; // 左右方 左:0 右:1
         public bool complete; // 是否記錄完成
         public int behavior; // 動作 發球:-1 接球:1 攻擊:2 攔網:3 
-        public int touchFieldCount;
         public int clickType;
         
     };
@@ -32,6 +32,7 @@ public class ClickRecord : MonoBehaviour
     [SerializeField] GameObject[] NetLocate;
     [SerializeField] GameObject selectBlock;
     [SerializeField] GameObject pin;
+    [SerializeField] GameObject test;
 
 
     Vector3[] NetLocateXY; 
@@ -40,6 +41,10 @@ public class ClickRecord : MonoBehaviour
     private bool isDrag;
     Vector3 startWorldPos, endWorldPos, startPos, endPos;
     SystemData SystemScript;
+    dealDB DataBaseScript;
+
+    Vector2[] ServePos;
+
     void Awake(){
         SystemScript = system.GetComponent<SystemData>();
         Behavior = new List<ClickData>();
@@ -59,12 +64,15 @@ public class ClickRecord : MonoBehaviour
             SystemScript.rightPlayers[0].GetComponent<SpriteRenderer>().color = new Color(255, 0, 0, 255);
         
         }
-        Serve.touchFieldCount = 0;
+
         Behavior.Add(Serve);
         selectBlock.SetActive(false);
         isDrag = false;
         touchCount = new int[2];
-        
+        DataBaseScript = database.GetComponent<dealDB>();
+
+        ServePos = new Vector2[2];
+
     }
     void Start()
     {
@@ -78,7 +86,7 @@ public class ClickRecord : MonoBehaviour
         for(int i = 0; i < CanBlock.Length; i++){
             CanBlockXY[i] = CanBlock[i].transform.position;
         }   
-        
+        test.GetComponent<RectTransform>().transform.position = NetLocateXY[2];
     }
     Vector3 GetWorldPositionFromUI(RectTransform uiElement)
     {
@@ -94,39 +102,17 @@ public class ClickRecord : MonoBehaviour
     {
         if(!SystemScript.changePosition){
             if(Input.GetMouseButtonDown(0)){
-                if(Behavior.Count > 1){ // 發球不能進行攔網
-                    isDrag = true;
-                    selectBlock.SetActive(true);
-                }
                 startWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 startPos = Input.mousePosition;
-
             }
             if(Input.GetMouseButtonUp(0)){
                 isDrag = false;
                 selectBlock.SetActive(false);
                 endWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 endPos = Input.mousePosition;
-                //selectBlock.SetActive(false);
-                if(Math.Abs(startWorldPos.x - endWorldPos.x) > 5f || Math.Abs(startWorldPos.y - endWorldPos.y) > 5f){ // 有拖曳選取
-                    
-                }
-                else{ // 非拖曳選取 
-                    GetClickTarget();
-                }
-            }
-            if(isDrag){
-                endWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                endPos = Input.mousePosition;
-                selectBlock.SetActive(true);
-                Vector3 tmp = new Vector3((startPos.x + endPos.x) / 2, (startPos.y + endPos.y) / 2, 0);
-                Vector3 size = new Vector3((startPos.x - endPos.x) / 100, (startPos.y - endPos.y) / 100, selectBlock.transform.localScale.z);
-                tmp = Camera.main.ScreenToWorldPoint(tmp);
-                //print(tmp);
-                tmp.z = 0;
-                selectBlock.transform.position = tmp;
-                selectBlock.transform.localScale = size;       
-            }
+                GetClickTarget();
+                
+            }   
         }
     }
     void GetClickTarget(){
@@ -135,14 +121,12 @@ public class ClickRecord : MonoBehaviour
         mousePosition.z = 0f;
         RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
         // 球員
-        print(Behavior.Count);
         if (hit.collider != null && Behavior.Count != 1)
         {
             return;
         }
-
-        // 地板
-        if (IsPointerOverUI() && inField(mousePosition))
+        
+        if(inField(mousePosition))
         {
             if(Behavior.Last().complete == true)
                 return;
@@ -151,16 +135,18 @@ public class ClickRecord : MonoBehaviour
             Vector3 tmpPos = mousePosition;
             RectTransform pinRect = pin.GetComponent<RectTransform>();
             tmpPos.y += pinRect.rect.height / 200f;
-            if(inField(tmpPos))
-                pinRect.position = tmpPos;
-            else
-                pin.SetActive(false);
-
+            pinRect.position = tmpPos;
+            
             int side = leftOrRight(mousePosition);
             bool inOrout = inField(mousePosition);
             string clickSide = (side == LEFT) ? "Left" : "Right";
             ClickData target = Behavior[Behavior.Count - 1];
-
+            string leftFormation = "", rightFormation = "";
+            for(int i = 0; i < 6; i++){
+                leftFormation += ("L" + SystemScript.leftPlayers[i].GetComponent<dragPlayer>().playerNum + " ");
+                rightFormation += ("L" + SystemScript.rightPlayers[i].GetComponent<dragPlayer>().playerNum + " ");
+            }
+            target.formation = leftFormation + rightFormation;
             if(Behavior.Last().behavior == -1 && inOrout){ // 發球
                 print("Serve finish");
                 target.complete = true;
@@ -196,6 +182,7 @@ public class ClickRecord : MonoBehaviour
                 for(int i = 0; i < target.players.Count; i++){
                     target.players[i].GetComponent<dragPlayer>().isSelect[0] = false;
                 }
+                
                 Behavior.RemoveAt(Behavior.Count - 1);
                 Behavior.Add(target);
                 for(int i = 0; i < Behavior.Last().players.Count; i++){
@@ -241,47 +228,6 @@ public class ClickRecord : MonoBehaviour
 
         return string.Empty; // 如果没有找到对应标签的 UI 元素，返回空字符串
     }
-    bool FCheckValid(Vector3 pos){
-        if(Behavior.Count == 0) // 沒有前置資料點擊地板無效
-            return false;
-        ClickData checkBehavior = Behavior.Last();
-        if(checkBehavior.complete == true) // 前置資料已完成點擊地板無效
-            return false;
-        if(inField(pos) == false) // 點擊區域不在場內
-            return false;
-        
-        // 檢查動作是否合法
-        int sideClicked = leftOrRight(pos), behavior = checkBehavior.behavior;
-        if(behavior == -1 && checkBehavior.touchFieldCount == 0){ // 發球
-            return true;
-        }
-        else if(behavior == 0 && checkBehavior.touchFieldCount == 0){ // 接球
-            return true;
-        }
-        else if(behavior == 1 && checkBehavior.touchFieldCount == 0){ // 舉球
-            return true;
-        }
-        else if(behavior == 2 && checkBehavior.touchFieldCount == 0){ // 攻擊
-            return true;
-        }
-        else if(behavior == 3 && checkBehavior.touchFieldCount == 0){ // 吊球
-            return true;
-        }
-        else if(behavior == 4){ // 攔網
-            if(checkBehavior.touchFieldCount == 0 && 
-               checkBehavior.players.Last().tag != (sideClicked == LEFT ? "Left" : "Right")){
-                return false;
-            }
-            else if(checkBehavior.touchFieldCount == 1){
-                return true;
-            }
-            else if(checkBehavior.touchFieldCount >= 2)
-                return false;
-        }
-        
-        
-        return true; 
-    }
     bool inField(Vector3 pos){
         if(pos.x > NetLocateXY[2].x && pos.x < NetLocateXY[3].x && pos.y < NetLocateXY[2].y && pos.y > NetLocateXY[4].y)
             return true;
@@ -306,6 +252,7 @@ public class ClickRecord : MonoBehaviour
     }
 
     public void clickInsert(){
+
         canvas.gameObject.GetComponent<RefreshPoint>().rotate();
         pin.SetActive(false);
         Behavior.Clear();
@@ -316,7 +263,6 @@ public class ClickRecord : MonoBehaviour
         Serve.players = new List<GameObject>();
         Serve.clicks = new List<Vector2>();
         Serve.side = canvas.GetComponent<RefreshPoint>().whoServe;
-        Serve.touchFieldCount = 0;
         
 
         if(Serve.side == LEFT){
@@ -331,6 +277,8 @@ public class ClickRecord : MonoBehaviour
         }
         Behavior.Add(Serve);
         
+
+
     }
 
     public void refreshPlayer(){
@@ -342,7 +290,41 @@ public class ClickRecord : MonoBehaviour
         }
     }
 
+    public void clickRectoData(){
+        int round = SystemScript.score[LEFT] + SystemScript.score[RIGHT] + 1;
+        dealDB.Data tmp;
+        int teamNum = Behavior[0].side == LEFT ? SystemScript.leftTeamNum : SystemScript.rightTeamNum;
+        tmp = new dealDB.Data(
+            Behavior[0].formation, round, Behavior[0].players, teamNum,
+            (int)ServePos[Behavior[0].side].x, (int)ServePos[Behavior[0].side].y, 
+            (int)Behavior[0].clicks[0].x, (int)Behavior[0].clicks[0].y,
+            Behavior[0].behavior, 0
+        );
+        DataBaseScript.saveData.Add(tmp);
+        
+        for(int i = 1; i < Behavior.Count; i++){
+            teamNum = Behavior[i].side == LEFT ? SystemScript.leftTeamNum : SystemScript.rightTeamNum;
+            tmp = new dealDB.Data(
+                Behavior[i].formation, round, Behavior[i].players, teamNum,
+                (int)Behavior[i - 1].clicks[0].x, (int)Behavior[i - 1].clicks[0].y, 
+                (int)Behavior[i].clicks[0].x, (int)Behavior[i].clicks[0].y,
+                Behavior[0].behavior, 0
+            );
+
+            DataBaseScript.saveData.Add(tmp);
+        }
+
+        tmp = DataBaseScript.saveData.Last();
+        DataBaseScript.saveData.RemoveAt(DataBaseScript.saveData.Count - 1);   
+        if(canvas.GetComponent<RefreshPoint>().reClick == LEFT)
+           tmp.score = 1;
+        else
+            tmp.score = -1;
+        DataBaseScript.saveData.Add(tmp);
+
+        print(Behavior.Count);
+        print(DataBaseScript.saveData.Count);
+
+    }
+
 }
-
-
-

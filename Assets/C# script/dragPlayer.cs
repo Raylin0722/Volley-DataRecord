@@ -148,7 +148,7 @@ public class dragPlayer : MonoBehaviour {
         }
     }   
 
-    void Record(int type){
+     void Record(int type){
         if(!DataScript.Behavior.Any())
             return;
         if(DataScript.Behavior.Last().complete == true){
@@ -171,7 +171,7 @@ public class dragPlayer : MonoBehaviour {
             else if(type == PRESS){
                 newData.clickType = PRESS;
             }
-        
+            
             DataScript.Behavior.Add(newData);
         }
         else if(DataScript.Behavior.Last().complete == false && 
@@ -221,7 +221,6 @@ public class dragPlayer : MonoBehaviour {
         print(DataScript.Behavior.Last().side);
         print(DataScript.Behavior.Last().complete);
         print(DataScript.Behavior.Last().behavior);
-        print(DataScript.Behavior.Last().touchFieldCount);
     }
 
 }

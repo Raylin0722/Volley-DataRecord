@@ -28,19 +28,34 @@ public class dealDB : MonoBehaviour
     public struct Data{
         public string formation;
         public int round;
-        public string role;
-        public string attackblock, catchblock;
+        public int teamNum;
+        public int role1, role2, role3;
         public int score, situation;
+        public int startx, starty;
+        public int endx, endy;
 
-        public Data(string formation,  int round, string role, string attackblock,
-                    string catchblock, int situation, int score){
+        public Data(string formation, int round, List<GameObject> role, int teamNum,
+                    int startx, int starty, int endx, int endy,
+                    int situation, int score){
             this.formation = formation;
             this.round = round;
-            this.role = role;
-            this.attackblock = attackblock;
-            this.catchblock = catchblock;
+            this.startx = startx;
+            this.starty = starty;
+            this.endx= endx;
+            this.endy = endy;
             this.situation = situation;
             this.score = score;
+            this.teamNum = teamNum;
+
+            this.role1 = Int32.Parse(role[0].GetComponent<dragPlayer>().playerNum);
+            if(role.Count == 2)
+                this.role2 = Int32.Parse(role[1].GetComponent<dragPlayer>().playerNum);
+            else
+                this.role2 = -1;
+            if(role.Count == 3)
+                this.role3 = Int32.Parse(role[2].GetComponent<dragPlayer>().playerNum);
+            else
+                this.role3 = -1;
         }
 
     }
@@ -72,15 +87,13 @@ public class dealDB : MonoBehaviour
     // Start is called before the first frame update
     void Awake(){
         saveData = new List<Data>(); // 儲存資料用
-        //UserName = UserData.Instance.UserName; //後面要連伺服器
-        //UserID = UserData.Instance.UserID;
-        //GameID = UserData.Instance.GameID;
+        UserName = UserData.Instance.UserName; //後面要連伺服器
+        UserID = UserData.Instance.UserID;
+        GameID = UserData.Instance.GameID;
         CallinitDB();
     }
 
-    void Start(){
-        
-    }
+
 
     public void CallinitDB(){
         StartCoroutine(initDB());
@@ -99,7 +112,6 @@ public class dealDB : MonoBehaviour
             result = JsonUtility.FromJson<Return>(response);
             if(result.success == false){
                 switch (result.situation){
-                    
                     case -1:
                         Debug.Log("參數傳送錯誤!"); 
                         break;
@@ -116,7 +128,6 @@ public class dealDB : MonoBehaviour
             }
             else{
                 Debug.Log("Success!");
-                
             }
         }
         else{
@@ -145,8 +156,13 @@ public class dealDB : MonoBehaviour
     }
     [SerializeField] GameObject content;
     public void CallInsertData(){
-        content.GetComponent<Text>().text = "";
-        StartCoroutine(insertData());
+        //content.GetComponent<Text>().text = "";
+        //StartCoroutine(insertData());
+        foreach(Data data in saveData){
+            print(string.Format("formation: {0}\nround: {1}\nteamNum: {2}\nrole1: {3} role2: {4} role3: {5}\nsituation: {6}\n startPos: ({7}, {8}) endPos: ({9}, {10})\nscore: {11}\n", 
+                                 data.formation, data.round, data.teamNum, data.role1, data.role2, data.role3, data.situation, data.startx, data.starty, data.endx, data.endy, data.score));
+        }
+        print(saveData.Count);
     }
 
     public IEnumerator insertData()
@@ -198,6 +214,7 @@ public class dealDB : MonoBehaviour
 
         saveData.Clear();
     }
+
 }
 
 

@@ -15,6 +15,7 @@ public class UserData : MonoBehaviour
     // 以下為紀錄系統需要資料
     public int GameID;
     public string GameName;
+    public int leftTeamNum, rightTeamNum;
     public List<int> UserPlayerID; // 伺服器中儲存的ID
     public List<string> UserPlayerName; // 名稱
     public List<int> UserPlayerNumber; // 背號
@@ -45,6 +46,8 @@ public class UserData : MonoBehaviour
         numOfGame = 1;
         numOfPlayer = 12;
         GameID = 1;
+        leftTeamNum = 0;
+        rightTeamNum = 1;
         GameName  = "TestGame";
         UserPlayerID = new List<int>{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
         UserPlayerName = new List<string>{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"};
