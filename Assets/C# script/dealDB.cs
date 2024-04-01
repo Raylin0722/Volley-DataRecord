@@ -33,10 +33,11 @@ public class dealDB : MonoBehaviour
         public int score, situation;
         public int startx, starty;
         public int endx, endy;
+        public int side;
 
         public Data(string formation, int round, List<GameObject> role, int teamNum,
                     int startx, int starty, int endx, int endy,
-                    int situation, int score){
+                    int situation, int score, int side){
             this.formation = formation;
             this.round = round;
             this.startx = startx;
@@ -46,6 +47,7 @@ public class dealDB : MonoBehaviour
             this.situation = situation;
             this.score = score;
             this.teamNum = teamNum;
+            this.side = side;
 
             this.role1 = Int32.Parse(role[0].GetComponent<dragPlayer>().playerNum);
             if(role.Count == 2)

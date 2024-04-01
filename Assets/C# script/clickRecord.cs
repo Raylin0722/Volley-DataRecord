@@ -296,28 +296,52 @@ public class ClickRecord : MonoBehaviour
         int round = SystemScript.score[LEFT] + SystemScript.score[RIGHT] + 1;
         dealDB.Data tmp;
         int teamNum = Behavior[0].side == LEFT ? SystemScript.leftTeamNum : SystemScript.rightTeamNum;
-        Vector2 tmpStart = Behavior[0].clicks[0], tmpEnd = ServePos[Behavior[0].side];
+        Vector2 tmpEnd = Behavior[0].clicks[0];
+        Vector2 tmpStart = ServePos[Behavior[0].side];
+        
         if(Behavior[0].side == LEFT){
-
+            tmpStart.x = ((tmpStart.x - NetLocateXY[2].x) * 500) / (NetLocateXY[3].x - NetLocateXY[2].x);
+            tmpStart.y = ((NetLocateXY[2].y - tmpStart.y) * 800) / (NetLocateXY[2].y - NetLocateXY[4].y);
+            tmpEnd.x = ((tmpEnd.x - NetLocateXY[2].x) * 500) / (NetLocateXY[3].x - NetLocateXY[2].x);
+            tmpEnd.y = ((NetLocateXY[2].y - tmpEnd.y)  * 800) / (NetLocateXY[2].y - NetLocateXY[4].y);
         }
         else{
-            
+            tmpStart.x = ((-tmpStart.x + NetLocateXY[5].x) * 500) / (NetLocateXY[3].x - NetLocateXY[2].x);
+            tmpStart.y = ((-NetLocateXY[5].y + tmpStart.y) * 800) / (NetLocateXY[2].y - NetLocateXY[4].y);
+            tmpEnd.x = ((-tmpEnd.x + NetLocateXY[5].x) * 500) / (NetLocateXY[3].x - NetLocateXY[2].x);
+            tmpEnd.y = ((-NetLocateXY[5].y + tmpEnd.y)  * 800) / (NetLocateXY[2].y - NetLocateXY[4].y);
         }
+
         tmp = new dealDB.Data(
             Behavior[0].formation, round, Behavior[0].players, teamNum,
-            (int)ServePos[Behavior[0].side].x, (int)ServePos[Behavior[0].side].y, 
-            (int)Behavior[0].clicks[0].x, (int)Behavior[0].clicks[0].y,
-            Behavior[0].behavior, 0
+            (int)tmpStart.x, (int)tmpStart.y, 
+            (int)tmpEnd.x, (int)tmpEnd.y,
+            Behavior[0].behavior, 0, Behavior[0].side
         );
         DataBaseScript.saveData.Add(tmp);
         
         for(int i = 1; i < Behavior.Count; i++){
             teamNum = Behavior[i].side == LEFT ? SystemScript.leftTeamNum : SystemScript.rightTeamNum;
+            tmpEnd = Behavior[i].clicks[0];
+            tmpStart = Behavior[i - 1].clicks[0];
+            if(Behavior[i].side == LEFT){
+                tmpStart.x = ((tmpStart.x - NetLocateXY[2].x) * 500) / (NetLocateXY[3].x - NetLocateXY[2].x);
+                tmpStart.y = ((NetLocateXY[2].y - tmpStart.y) * 800) / (NetLocateXY[2].y - NetLocateXY[4].y);
+                tmpEnd.x = ((tmpEnd.x - NetLocateXY[2].x) * 500) / (NetLocateXY[3].x - NetLocateXY[2].x);
+                tmpEnd.y = ((NetLocateXY[2].y - tmpEnd.y)  * 800) / (NetLocateXY[2].y - NetLocateXY[4].y);
+            }
+            else{
+                tmpStart.x = ((-tmpStart.x + NetLocateXY[5].x) * 500) / (NetLocateXY[3].x - NetLocateXY[2].x);
+                tmpStart.y = ((-NetLocateXY[5].y + tmpStart.y) * 800) / (NetLocateXY[2].y - NetLocateXY[4].y);
+                tmpEnd.x = ((-tmpEnd.x + NetLocateXY[5].x) * 500) / (NetLocateXY[3].x - NetLocateXY[2].x);
+                tmpEnd.y = ((-NetLocateXY[5].y + tmpEnd.y)  * 800) / (NetLocateXY[2].y - NetLocateXY[4].y);
+            }
+            
             tmp = new dealDB.Data(
                 Behavior[i].formation, round, Behavior[i].players, teamNum,
-                (int)Behavior[i - 1].clicks[0].x, (int)Behavior[i - 1].clicks[0].y, 
-                (int)Behavior[i].clicks[0].x, (int)Behavior[i].clicks[0].y,
-                Behavior[0].behavior, 0
+                (int)tmpStart.x, (int)tmpStart.y, 
+                (int)tmpEnd.x, (int)tmpEnd.y,
+                Behavior[i].behavior, 0, Behavior[i].side
             );
 
             DataBaseScript.saveData.Add(tmp);

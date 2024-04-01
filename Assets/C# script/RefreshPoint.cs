@@ -45,7 +45,6 @@ public class RefreshPoint : MonoBehaviour
                     return;
 
         if(obj.tag == "LeftPoint" ){
-            
             print(systemDataScript.point[LEFT]);
             systemDataScript.point[LEFT]++;
             print(systemDataScript.point[LEFT]);
@@ -60,7 +59,6 @@ public class RefreshPoint : MonoBehaviour
                 ? systemDataScript.point[LEFT].ToString() : "0" + systemDataScript.point[LEFT].ToString();
         }
         else if(obj.tag == "RightPoint"){
-            
             systemDataScript.point[RIGHT]++;
             reClick = RIGHT;
             reWhoServe = whoServe;
