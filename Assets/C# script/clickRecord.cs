@@ -87,6 +87,10 @@ public class ClickRecord : MonoBehaviour
             CanBlockXY[i] = CanBlock[i].transform.position;
         }   
         test.GetComponent<RectTransform>().transform.position = NetLocateXY[2];
+        print(string.Format("({0}, {1})", NetLocateXY[2].x, NetLocateXY[2].y));
+        print(string.Format("({0}, {1})", NetLocateXY[3].x, NetLocateXY[3].y));
+        print(string.Format("({0}, {1})", NetLocateXY[4].x, NetLocateXY[4].y));
+        print(string.Format("({0}, {1})", NetLocateXY[5].x, NetLocateXY[5].y));
     }
     Vector3 GetWorldPositionFromUI(RectTransform uiElement)
     {
@@ -199,8 +203,6 @@ public class ClickRecord : MonoBehaviour
             if(Behavior.Last().players.Count == 1)
                 Behavior.Last().players[0].SetActive(false);
         }
-        else
-            print("None");
     }
     bool IsPointerOverUI()
     {
@@ -294,6 +296,13 @@ public class ClickRecord : MonoBehaviour
         int round = SystemScript.score[LEFT] + SystemScript.score[RIGHT] + 1;
         dealDB.Data tmp;
         int teamNum = Behavior[0].side == LEFT ? SystemScript.leftTeamNum : SystemScript.rightTeamNum;
+        Vector2 tmpStart = Behavior[0].clicks[0], tmpEnd = ServePos[Behavior[0].side];
+        if(Behavior[0].side == LEFT){
+
+        }
+        else{
+            
+        }
         tmp = new dealDB.Data(
             Behavior[0].formation, round, Behavior[0].players, teamNum,
             (int)ServePos[Behavior[0].side].x, (int)ServePos[Behavior[0].side].y, 
@@ -321,9 +330,6 @@ public class ClickRecord : MonoBehaviour
         else
             tmp.score = -1;
         DataBaseScript.saveData.Add(tmp);
-
-        print(Behavior.Count);
-        print(DataBaseScript.saveData.Count);
 
     }
 
