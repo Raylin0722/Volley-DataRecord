@@ -356,5 +356,54 @@ public class ClickRecord : MonoBehaviour
         DataBaseScript.saveData.Add(tmp);
 
     }
+    public void deleteNewData(){    
+        if(DataBaseScript.saveData.Count == 0 && Behavior.Last().complete == false && Behavior.Count == 1)
+            return;
+        if(canvas.GetComponent<RefreshPoint>().reClick == -1){ // 沒按得分
+            if(Behavior.Count == 1){
+                Behavior.RemoveAt(Behavior.Count - 1);
+                ClickData Serve = new ClickData();
+                Serve.behavior = -1;
+                Serve.complete = false;
+                Serve.clickType = -1;
+                Serve.players = new List<GameObject>();
+                Serve.clicks = new List<Vector2>();
+                Serve.side = canvas.GetComponent<RefreshPoint>().whoServe;
+                if(Serve.side == LEFT){
+                    Serve.players.Add(SystemScript.leftPlayers[0]);
+                    SystemScript.leftPlayers[0].GetComponent<SpriteRenderer>().color = new Color(255, 0, 0, 255);
+                }
+                else{
+                    Serve.players.Add(SystemScript.rightPlayers[0]);
+                    SystemScript.rightPlayers[0].GetComponent<SpriteRenderer>().color = new Color(255, 0, 0, 255);
+                }
+                for(int i = 0; i < 6; i++){
+                    SystemScript.leftPlayers[i].SetActive(true);
+                    SystemScript.rightPlayers[i].SetActive(true);
+                }
+                pin.SetActive(false);
+                Behavior.Add(Serve);
+            }
+            else{
+                Behavior.RemoveAt(Behavior.Count - 1);
+                for(int i = 0; i < 6; i++){
+                    SystemScript.leftPlayers[i].SetActive(true);
+                    SystemScript.rightPlayers[i].SetActive(true);
+                }
+                ClickData tmp = Behavior.Last();
+                pin.GetComponent<RectTransform>().transform.position = tmp.clicks[0];
+                if(tmp.behavior != 3 )
+                    tmp.players[0].SetActive(false);
+                
+            }
+            
+        }
+        else{ // 有按得分
+            canvas.GetComponent<RefreshPoint>().back();
+        }
+        if(DataBaseScript.saveData.Count > 0)
+            DataBaseScript.saveData.Clear();
 
+
+    }
 }

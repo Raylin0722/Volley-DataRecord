@@ -133,6 +133,8 @@ public class RefreshPoint : MonoBehaviour
             systemDataScript.leftPlayers[i].SetActive(true);
             systemDataScript.rightPlayers[i].SetActive(true);
         }
+
+        reClick = -1;
     }
     public void changeSideServe(){ // 局換發
         if((systemDataScript.score[LEFT] + systemDataScript.score[RIGHT]) % 2 != 0)
@@ -156,7 +158,8 @@ public class RefreshPoint : MonoBehaviour
                 leftServeTag.SetActive(false);
                 rightServeTag.SetActive(true);
             }
-
+            systemDataScript.leftPointText.text = systemDataScript.point[LEFT] >= 10 
+                ? systemDataScript.point[LEFT].ToString() : "0" + systemDataScript.point[LEFT].ToString();
         }
         else if(reClick == RIGHT){
             systemDataScript.point[RIGHT]--;
@@ -165,7 +168,10 @@ public class RefreshPoint : MonoBehaviour
                 leftServeTag.SetActive(true);
                 rightServeTag.SetActive(false);
             }
+            systemDataScript.rightPointText.text = systemDataScript.point[RIGHT] >= 10 
+                ? systemDataScript.point[RIGHT].ToString() : "0" + systemDataScript.point[RIGHT].ToString();
         }
+        reClick = -1;
     }
     void LRChange(){
 

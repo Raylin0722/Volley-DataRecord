@@ -1,8 +1,6 @@
 create database if not exists Volleyball;
 use Volleyball;
 
-
-
 create table users(
 	ID int primary key auto_increment,
     account varchar(50) ,
@@ -80,7 +78,7 @@ create table GameData(
     GameID int, 
     `Set` int,
     TeamID int,
-    PNum int, 
+    PNum varchar(10), 
     formation varchar(50),
     startx int,
     starty int,
@@ -89,4 +87,3 @@ create table GameData(
     behavior int, 
     score int
 )engine = InnoDB default charset=utf8mb4 collate=utf8mb4_bin;
-

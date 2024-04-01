@@ -161,6 +161,7 @@ def insertData():
     UserID = request.args.get("UserID")
 
     print(data); print(GameID); print(UserID)
+    
     resultReturn = {"success":False, "situation":-1}
     if data == None or GameID == None or UserID == None:
         return resultReturn

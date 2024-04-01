@@ -84,7 +84,8 @@ public class dealDB : MonoBehaviour
     public int GameID;
     public string UserName;
 
-
+    [SerializeField] GameObject CheckClick;
+    private ClickRecord ClickScript;
 
     // Start is called before the first frame update
     void Awake(){
@@ -92,6 +93,7 @@ public class dealDB : MonoBehaviour
         UserName = UserData.Instance.UserName; //後面要連伺服器
         UserID = UserData.Instance.UserID;
         GameID = UserData.Instance.GameID;
+        ClickScript = CheckClick.GetComponent<ClickRecord>();
         CallinitDB();
     }
 
@@ -159,21 +161,22 @@ public class dealDB : MonoBehaviour
     [SerializeField] GameObject content;
     public void CallInsertData(){
         //content.GetComponent<Text>().text = "";
-        //StartCoroutine(insertData());
+        StartCoroutine(insertData());
         foreach(Data data in saveData){
             print(string.Format("formation: {0}\nround: {1}\nteamNum: {2}\nrole1: {3} role2: {4} role3: {5}\nsituation: {6}\n startPos: ({7}, {8}) endPos: ({9}, {10})\nscore: {11}\n", 
                                  data.formation, data.round, data.teamNum, data.role1, data.role2, data.role3, data.situation, data.startx, data.starty, data.endx, data.endy, data.score));
         }
         print(saveData.Count);
+        saveData.Clear();
     }
 
     public IEnumerator insertData()
     {
         string data = JsonConvert.SerializeObject(saveData);
-        string serverUrl = "https://volley.csie.ntnu.edu.tw/insertData";
+        
         
 
-        UnityWebRequest www = UnityWebRequest.Post($"https://volley.csie.ntnu.edu.tw/insertData?GameID={GameID}&UserID={UserID}", new WWWForm());
+        UnityWebRequest www = UnityWebRequest.Post($"http://127.0.0.1:5000/insertData?GameID={GameID}&UserID={UserID}", new WWWForm());
         www.SetRequestHeader("Content-Type", "application/json");
 
         byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(data);
@@ -217,7 +220,9 @@ public class dealDB : MonoBehaviour
         saveData.Clear();
     }
 
+   
 }
+
 
 
 
