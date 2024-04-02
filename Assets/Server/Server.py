@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, render_template
 import mysql.connector
 import secrets
 import hashlib
@@ -17,10 +17,9 @@ config = {
     'port': '3306'        
 }
 
-
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return 'index'
+    return render_template("test.html")
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
