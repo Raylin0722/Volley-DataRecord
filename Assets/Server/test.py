@@ -15,11 +15,11 @@ config = {
     'port': '3306'        
 }
 
-cnx = mysql.connector.connect(**config)
-cur = cnx.cursor(buffered=True)
-
-cur.execute("CREATE TABLE %s (column1 INT, column2 VARCHAR(255))", ("test",))
-print("success")
-
-cur.close()
-cnx.close()
+try:
+    a = 0/0
+except Exception as ec:
+    print(ec)
+    exit()
+finally:
+    print("enter finally")
+print("No exit")

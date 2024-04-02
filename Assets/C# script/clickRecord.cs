@@ -33,6 +33,7 @@ public class ClickRecord : MonoBehaviour
     [SerializeField] GameObject selectBlock;
     [SerializeField] GameObject pin;
     [SerializeField] GameObject test;
+    [SerializeField] GameObject insertBtn;
 
 
     Vector3[] NetLocateXY; 
@@ -72,6 +73,9 @@ public class ClickRecord : MonoBehaviour
         DataBaseScript = database.GetComponent<dealDB>();
 
         ServePos = new Vector2[2];
+        ServePos[0] = new Vector2(317, 580);
+        ServePos[1] = new Vector2(328, 583);
+
 
     }
     void Start()
@@ -284,6 +288,7 @@ public class ClickRecord : MonoBehaviour
     }
 
     public void refreshPlayer(){
+        insertBtn.GetComponent<Button>().interactable = true;
         for(int i = 0; i < 6; i++){
             SystemScript.leftPlayers[i].SetActive(true);
             SystemScript.rightPlayers[i].SetActive(true);

@@ -46,8 +46,8 @@ public class UserData : MonoBehaviour
         numOfGame = 1;
         numOfPlayer = 12;
         GameID = 1;
-        leftTeamNum = 0;
-        rightTeamNum = 1;
+        leftTeamNum = 1;
+        rightTeamNum = 2;
         GameName  = "TestGame";
         UserPlayerID = new List<int>{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
         UserPlayerName = new List<string>{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"};

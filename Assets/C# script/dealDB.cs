@@ -84,16 +84,17 @@ public class dealDB : MonoBehaviour
     public int GameID;
     public string UserName;
 
-    [SerializeField] GameObject CheckClick;
-    private ClickRecord ClickScript;
+    [SerializeField] GameObject insertBtn;
+
 
     // Start is called before the first frame update
     void Awake(){
         saveData = new List<Data>(); // 儲存資料用
-        UserName = UserData.Instance.UserName; //後面要連伺服器
-        UserID = UserData.Instance.UserID;
-        GameID = UserData.Instance.GameID;
-        ClickScript = CheckClick.GetComponent<ClickRecord>();
+        //UserName = UserData.Instance.UserName; //後面要連伺服器
+        //UserID = UserData.Instance.UserID;
+        //GameID = UserData.Instance.GameID;
+        UserID = 1;
+        GameID = 1;
         CallinitDB();
     }
 
@@ -168,15 +169,14 @@ public class dealDB : MonoBehaviour
         }
         print(saveData.Count);
         saveData.Clear();
+        insertBtn.GetComponent<Button>().interactable = false;
     }
 
     public IEnumerator insertData()
     {
         string data = JsonConvert.SerializeObject(saveData);
         
-        
-
-        UnityWebRequest www = UnityWebRequest.Post($"http://127.0.0.1:5000/insertData?GameID={GameID}&UserID={UserID}", new WWWForm());
+        UnityWebRequest www = UnityWebRequest.Post($"https://volley.csie.ntnu.edu.tw/insertData?GameID={GameID}&UserID={UserID}", new WWWForm());
         www.SetRequestHeader("Content-Type", "application/json");
 
         byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(data);

@@ -45,9 +45,7 @@ public class RefreshPoint : MonoBehaviour
                     return;
 
         if(obj.tag == "LeftPoint" ){
-            print(systemDataScript.point[LEFT]);
             systemDataScript.point[LEFT]++;
-            print(systemDataScript.point[LEFT]);
             reClick = LEFT;
             reWhoServe = whoServe;
             if(whoServe == RIGHT){
@@ -174,11 +172,10 @@ public class RefreshPoint : MonoBehaviour
         reClick = -1;
     }
     void LRChange(){
-
-        Text tmpText;
-        tmpText = systemDataScript.leftTeamName;
-        systemDataScript.leftTeamName = systemDataScript.rightTeamName;
-        systemDataScript.rightTeamName = tmpText;
+        string tmpText;
+        tmpText = systemDataScript.leftTeamName.text;
+        systemDataScript.leftTeamName.text = systemDataScript.rightTeamName.text;
+        systemDataScript.rightTeamName.text = tmpText;
 
         int tmpPoint;
         tmpPoint = systemDataScript.point[0];
@@ -189,20 +186,32 @@ public class RefreshPoint : MonoBehaviour
         systemDataScript.score[0] = systemDataScript.score[1];
         systemDataScript.score[1] = tmpPoint;
 
-        tmpText = systemDataScript.leftScoreText;
-        systemDataScript.leftScoreText = systemDataScript.rightScoreText;
-        systemDataScript.rightScoreText = tmpText;
 
-        tmpText = systemDataScript.leftPointText;
-        systemDataScript.leftPointText = systemDataScript.rightPointText;
-        systemDataScript.rightPointText = tmpText;
+        tmpText = systemDataScript.leftScoreText.text;
+        systemDataScript.leftScoreText.text = systemDataScript.rightScoreText.text;
+        systemDataScript.rightScoreText.text = tmpText;
+
+        tmpText = systemDataScript.leftPointText.text;
+        systemDataScript.leftPointText.text = systemDataScript.rightPointText.text;
+        systemDataScript.rightPointText.text = tmpText;
 
         whoServe = startServe;
 
-        GameObject tmpPlayer;
+        string tmpName, tmpNum;
+        int tmpPos;
 
-        for(int i = 0; i < 5; i++){
-            
+        for(int i = 0; i < 6; i++){
+            tmpName = systemDataScript.leftPlayers[i].GetComponent<dragPlayer>().playerName;
+            tmpNum = systemDataScript.leftPlayers[i].GetComponent<dragPlayer>().playerNum;
+            tmpPos = systemDataScript.leftPlayers[i].GetComponent<dragPlayer>().playerPlayPos;
+            systemDataScript.leftPlayers[i].GetComponent<dragPlayer>().playerName = systemDataScript.rightPlayers[i].GetComponent<dragPlayer>().playerName;
+            systemDataScript.leftPlayers[i].GetComponent<dragPlayer>().playerNum = systemDataScript.rightPlayers[i].GetComponent<dragPlayer>().playerNum;
+            systemDataScript.leftPlayers[i].GetComponent<dragPlayer>().playerPlayPos = systemDataScript.rightPlayers[i].GetComponent<dragPlayer>().playerPlayPos;
+            systemDataScript.rightPlayers[i].GetComponent<dragPlayer>().playerName = tmpName;
+            systemDataScript.rightPlayers[i].GetComponent<dragPlayer>().playerNum = tmpNum;
+            systemDataScript.rightPlayers[i].GetComponent<dragPlayer>().playerPlayPos = tmpPos;
+            systemDataScript.rightPlayers[i].GetComponent<dragPlayer>().updata[0] = false;
+            systemDataScript.leftPlayers[i].GetComponent<dragPlayer>().updata[0] = false;
         }
 
 

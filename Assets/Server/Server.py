@@ -161,7 +161,7 @@ def insertData():
     UserID = request.args.get("UserID")
 
     print(data); print(GameID); print(UserID)
-    
+
     resultReturn = {"success":False, "situation":-1}
     if data == None or GameID == None or UserID == None:
         return resultReturn
@@ -171,20 +171,22 @@ def insertData():
     
     cur.execute("select * from users where id=%s;", (UserID, ))
     check1 = cur.fetchall()
+    print(check1)
 
     if len(check1) == 1: # 帳號存在
-        cur.execute(f"select * from userGame{UserID} where ID=%s", (GameID, ))
+        cur.execute("select * from GameInfo where UserID=%s and GameID=%s;", (UserID, GameID))
         check2 = cur.fetchall()
         if len(check2) == 1: # 比賽存在
-            cur.execute(f"SELECT * FROM information_schema.tables WHERE table_schema = 'Volleyball' AND table_name = %s;", (f'GameDataU{UserID}G{GameID}',))
+            cur.execute("show tables like 'GameData';")
             check3 = cur.fetchall()
             if len(check3) == 1: # 資料表存在
                 try:
                     for i in range(len(data)):
-                        cur.execute(f"insert into GameDataU{UserID}G{GameID}(formation, round, role, attackblock, catchblock, situation, score) value(%s, %s, %s, %s, %s, %s, %s);", 
-                                   (data[i]['formation'], data[i]['round'], data[i]['role'], data[i]['attackblock'], 
-                                    data[i]['catchblock'], data[i]['situation'], data[i]['score']))
-                        print(data[i])
+                        
+                        cur.execute("insert into GameData(UserID, GameID, `set`, TeamID, side, Player1, Player2, Player3, formation, startx, starty, endx, endy, behavior, score) "
+                                    "value(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);", 
+                                    (UserID, GameID, data[i]['round'], data[i]['teamNum'], data[i]['side'], data[i]['role1'], data[i]['role2'], data[i]['role3'], 
+                                     data[i]['formation'], data[i]['startx'], data[i]['starty'], data[i]['endx'], data[i]['endy'], data[i]['situation'], data[i]['score']))
                     cnx.commit()
                     resultReturn['situation'] = 0
                     resultReturn['success'] = True
@@ -419,5 +421,183 @@ def CorrectPlayer():
         print("-5")
     return resultReturn
     
+@app.route("/graphicData", methods=['GET', 'POST'])
+def graphicData():
+    #UserID = request.form.get("UserID")
+    #GameID = request.form.get("GameID")
+
+    UserID = request.args.get("UserID")
+    GameID = request.args.get("GameID")
+
+    print(UserID, GameID)
+
+    if UserID == None or GameID == None:
+        return "Invalid UserID/GameID"
+
+    cnx = mysql.connector.connect(**config)
+    cur = cnx.cursor(buffered=True)
+
+    result = {
+        "LREachRound":{ #OK
+            "left": [],
+            "right": []
+        },
+
+        "matchDate": "",
+        "totalSet": 0, #OK
+        
+        "players": { #OK
+            "left": [
+                {"name": "", "num": 0, "pos": 0},
+                {"name": "", "num": 0, "pos": 0},
+                {"name": "", "num": 0, "pos": 0},
+                {"name": "", "num": 0, "pos": 0},
+                {"name": "", "num": 0, "pos": 0},
+                {"name": "", "num": 0, "pos": 0},
+                {"name": "", "num": 0, "pos": 0},
+                {"name": "", "num": 0, "pos": 0},
+                {"name": "", "num": 0, "pos": 0},
+                {"name": "", "num": 0, "pos": 0},
+                {"name": "", "num": 0, "pos": 0},
+                {"name": "", "num": 0, "pos": 0}
+            ],
+            "right": [
+                {"name": "", "num": 0, "pos": 0},
+                {"name": "", "num": 0, "pos": 0},
+                {"name": "", "num": 0, "pos": 0},
+                {"name": "", "num": 0, "pos": 0},
+                {"name": "", "num": 0, "pos": 0},
+                {"name": "", "num": 0, "pos": 0},
+                {"name": "", "num": 0, "pos": 0},
+                {"name": "", "num": 0, "pos": 0},
+                {"name": "", "num": 0, "pos": 0},
+                {"name": "", "num": 0, "pos": 0},
+                {"name": "", "num": 0, "pos": 0},
+                {"name": "", "num": 0, "pos": 0}
+            ]
+        },
+        "scores": [
+            {"leftScore": 0, "rightScore": 0, "winner":0},
+            {"leftScore": 0, "rightScore": 0, "winner":0},
+            {"leftScore": 0, "rightScore": 0, "winner":0},
+            {"leftScore": 0, "rightScore": 0, "winner":0},
+            {"leftScore": 0, "rightScore": 0, "winner":0}
+        ],
+        "ballRecords": {
+            "set1": [],
+            "set2": [],
+            "set3": [],
+            "set4": [],
+            "set5": []
+        }
+    }
+    try:
+        cur.execute("select * from GameInfo where UserID=%s and GameID=%s;", (UserID, GameID))
+        GameInfo = cur.fetchall()
+        if(len(GameInfo) != 1):
+            return "Database Error(GameInfo)!"
+        
+        cur.execute("select * from SetWinner where UserID=%s and GameID=%s;", (UserID, GameID))
+        SetWinner = cur.fetchall()
+        if(len(SetWinner) != 1):
+            return "Database Error(SetWinner)!"
+        
+        cur.execute("select * from FirstPlayer where UserID=%s and GameID=%s;", (UserID, GameID))
+        FirstPlayer = cur.fetchall()
+        if(len(FirstPlayer) != 1):
+            return "Database Error(FirstPlayer)!"
+        
+        cur.execute("select * from SetSide where UserID=%s and GameID=%s;", (UserID, GameID))
+        SetSide = cur.fetchall()
+        if(len(SetSide) != 1):
+            return "Database Error!(SetSide)"
+        
+        cur.execute("select * from GameData where UserID=%s and GameID=%s;", (UserID, GameID))
+        GameData = cur.fetchall()
+        if(len(GameData) == 0):
+            return "No Data"
+        
+        cur.execute("select * from Player where UserID=%s and TeamID=%s;", (UserID, GameInfo[0][3]))
+        playerDataL = cur.fetchall()
+        if(len(playerDataL) < 6):
+            return "Player Error!"
+    
+        cur.execute("select * from Player where UserID=%s and TeamID=%s;", (UserID, GameInfo[0][4]))
+        playerDataR = cur.fetchall()
+        if(len(playerDataR) < 6):
+            return "Player Error!"
+    
+    except Exception as ex:
+        print(ex)
+        return "Database Error!" + ex
+    finally:
+        cur.close()
+        cnx.close()
+    
+    for i in range(12):
+        if(i < len(playerDataL)):
+            result["players"]["left"][i]["name"] = playerDataL[i][2]
+            result["players"]["left"][i]["num"] = playerDataL[i][3]
+            result["players"]["left"][i]["pos"] = playerDataL[i][4]
+        if(i < len(playerDataR)):
+            result["players"]["right"][i]["name"] = playerDataR[i][2]
+            result["players"]["right"][i]["num"] = playerDataR[i][3]
+            result["players"]["right"][i]["pos"] = playerDataR[i][4]
+    
+    set1L = 0; set1R = 0
+    set2L = 0; set2R = 0
+    set3L = 0; set3R = 0
+    set4L = 0; set4R = 0
+    set5L = 0; set5R = 0
+    
+    for data in GameData:
+        print(type(data))
+        if(data[3] == 1):
+            set1L = set1L + 1 if data[15] > 0 else set1L
+            set1R = set1R + 1 if data[15] < 0 else set1R
+            result["ballRecords"]["set1"].append(data)
+        elif(data[3] == 2):
+            set2L = set2L + 1 if data[15] > 0 else set2L
+            set2R = set2R + 1 if data[15] < 0 else set2R
+            result["ballRecords"]["set2"].append(data)
+        elif(data[3] == 3):
+            set3L = set3L + 1 if data[15] > 0 else set3L
+            set3R = set3R + 1 if data[15] < 0 else set3R
+            result["ballRecords"]["set3"].append(data)
+        elif(data[3] == 4):
+            set4L = set4L + 1 if data[15] > 0 else set4L
+            set4R = set4R + 1 if data[15] < 0 else set4R
+            result["ballRecords"]["set4"].append(data)
+        elif(data[3] == 5):
+            set5L = set5L + 1 if data[15] > 0 else set5L
+            set5R = set5R + 1 if data[15] < 0 else set5R
+            result["ballRecords"]["set5"].append(data)
+
+    result["totalSet"] = SetWinner[0][2]
+    for i in range(5):
+        left = GameInfo[0][3]
+        right = GameInfo[0][4]
+        if left != SetSide[0][i+2]:
+            right = left
+            left = SetSide[0][i+2]
+        result["LREachRound"]["left"].append(left)
+        result["LREachRound"]["right"].append(right)
+        result["scores"][i]["winner"] = SetWinner[0][i+3]
+    
+    result['scores'][0]["leftScore"] = set1L
+    result['scores'][0]["rightScore"] = set1R
+    result['scores'][1]["leftScore"] = set2L
+    result['scores'][1]["rightScore"] = set2R
+    result['scores'][2]["leftScore"] = set3L
+    result['scores'][2]["rightScore"] = set3R
+    result['scores'][3]["leftScore"] = set4L
+    result['scores'][3]["rightScore"] = set4R
+    result['scores'][4]["leftScore"] = set5L
+    result['scores'][4]["rightScore"] = set5R
+
+
+
+    return result
+
 if __name__ == '__main__':
-    app.run(port=5000)   
+    app.run(port=5000, debug=True)   

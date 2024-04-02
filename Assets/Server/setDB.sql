@@ -78,7 +78,10 @@ create table GameData(
     GameID int, 
     `Set` int,
     TeamID int,
-    PNum varchar(10), 
+    side int,
+    Player1 int, 
+    Player2 int,
+    Player3 int,
     formation varchar(50),
     startx int,
     starty int,
@@ -87,3 +90,4 @@ create table GameData(
     behavior int, 
     score int
 )engine = InnoDB default charset=utf8mb4 collate=utf8mb4_bin;
+
