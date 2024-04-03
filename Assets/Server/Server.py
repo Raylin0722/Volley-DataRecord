@@ -156,8 +156,8 @@ def initDB():
 @app.route("/insertData", methods=['GET', 'POST'])
 def insertData():
     data = request.get_json()
-    GameID = request.args.get("GameID")
-    UserID = request.args.get("UserID")
+    GameID = request.form.get("GameID")
+    UserID = request.form.get("UserID")
 
     print(data); print(GameID); print(UserID)
 
@@ -207,6 +207,26 @@ def insertData():
     
     return resultReturn
    
+@app.route("/insertWinner", methods=['GET', 'POST'])
+def insertWinner():
+    GameID = request.form.get("GameID")
+    UserID = request.form.get("UserID")
+    
+    resultReturn = {"success":False, "situation":-1}
+    if GameID == None or UserID == None:
+        return resultReturn
+
+    cnx = mysql.connector.connect(**config)
+    cur = cnx.cursor(buffered=True)
+    
+    try:
+       cur.execute() 
+    except Exception as ec:
+        print(ec)
+    finally:
+        cur.close()
+        cnx.close()
+
 @app.route("/displayData", methods=['GET', 'POST'])
 def displayData():
     UserID = request.form.get("UserID")
@@ -422,11 +442,9 @@ def CorrectPlayer():
     
 @app.route("/graphicData", methods=['GET', 'POST'])
 def graphicData():
-    #UserID = request.form.get("UserID")
-    #GameID = request.form.get("GameID")
+    UserID = request.form.get("UserID")
+    GameID = request.form.get("GameID")
 
-    UserID = request.args.get("UserID")
-    GameID = request.args.get("GameID")
 
     print(UserID, GameID)
 
@@ -496,11 +514,6 @@ def graphicData():
         if(len(GameInfo) != 1):
             return "Database Error(GameInfo)!"
         
-        cur.execute("select * from SetWinner where UserID=%s and GameID=%s;", (UserID, GameID))
-        SetWinner = cur.fetchall()
-        if(len(SetWinner) != 1):
-            return "Database Error(SetWinner)!"
-        
         cur.execute("select * from FirstPlayer where UserID=%s and GameID=%s;", (UserID, GameID))
         FirstPlayer = cur.fetchall()
         if(len(FirstPlayer) != 1):
@@ -550,7 +563,6 @@ def graphicData():
     set5L = 0; set5R = 0
     
     for data in GameData:
-        print(type(data))
         if(data[3] == 1):
             set1L = set1L + 1 if data[15] > 0 else set1L
             set1R = set1R + 1 if data[15] < 0 else set1R
@@ -572,17 +584,6 @@ def graphicData():
             set5R = set5R + 1 if data[15] < 0 else set5R
             result["ballRecords"]["set5"].append(data)
 
-    result["totalSet"] = SetWinner[0][2]
-    for i in range(5):
-        left = GameInfo[0][3]
-        right = GameInfo[0][4]
-        if left != SetSide[0][i+2]:
-            right = left
-            left = SetSide[0][i+2]
-        result["LREachRound"]["left"].append(left)
-        result["LREachRound"]["right"].append(right)
-        result["scores"][i]["winner"] = SetWinner[0][i+3]
-    
     result['scores'][0]["leftScore"] = set1L
     result['scores'][0]["rightScore"] = set1R
     result['scores'][1]["leftScore"] = set2L
@@ -593,6 +594,53 @@ def graphicData():
     result['scores'][3]["rightScore"] = set4R
     result['scores'][4]["leftScore"] = set5L
     result['scores'][4]["rightScore"] = set5R
+
+
+    result["totalSet"] = SetWinner[0][2]
+    for i in range(5):
+        left = GameInfo[0][3]
+        right = GameInfo[0][4]
+        if left != SetSide[0][i+2]:
+            right = left
+            left = SetSide[0][i+2]
+        result["LREachRound"]["left"].append(left)
+        result["LREachRound"]["right"].append(right)
+    
+    try:
+        cnx = mysql.connector.connect(**config)
+        cur = cnx.cursor(buffered=True)
+        cur.execute("select * from SetWinner where UserID=%s and GameID=%s;", (UserID, GameID))
+        SetWinner = cur.fetchall()
+        if(len(SetWinner) == 0):
+            SetWinner = []
+            count = 0
+            for i in range(5):
+                if result['scores'][i]["leftScore"] != 0 or result['scores'][i]["rightScore"]:
+                    count += 1
+                if result['scores'][i]["leftScore"] > result['scores'][i]["rightScore"]:
+                    SetWinner.append(result["LREachRound"]["left"][i])
+                elif result['scores'][i]["leftScore"] < result['scores'][i]["rightScore"]:
+                    SetWinner.append(result["LREachRound"]["right"][i])
+                else:
+                    SetWinner.append(-1)
+                result["scores"][i]['winner'] = SetWinner[0][i]
+            cur.execute("insert into SetWinner(UserID, GameID, TotalSet, Set1, Set2, Set3, Set4, Set5) value(%s, %s, %s, %s, %s, %s, %s, %s)"
+                        ,(UserID, GameID, count, SetWinner[0], SetWinner[1], SetWinner[2], SetWinner[3], SetWinner[4]))
+            cnx.commit()
+            
+        elif(len(SetWinner) == 1):
+            for i in range(5):
+                result["scores"][i]['winner'] = SetWinner[0][i + 3]
+        elif(len(SetWinner) > 1):
+            return "Database Error!"
+    except Exception as ec:
+        print(ec)
+        return "Database Error!"
+    finally:
+        cur.close()
+        cnx.close()    
+    
+    
 
 
 
