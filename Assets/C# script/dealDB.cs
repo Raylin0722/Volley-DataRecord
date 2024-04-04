@@ -220,20 +220,7 @@ public class dealDB : MonoBehaviour
         saveData.Clear();
     }
 
-    public IEnumerator insertWinner(){
-        WWWForm form = new WWWForm();
-        form.AddField("UserID", UserID);
-        form.AddField("GameID", GameID);
-
-        UnityWebRequest www = UnityWebRequest.Post("https://volley.csie.ntnu.edu.tw/insertWinner", form);
-        yield return www.SendWebRequest();
-        if(www.result == UnityWebRequest.Result.Success)
-            return;
-        else
-            print("Error!");    
-        
-    } 
-
+   
 }
 
 
