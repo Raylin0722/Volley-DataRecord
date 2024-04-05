@@ -10,18 +10,20 @@ using System.Text;
 
 public class Login : MonoBehaviour
 {
-    public TMP_InputField accountField;
-    public TMP_InputField passwordField;
+    public InputField accountField;
+    public InputField passwordField;
     public Button submitButton;
-    public TMP_Text WarnMessage;
+    public Text WarnMessage;
 
     public class dataReturn{
         public bool success;
         public int situation;
         public string UserName;
         public int UserID;
+        public int TeamID;
         public int numOfGame;
         public int numOfPlayer;
+        public string ec;
     }
 
 
@@ -46,7 +48,7 @@ public class Login : MonoBehaviour
         form.AddField("account", accountField.text);
         form.AddField("password", hashPwd);
 
-        UnityWebRequest www = UnityWebRequest.Post("https://volley.csie.ntnu.edu.tw/login", form);
+        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/login", form);
         
         dataReturn result = new dataReturn();
 
@@ -59,13 +61,14 @@ public class Login : MonoBehaviour
             if(result.success == true){
                 UserData.Instance.UserName = result.UserName;
                 UserData.Instance.UserID = result.UserID;
+                UserData.Instance.TeamID = result.TeamID;
                 UserData.Instance.numOfGame = result.numOfGame;
                 UserData.Instance.numOfPlayer = result.numOfPlayer;
             }
         }
         else{
             result.success = false;
-            result.situation = -3;
+            result.situation = -7;
         }
         // 0 成功 -1 資料庫錯誤 -2 密碼錯誤 -3 request未成功 
 
@@ -76,16 +79,32 @@ public class Login : MonoBehaviour
                 SceneManager.LoadScene("GameSelect");
                 break;
             case -1:
-                Debug.Log("帳號不存在");
-                WarnMessage.text = "Account doesn't exist!";
+                Debug.Log(result.ec);
+                WarnMessage.text = "資料庫錯誤(參數)!";
                 break;
             case -2:
-                Debug.Log("密碼錯誤");
-                WarnMessage.text = "Password error!";
+                Debug.Log(result.ec);
+                WarnMessage.text = "資料庫錯誤(users)!";
                 break;
             case -3:
-                Debug.Log("request未成功");
-                WarnMessage.text = "Server down!";
+                Debug.Log(result.ec);
+                WarnMessage.text = "資料庫錯誤(Team)!";
+                break;
+            case -4:
+                Debug.Log(result.ec);
+                WarnMessage.text = "密碼錯誤!";
+                break;
+            case -5:
+                Debug.Log(result.ec);
+                WarnMessage.text = "資料庫錯誤(exception)!";
+                break;
+            case -6:
+                Debug.Log(result.ec);
+                WarnMessage.text = "資料庫錯誤(users)!";
+                break;
+            case -7:
+                Debug.Log("連線錯誤!");
+                WarnMessage.text = "連線錯誤!";
                 break;
         }
 

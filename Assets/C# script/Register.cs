@@ -12,11 +12,15 @@ using System;
 
 public class Register : MonoBehaviour
 {
-    public TMP_InputField accountField;
-    public TMP_InputField passwordField;
-    public TMP_InputField repasswordField;
+    public InputField accountField;
+    public InputField passwordField;
+    public InputField repasswordField;
+    public InputField TeamField;
     public Button submitButton;
-    public TMP_Text WarnMessage;
+    public Text WarnMessage;
+    public Text TeamWarnMessage;
+    public GameObject MainCanvas;
+    public GameObject TeamCanvas;
 
     public class dataReturn{
         public bool success;
@@ -26,37 +30,43 @@ public class Register : MonoBehaviour
         public int numOfGame;
         public int numOfPlayer;
     }
+    public class TeamReturn{
+        public bool success;
+        public int situation;
+        public int TeamID;
+        public string ec;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        WarnMessage.text = "Account and passwords: English letters, numbers only, 8-16 characters";
+        WarnMessage.text = "帳號跟密碼: 限數字英文字母大小寫 長度8-16";
     }
 
     public void CallRegisterUser(){
         if(string.IsNullOrEmpty(accountField.text))
-            WarnMessage.text = "Account can't be empty!";   
+            WarnMessage.text = "帳號欄不可為空!";   
         else if(accountField.text.Length < 8)
-            WarnMessage.text = "Account length must be greater than 8!";
+            WarnMessage.text = "帳號長度必須大於8!";
         else if(string.IsNullOrEmpty(passwordField.text))
-            WarnMessage.text = "Password can't be empty!";
+            WarnMessage.text = "密碼欄不可為空!";
         else if(string.IsNullOrEmpty(repasswordField.text))
-            WarnMessage.text = "Retype Password can't be empty!";
+            WarnMessage.text = "重複密碼欄位不可為空!";
         else if(passwordField.text.Length < 8)
-            WarnMessage.text = "Password length must be greater than 8!";
+            WarnMessage.text = "密碼長度需要大於8!";
         else if(!string.Equals(passwordField.text, repasswordField.text, StringComparison.Ordinal))
-            WarnMessage.text = "Please enter the same password in both fields!";
+            WarnMessage.text = "密碼不相符請重新輸入!";
         else{
             Regex regex = new Regex("^[a-zA-Z0-9]+$");
             if(!regex.IsMatch(accountField.text))
-                WarnMessage.text = "Account can only consist of uppercase and lowercase letters as well as numbers!";
+                WarnMessage.text = "帳號只能有英文大小寫數字!";
             else if(!regex.IsMatch(passwordField.text))
-                WarnMessage.text = "Password can only consist of uppercase and lowercase letters as well as numbers!";
+                WarnMessage.text = "密碼只能有英文大小寫數字!";
             else
                 StartCoroutine(RegisterUser());
         }
     }
-    public IEnumerator  RegisterUser(){
+    public IEnumerator RegisterUser(){
 
         string hashPwd = CalculateSHA256Hash(passwordField.text);
         Debug.Log(hashPwd);
@@ -64,7 +74,7 @@ public class Register : MonoBehaviour
         form.AddField("account", accountField.text);
         form.AddField("password", hashPwd);
 
-        UnityWebRequest www = UnityWebRequest.Post("https://volley.csie.ntnu.edu.tw/register", form);
+        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/register", form);
         
         dataReturn result = new dataReturn();
 
@@ -72,49 +82,53 @@ public class Register : MonoBehaviour
 
         if(www.result == UnityWebRequest.Result.Success){
             string response = www.downloadHandler.text;
+            print(response);
             result = JsonUtility.FromJson<dataReturn>(response);
             if(result.success == true){
                 UserData.Instance.UserName = result.UserName;
                 UserData.Instance.UserID = result.UserID;
                 UserData.Instance.numOfGame = result.numOfGame;
                 UserData.Instance.numOfPlayer = result.numOfPlayer;
-
             }
         }
         else{
             result.success = false;
-            result.situation = -4;
+            result.situation = -5;
         }
         // 0 成功 -1 使用者已存在 -2 資料庫錯誤 -3 帳號格式不符
 
         switch (result.situation){
             case 0:
-                Debug.Log("success!");
-                WarnMessage.text = "Success!";
-                SceneManager.LoadScene("GameSelect");
+                Debug.Log("成功!");
+                WarnMessage.text = "成功!";
+                MainCanvas.SetActive(false);
+                TeamCanvas.SetActive(true);
                 break;
             case -1:
-                Debug.Log("帳號已存在");
-                WarnMessage.text = "Account already exists!";
+                Debug.Log("傳遞參數錯誤!");
+                WarnMessage.text = "系統錯誤!";
                 break;
             case -2:
                 Debug.Log("資料庫錯誤");
-                WarnMessage.text = "Database error!";
+                WarnMessage.text = "資料庫錯誤!";
                 break;
             case -3:
                 Debug.Log("帳號格式不符");
-                WarnMessage.text = "Invalid account format";
+                WarnMessage.text = "帳號格式不符!";
                 break;
             case -4:
+                Debug.Log("帳號已存在");
+                WarnMessage.text = "帳號已存在!";
+                break;
+            case -5:
                 Debug.Log("request未成功");
-                WarnMessage.text = "Server down!";
+                WarnMessage.text = "request未成功!";
                 break;
         }
 
         
 
     }
-
     private string CalculateSHA256Hash(string input)
     {
         using (SHA256 sha256 = new SHA256Managed())
@@ -142,6 +156,74 @@ public class Register : MonoBehaviour
             Destroy(obj);
         SceneManager.LoadScene("StartMenu");
         
+    }
+
+    public void CallSetTeam(){
+        if(string.IsNullOrEmpty(TeamField.text))
+            TeamWarnMessage.text = "名稱不可為空!";  
+        else{
+            string pattern = @"^[a-zA-Z0-9\u4e00-\u9fa5]*$"; // 匹配字母、数字和中文
+            if(TeamField.text.Length > 10)
+                TeamWarnMessage.text = "隊伍名稱長度需要小於10!";
+            else if (!Regex.IsMatch(TeamField.text, pattern))
+                TeamWarnMessage.text = "隊伍名稱只能輸入中文字 英文字母 數字!";
+            else{
+                TeamWarnMessage.text = "";
+                StartCoroutine(SetTeam());
+            }
+        } 
+    }
+
+    public IEnumerator SetTeam(){
+        WWWForm form = new WWWForm();
+        form.AddField("UserID", UserData.Instance.UserID);
+        form.AddField("TeamName", TeamField.text);
+
+        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/SetTeam", form);
+
+        TeamReturn result = new TeamReturn();
+
+        yield return www.SendWebRequest();
+
+        if(www.result == UnityWebRequest.Result.Success){
+            string response = www.downloadHandler.text;
+            print(response);
+            result = JsonUtility.FromJson<TeamReturn>(response);
+            if(result.success == true)
+                UserData.Instance.TeamID = result.TeamID;
+        }
+        else{
+            result.success = false;
+            result.situation = -6;
+        }
+
+        switch (result.situation){
+            case 0:
+                Debug.Log("成功!");
+                TeamWarnMessage.text = "成功!";
+                SceneManager.LoadScene("GameSelect");
+                break;
+            case -2:
+                Debug.Log("帳號錯誤!");
+                TeamWarnMessage.text = "帳號錯誤!";
+                break;
+            case -3:
+                Debug.Log("隊伍名稱重複!");
+                TeamWarnMessage.text = "隊伍名稱重複!";
+                break;
+            case -4:
+                Debug.Log("資料庫錯誤!");
+                TeamWarnMessage.text = "資料庫錯誤!";
+                break;
+            case -5:
+                Debug.Log(result.ec);
+                TeamWarnMessage.text = result.ec;
+                break;
+            case -6:
+                Debug.Log("request未成功");
+                TeamWarnMessage.text = "連線失敗!";
+                break;
+        }
     }
 
 }

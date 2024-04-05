@@ -56,6 +56,8 @@ public class ClickRecord : MonoBehaviour
         Serve.players = new List<GameObject>();
         Serve.clicks = new List<Vector2>();
         Serve.side = canvas.GetComponent<RefreshPoint>().whoServe;
+        print(canvas.GetComponent<RefreshPoint>().whoServe);
+        print(Serve.side);
         if(Serve.side == LEFT){
             Serve.players.Add(SystemScript.leftPlayers[0]);
             SystemScript.leftPlayers[0].GetComponent<SpriteRenderer>().color = new Color(255, 0, 0, 255);

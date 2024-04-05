@@ -14,7 +14,7 @@ public class RefreshPoint : MonoBehaviour
     [SerializeField] GameObject rightServeTag;
     private SystemData systemDataScript;
 
-    
+    bool lastRound = false, stop = false;
     void Start(){
         systemDataScript = serverData.GetComponent<SystemData>();
         whoServe = UserData.Instance.whoServe; // 跟伺服器拿資料
@@ -73,9 +73,11 @@ public class RefreshPoint : MonoBehaviour
     }
     public void addScore(){ // 大比分加分 插入資料再判斷
         int endPoint = 25;
-        bool clear = false;
-        if(systemDataScript.score[LEFT] + systemDataScript.score[RIGHT] >= 4)
+        bool clear = false ;
+        if(systemDataScript.score[LEFT] + systemDataScript.score[RIGHT] >= 4){
             endPoint = 15;
+            lastRound = true;
+        }
         
         if(systemDataScript.point[LEFT] >= endPoint && systemDataScript.point[LEFT] - systemDataScript.point[RIGHT] >= 2){
             systemDataScript.score[LEFT]++;
@@ -85,7 +87,7 @@ public class RefreshPoint : MonoBehaviour
             systemDataScript.score[RIGHT]++;
             clear = true;
         }
-        if(clear){
+        if(clear && !lastRound){
             systemDataScript.point[LEFT] = 0;
             systemDataScript.point[RIGHT] = 0;
             systemDataScript.leftPointText.text = "00";
@@ -94,6 +96,9 @@ public class RefreshPoint : MonoBehaviour
             systemDataScript.rightScoreText.text = systemDataScript.score[RIGHT].ToString();
             LRChange();
         }
+        else if(clear && lastRound)
+            stop = true;
+        
         
     }
     public void rotate(){ // 輪轉

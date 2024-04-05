@@ -31,12 +31,21 @@ public class GameSelect : MonoBehaviour
     public class ServerToUser{
         public bool success;
         public int situation;
+        public int TeamID;
         public List<int> UserPlayerID;
         public List<string> UserPlayerName;
         public List<int> UserPlayerNumber;
+        public List<int> UserPlayerPos;
         public List<int> UserGameID;
         public List<string> UserGameDate;
         public List<string> UserGameName;
+        public List<int> OtherTeamID;
+        public List<string> OtherTeamName;
+        public List<int> OtherPlayerID;
+        public List<int> OtherPlayerNumber;
+        public List<string> OtherPlayerName;
+        public List<int> OtherPlayerPos;
+        
     }
 
     public class Return{

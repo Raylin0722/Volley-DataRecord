@@ -2,33 +2,34 @@ create database if not exists Volleyball;
 use Volleyball;
 
 create table users(
-	ID int primary key auto_increment,
+	UserID int primary key auto_increment,
     account varchar(50) ,
     hash varchar(64) 
 ) engine = InnoDB default charset=utf8mb4 collate=utf8mb4_bin;	
 
 create table Team(
-	UserId int ,
-    TeamId int primary key auto_increment,
-    Name varchar(20)
+	UserID int ,
+    TeamID int primary key auto_increment,
+    Name varchar(64)
 )engine = InnoDB default charset=utf8mb4 collate=utf8mb4_bin;
 
 create table Player(
+    PlayerID int auto_increment primary key,
 	UserID int,
     TeamID int,
     PName varchar(20),
     PNum int, 
-    Position INT,
-    primary key(UserID, TeamID, PNum)
+    Position INT
 )engine = InnoDB default charset=utf8mb4 collate=utf8mb4_bin;
 
 create table GameInfo(
+    GameID int auto_increment primary key,
 	UserID int, 
-    GameID int,
     Serve int,
     TeamL int,
     TeamR int,
-    primary key(UserID, GameID)
+    GameDate Date,
+    GameName varchar(30)
 )engine = InnoDB default charset=utf8mb4 collate=utf8mb4_bin;
 
 create table SetWinner(
@@ -90,4 +91,3 @@ create table GameData(
     behavior int, 
     score int
 )engine = InnoDB default charset=utf8mb4 collate=utf8mb4_bin;
-

@@ -9,6 +9,7 @@ public class UserData : MonoBehaviour
     // 登入系統需要資料
     public string UserName;
     public int UserID;
+    public int TeamID;
     public int numOfGame;
     public int numOfPlayer;
 
@@ -28,20 +29,18 @@ public class UserData : MonoBehaviour
     public string EnemyTeamName;
     public int whoServe;
     public int leftRight;
-    public UserData(){
-        
-    }
+
     void Awake(){
-        /*if(Instance != null){
+        if(Instance != null){
             Destroy(gameObject);
             return;
-        }*/
+        }
 
-        /*Instance = this;
-        Instance.tag = "DontDestroy";
-        DontDestroyOnLoad(gameObject);*/
         Instance = this;
-        UserName = "Test";
+        Instance.tag = "DontDestroy";
+        DontDestroyOnLoad(gameObject);
+        Instance = this;
+        /*UserName = "Test";
         UserID = 1; 
         numOfGame = 1;
         numOfPlayer = 12;
@@ -59,8 +58,8 @@ public class UserData : MonoBehaviour
         EnemyPlayerPlayPos = new List<int>{1, 3, 2, 1, 5, 1, 1, 1, 1, 3, 5, 1};
         UserTeamName = "Team A";
         EnemyTeamName = "Team B";
-        whoServe = 0; // 0 Left 1 Right
-        leftRight = 0; // 0 Left 1 Right
-
+        whoServe = 1; // 0 Left 1 Right
+        leftRight = 1; // 0 Left 1 Right
+        TeamID = 1;*/
     }
 }

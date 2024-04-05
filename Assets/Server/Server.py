@@ -26,12 +26,11 @@ def login():
     account = request.form.get("account")
     password = request.form.get("password")
 
-    resultReturn = {"success" : False, "situation" : -1, "UserName" : None, "UserID" : None, "numOfGame" : None, "numOfPlayer" : None}
+    resultReturn = {"success" : False, "situation" : -1, "UserName" : None, "UserID" : None, "numOfGame" : None, "numOfPlayer" : None, "TeamID": None, "ec": None}
 
-
-    print(password)
 
     if account == None or password == None:
+        resultReturn['ec'] = "form argument error"
         return resultReturn
 
 
@@ -44,25 +43,40 @@ def login():
     if len(result) == 1:
         try:
             if password == result[0][2]:
-                print("a")
-                resultReturn['success'] = True
-                resultReturn['situation'] = 0
                 resultReturn['UserName'] = account
                 resultReturn['UserID'] = result[0][0]
                 cur.execute("select * from users where account=%s;", (account, ))
-                userID = int(cur.fetchall()[0][0])
-                cur.execute(f"SELECT COUNT(*) FROM userGame{userID};")
-                resultReturn['numOfGame'] = int(cur.fetchall()[0][0])
-                cur.execute(f"SELECT COUNT(*) FROM userPlayer{userID};")
-                resultReturn['numOfPlayer'] = int(cur.fetchall()[0][0])
+                UserInfo = cur.fetchall()
+                
+                if(len(UserInfo) != 1):
+                    resultReturn['situation'] = -2
+                    resultReturn['ec'] = "len of UserInfo != 1"
+
+                cur.execute("select * from Team where UserID=%s and Name=%s;", (UserInfo[0][0], UserInfo[0][3]))
+                TeamInfo = cur.fetchall()
+                if len(TeamInfo) != 1:
+                    resultReturn['situation'] = -3
+                    resultReturn['ec'] = "len of TeamInfo != 1"
+                    
+                cur.execute("select * from GameInfo where UserID=%s;", (UserInfo[0][0], ))
+                resultReturn['numOfGame'] = len(cur.fetchall())
+                cur.execute("select * from Player where UserID=%s and TeamID=%s;", (UserInfo[0][0], TeamInfo[0][1]))
+                resultReturn['numOfPlayer'] = len(cur.fetchall())
+                
+                resultReturn['success'] = True
+                resultReturn['situation'] = 0
             else:
-                resultReturn['situation'] = -2
+                resultReturn['situation'] = -4
+                resultReturn['ec'] = "pwd error"
         except Exception as ec:
-            print(ec)
-            resultReturn['situation'] = -1
+            resultReturn['ec'] = str(ec)
+            resultReturn['situation'] = -5
         finally:
             cur.close()
             cnx.close()
+    else:
+        resultReturn['ec'] = "len of users != 1"
+        resultReturn['situation'] = -6
 
     return resultReturn
 
@@ -71,11 +85,10 @@ def register():
     account = request.form.get("account")
     password = request.form.get("password")
     
-    resultReturn = {"success" : False, "situation" : -1, "UserName" : None, "UserID" : None, "numOfGame" : None, "numOfPlayer" : None}
+    resultReturn = {"success" : False, "situation" : -1, "UserName" : None, "UserID" : None, "numOfGame" : None, "numOfPlayer" : None, "ec":""}
 
 
     if account == None or password == None:
-        resultReturn['situation'] = -3
         return resultReturn
 
     cnx = mysql.connector.connect(**config)
@@ -88,18 +101,14 @@ def register():
     if len(result) == 0:
         if re.match("^[a-zA-Z0-9]+$", account):
             
-            cur.execute("insert into users(account, hash) value(%s, %s);", (account, password))
-            cnx.commit()
-            cur.execute("select * from users;")
-            userId = int(cur.fetchall()[0][0])
             try:
-                cur.execute(f"create table userGame{userId} (ID INT AUTO_INCREMENT PRIMARY KEY, GameDate Date, GameName VARCHAR(50)) engine = InnoDB default charset=utf8mb4 collate=utf8mb4_bin;")
-                cur.execute(f"create table userPlayer{userId} (ID INT AUTO_INCREMENT PRIMARY KEY, PlayerName VARCHAR(50), PlayerNumber int) engine = InnoDB default charset=utf8mb4 collate=utf8mb4_bin;")
+                cur.execute("insert into users(account, hash) value(%s, %s);", (account, password))
+                cnx.commit()
+                cur.execute("select * from users where account=%s;", (account, ))
+                userId = int(cur.fetchall()[0][0])
             except Exception as ec:
-                print(ec)
-                resultReturn['success'] = False
+                resultReturn['ec'] = str(ec)
                 resultReturn['situation'] = -2
-                
             else:
                 resultReturn['success'] = True
                 resultReturn['situation'] = 0
@@ -107,12 +116,14 @@ def register():
                 resultReturn['numOfGame'] = 0
                 resultReturn['numOfPlayer'] = 0
                 resultReturn['UserName'] = account
-
             finally:
                 cur.close()
                 cnx.close()
+            
         else:
             resultReturn['situation'] = -3
+    else:
+        resultReturn['situation'] = -4
 
     return resultReturn
 
@@ -156,8 +167,8 @@ def initDB():
 @app.route("/insertData", methods=['GET', 'POST'])
 def insertData():
     data = request.get_json()
-    GameID = request.form.get("GameID")
-    UserID = request.form.get("UserID")
+    GameID = request.args.get("GameID")
+    UserID = request.args.get("UserID")
 
     print(data); print(GameID); print(UserID)
 
@@ -207,26 +218,6 @@ def insertData():
     
     return resultReturn
    
-@app.route("/insertWinner", methods=['GET', 'POST'])
-def insertWinner():
-    GameID = request.form.get("GameID")
-    UserID = request.form.get("UserID")
-    
-    resultReturn = {"success":False, "situation":-1}
-    if GameID == None or UserID == None:
-        return resultReturn
-
-    cnx = mysql.connector.connect(**config)
-    cur = cnx.cursor(buffered=True)
-    
-    try:
-       cur.execute() 
-    except Exception as ec:
-        print(ec)
-    finally:
-        cur.close()
-        cnx.close()
-
 @app.route("/displayData", methods=['GET', 'POST'])
 def displayData():
     UserID = request.form.get("UserID")
@@ -252,12 +243,14 @@ def displayData():
 def AddPlayer():
     account = request.form.get("account")
     UserID = request.form.get("UserID")
+    TeamID = request.form.get("TeamID")
     PlayerName = request.form.get("PlayerName")
     PlayerNumber = request.form.get("PlayerNumber")
+    position = request.form.get("position")
     
     resultReturn = {"success" : False, "situation": -1} # 0 成功 -1 參數錯誤 -2 資料庫錯誤 -3 帳號不存在 -4 該球員已存在 -5 該背號已存在
     
-    if account == None or UserID == None or PlayerName == None or PlayerNumber == None:
+    if account == None or UserID == None or PlayerName == None or PlayerNumber == None or TeamID == None:
         return resultReturn
     cnx = mysql.connector.connect(**config)
     cur = cnx.cursor(buffered=True)
@@ -265,15 +258,15 @@ def AddPlayer():
     cur.execute("select account from users where account=%s;", (account,))
     result = cur.fetchall()
     
-    cur.execute(f"select * from userPlayer{UserID} where PlayerName=%s;", (PlayerName, ))
+    cur.execute("select * from Player where UserID=%s and TeamID=%s and PNum=%s;", (UserID, TeamID, PlayerNumber))
     check1 = cur.fetchall()
     
-    cur.execute(f"select * from userPlayer{UserID} where PlayerNumber=%s;", (PlayerNumber, ))
+    cur.execute("select * from Team where UserID=%s and TeamID=%s;", (UserID, TeamID))
     check2 = cur.fetchall()
     
-    if len(result) == 1 and len(check1) == 0 and len(check2) == 0:
+    if len(result) == 1 and len(check1) == 0 and len(check2) == 1:
         try:
-            cur.execute(f"insert into userPlayer{UserID}(playerName, playerNumber) value(%s, %s)", (PlayerName, PlayerNumber))
+            cur.execute("insert into Player(UserID, TeamID, PName, PNum, Position) value(%s, %s, %s, %s, %s)", (UserID, TeamID, PlayerName, PlayerNumber, position))
             cnx.commit()
             resultReturn['situation'] = 0
             resultReturn['success'] = True
@@ -289,7 +282,7 @@ def AddPlayer():
     elif len(result) == 1 and len(check1) != 0:
         resultReturn['situation'] = -4
         print("-4")
-    elif len(result) == 1 and len(check2) != 0:
+    elif len(result) == 1 and len(check2) != 1:
         resultReturn['situation'] = -5
         print("-5")
     return resultReturn
@@ -310,13 +303,13 @@ def AddGame():
     cur.execute("select account from users where account=%s;", (account,))
     result = cur.fetchall()
     
-    cur.execute(f"select * from userGame{UserID} where GameName=%s;", (GameName, ))
+    cur.execute("select * from GameInfo where UserID=%s and GameName=%s and GameDate=%s;", (UserID, GameName, GameDate))
     check = cur.fetchall()
     
     if len(result) == 1 and len(check) == 0:
         try:
             GameDate = datetime.strptime(GameDate, "%Y-%m-%d")
-            cur.execute(f"insert into userGame{UserID}(GameDate, GameName) value(%s, %s)", (GameDate, GameName))
+            cur.execute("insert into GameInfo(UserID, Serve, TeamL, TeamR, GameDate, GameName) value(%s, %s, %s, %s, %s, %s)", (UserID, -1, -1, -1, GameDate, GameName))
             cnx.commit()
             resultReturn['situation'] = 0
             resultReturn['success'] = True
@@ -336,10 +329,11 @@ def AddGame():
 def UpdateUserData():
     account = request.form.get("account")
     UserID = request.form.get("UserID")
-    print(account, UserID)
+
     resultReturn = {"success" : False, "situation": -1, 
-                    "UserPlayerID" : None, "UserPlayerName" : None, "UserPlayerNumber" : None,
-                    "UserGameID" : None, "UserGameDate" : None, "UserGameName" : None}
+                    "UserPlayerName" : None, "UserPlayerNumber" : None, "UserPlayerPos": None,
+                    "UserGameID" : None, "GameServe": None, "TeamL": None, "TeamR": None, 
+                    "UserGameDate" : None, "UserGameName" : None}
     
     if account == None or UserID == None: # 0 成功 -1 參數錯誤 -2 資料庫錯誤 -3 帳號不存在
         return resultReturn
@@ -349,28 +343,35 @@ def UpdateUserData():
     
     cur.execute("select account from users where account=%s;", (account,))
     result = cur.fetchall()
-    # cur.execute(f"select * from userGame{UserID} where gameName=%s;", ())
-    UserPlayerID = []; UserPlayerName = []; UserPlayerNumber = []
-    UserGameID = []; UserGameDate = []; UserGameName = []
+    UserPlayerID = [], UserPlayerName = []; UserPlayerNumber = [], UserPlayerPos = []
+    UserGameID = []; UserGameDate = []; UserGameName = []; GameServe = []; TeamL = []; TeamR = []
     
     if len(result) == 1:
         try:
-            cur.execute(f"select * from userPlayer{UserID} order by PlayerNumber;")
+            cur.execute("select * from Player where UserID=%s order by PNum;", (UserID))
             Player = cur.fetchall()
-            cur.execute(f"select * from userGame{UserID} order by GameDate;")
+            cur.execute("select * from GameInfo where UserID=%s order by GameDate;", (UserID, ))
             Game = cur.fetchall()
             for i in Player:
                 UserPlayerID.append(i[0])
-                UserPlayerName.append(i[1])
-                UserPlayerNumber.append(i[2])
+                UserPlayerName.append(i[3])
+                UserPlayerNumber.append(i[4])
+                UserPlayerPos.append(i[5])
             for i in Game:
                 UserGameID.append(i[0])
-                UserGameDate.append(i[1])
-                UserGameName.append(i[2])
-            resultReturn['UserPlayerID'] = UserPlayerID
+                GameServe.append(i[2])
+                TeamL.append(i[3])
+                TeamR.append(i[4])
+                UserGameDate.append(i[5])
+                UserGameName.append(i[6])
+            
             resultReturn['UserPlayerName'] = UserPlayerName
             resultReturn['UserPlayerNumber'] = UserPlayerNumber
+            resultReturn['UserPlayerPos'] = UserPlayerPos
             resultReturn['UserGameID'] = UserGameID
+            resultReturn["GameServe"] = GameServe
+            resultReturn['TeamL'] = TeamL
+            resultReturn['TeamR'] = TeamR
             resultReturn['UserGameDate'] = UserGameDate
             resultReturn['UserGameName'] = UserGameName
             resultReturn['success'] = True
@@ -390,14 +391,14 @@ def UpdateUserData():
 @app.route("/CorrectPlayer", methods=['GET', 'POST'])    
 def CorrectPlayer():
     account = request.form.get("account")
-    UserID = request.form.get("UserID")
     PlayerID = request.form.get("PlayerID")
+    UserID = request.form.get("UserID")
     PlayerName = request.form.get("PlayerName")
     PlayerNumber = request.form.get("PlayerNumber")
     
     resultReturn = {"success" : False, "situation": -1} # 0 成功 -1 參數錯誤 -2 資料庫錯誤 -3 帳號不存在 -4 該球員已存在 -5 該背號已存在
     
-    if account == None or UserID == None or PlayerName == None or PlayerNumber == None or PlayerID == None:
+    if account == None or PlayerID == None or UserID == None or PlayerName == None or PlayerNumber == None :
         return resultReturn
     cnx = mysql.connector.connect(**config)
     cur = cnx.cursor(buffered=True)
@@ -405,18 +406,18 @@ def CorrectPlayer():
     cur.execute("select account from users where account=%s;", (account,))
     result = cur.fetchall()
     
-    cur.execute(f"select * from userPlayer{UserID} where ID=%s;", (PlayerID,))
+    cur.execute("select * from Player where PlayerID=%s;", (PlayerID,))
     check1 = cur.fetchall()
     
-    cur.execute(f"select * from userPlayer{UserID} where PlayerName=%s and ID != %s;", (PlayerName, PlayerID))
+    cur.execute("select * from Player where PName=%s and PlayerID != %s;", (PlayerName, PlayerID))
     check2 = cur.fetchall()
     
-    cur.execute(f"select * from userPlayer{UserID} where PlayerNumber=%s and ID != %s;", (PlayerNumber, PlayerID))
+    cur.execute("select * from Player where PNum=%s and PlayerID != %s;", (PlayerNumber, PlayerID))
     check3 = cur.fetchall()
     
     if len(result) == 1 and len(check1) == 1 and len(check2) == 0 and len(check3) == 0:
         try:
-            cur.execute(f"update userPlayer{UserID} set PlayerName=%s, PlayerNumber=%s where ID=%s;", (PlayerName, PlayerNumber, int(PlayerID)))
+            cur.execute("update Player set PName=%s, PNum=%s where PlayerID=%s;", (PlayerName, PlayerNumber, int(PlayerID)))
             cnx.commit()
             resultReturn['situation'] = 0
             resultReturn['success'] = True
@@ -442,8 +443,8 @@ def CorrectPlayer():
     
 @app.route("/graphicData", methods=['GET', 'POST'])
 def graphicData():
-    UserID = request.form.get("UserID")
-    GameID = request.form.get("GameID")
+    UserID = request.args.get("UserID")
+    GameID = request.args.get("GameID")
 
 
     print(UserID, GameID)
@@ -455,13 +456,21 @@ def graphicData():
     cur = cnx.cursor(buffered=True)
 
     result = {
+        
+        
+        
+        "teamL": "左方球隊名",
+        "teamR": "右方球隊名",
+        "matchDate": "",
+        
+        "totalSet": 0, #OK
+        
+        "Serve": 0,
+        
         "LREachRound":{ #OK
             "left": [],
             "right": []
         },
-
-        "matchDate": "",
-        "totalSet": 0, #OK
         
         "players": { #OK
             "left": [
@@ -538,6 +547,16 @@ def graphicData():
         playerDataR = cur.fetchall()
         if(len(playerDataR) < 6):
             return "Player Error!"
+
+        cur.execute("select * from Team where UserID=%s and TeamID=%s;", (UserID, GameInfo[0][3]))
+        TeamNameL = cur.fetchall()
+        if(len(TeamNameL) != 1 ):
+            return "Team Error!"
+        cur.execute("select * from Team where UserID=%s and TeamID=%s;", (UserID, GameInfo[0][4]))
+        TeamNameR = cur.fetchall()
+        if(len(TeamNameR) != 1):
+            return "Team Error!"
+    
     
     except Exception as ex:
         print(ex)
@@ -563,26 +582,31 @@ def graphicData():
     set5L = 0; set5R = 0
     
     for data in GameData:
+        tmp = {"set": 0, "format": "", "player1": 0, "player2": 0, "player3": 0, "startx": 0, "starty": 0, "endx": 0, "endy": 0, "behavior": 0, "score": 0}
+        tmp["set"] = data[3]; tmp["format"] = data[9]; 
+        tmp["player1"] = data[6]; tmp["player2"] = data[7]; tmp["player3"] = data[8]
+        tmp["startx"] = 10; tmp["starty"] = 11; tmp["endx"] = 12; tmp["endy"] = data[13]
+        tmp["behavior"] = data[14]; tmp["score"] = data[15]
         if(data[3] == 1):
             set1L = set1L + 1 if data[15] > 0 else set1L
             set1R = set1R + 1 if data[15] < 0 else set1R
-            result["ballRecords"]["set1"].append(data)
+            result["ballRecords"]["set1"].append(tmp)
         elif(data[3] == 2):
             set2L = set2L + 1 if data[15] > 0 else set2L
             set2R = set2R + 1 if data[15] < 0 else set2R
-            result["ballRecords"]["set2"].append(data)
+            result["ballRecords"]["set2"].append(tmp)
         elif(data[3] == 3):
             set3L = set3L + 1 if data[15] > 0 else set3L
             set3R = set3R + 1 if data[15] < 0 else set3R
-            result["ballRecords"]["set3"].append(data)
+            result["ballRecords"]["set3"].append(tmp)
         elif(data[3] == 4):
             set4L = set4L + 1 if data[15] > 0 else set4L
             set4R = set4R + 1 if data[15] < 0 else set4R
-            result["ballRecords"]["set4"].append(data)
+            result["ballRecords"]["set4"].append(tmp)
         elif(data[3] == 5):
             set5L = set5L + 1 if data[15] > 0 else set5L
             set5R = set5R + 1 if data[15] < 0 else set5R
-            result["ballRecords"]["set5"].append(data)
+            result["ballRecords"]["set5"].append(tmp)
 
     result['scores'][0]["leftScore"] = set1L
     result['scores'][0]["rightScore"] = set1R
@@ -594,9 +618,10 @@ def graphicData():
     result['scores'][3]["rightScore"] = set4R
     result['scores'][4]["leftScore"] = set5L
     result['scores'][4]["rightScore"] = set5R
-
-
-    result["totalSet"] = SetWinner[0][2]
+    
+    result["Serve"] = GameInfo[0][2]
+    result["teamL"] = TeamNameL[0][2]
+    result['teamR'] = TeamNameR[0][2]
     for i in range(5):
         left = GameInfo[0][3]
         right = GameInfo[0][4]
@@ -627,12 +652,14 @@ def graphicData():
             cur.execute("insert into SetWinner(UserID, GameID, TotalSet, Set1, Set2, Set3, Set4, Set5) value(%s, %s, %s, %s, %s, %s, %s, %s)"
                         ,(UserID, GameID, count, SetWinner[0], SetWinner[1], SetWinner[2], SetWinner[3], SetWinner[4]))
             cnx.commit()
-            
+            result["totalSet"] = count
         elif(len(SetWinner) == 1):
             for i in range(5):
                 result["scores"][i]['winner'] = SetWinner[0][i + 3]
+            result["totalSet"] = SetWinner[0][2]
         elif(len(SetWinner) > 1):
             return "Database Error!"
+        
     except Exception as ec:
         print(ec)
         return "Database Error!"
@@ -645,6 +672,53 @@ def graphicData():
 
 
     return result
+
+@app.route("/SetTeam", methods=['GET', 'POST'])
+def SetTeam():
+    UserID = request.form.get("UserID")
+    TeamName = request.form.get("TeamName")
+    
+    resultReturn = {"success" : False, "situation": -1, "TeamID": 0, "ec":""} # 0 成功 -1 參數錯誤 -2 資料庫錯誤 -3 帳號不存在 -4 該球員已存在 -5 該背號已存在
+    if UserID == None or TeamName == None:
+        return resultReturn
+    
+    cnx = mysql.connector.connect(**config)
+    cur = cnx.cursor(buffered=True)
+    
+    try:
+        cur.execute("select * from users where UserID=%s;", (UserID, ))
+        check1 = cur.fetchall()
+        if len(check1) != 1:
+            resultReturn["situation"] = -2
+            return resultReturn
+        
+        cur.execute("select * from Team where UserID=%s and Name=%s", (UserID, TeamName))
+        check2 = cur.fetchall()
+        if len(check2) != 0:
+            resultReturn["situation"] = -3
+            return resultReturn
+        cur.execute("insert into Team(UserID, Name) value(%s, %s);", (UserID, TeamName))
+        cur.execute("update users set TeamName=%s where UserID=%s;", (TeamName, UserID))
+        cnx.commit()
+        cur.execute("select * from Team where UserID=%s and Name=%s", (UserID, TeamName))
+        check3 = cur.fetchall()
+        if(len(check3) != 1):
+            resultReturn["situation"] = -4
+            return resultReturn
+        resultReturn["success"] = True
+        resultReturn["situation"] = 0
+        resultReturn["TeamID"] = check3[0][1]
+        
+        return resultReturn
+        
+    except Exception as ec:
+        resultReturn["situation"] = -5
+        resultReturn["ec"] = str(ec)
+        print(ec)
+        return resultReturn
+    finally:
+        cur.close()
+        cnx.close()
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)   

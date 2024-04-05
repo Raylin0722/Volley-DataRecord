@@ -16,7 +16,7 @@ config = {
 }
 
 try:
-    a = 0/0
+    a = 0/1
 except Exception as ec:
     print(ec)
     exit()
