@@ -65,6 +65,7 @@ def login():
                 
                 resultReturn['success'] = True
                 resultReturn['situation'] = 0
+                resultReturn['TeamID'] = TeamInfo[0][1]
             else:
                 resultReturn['situation'] = -4
                 resultReturn['ec'] = "pwd error"
@@ -241,21 +242,24 @@ def displayData():
    
 @app.route("/AddPlayer", methods=['GET', 'POST'])
 def AddPlayer():
-    account = request.form.get("account")
     UserID = request.form.get("UserID")
     TeamID = request.form.get("TeamID")
     PlayerName = request.form.get("PlayerName")
     PlayerNumber = request.form.get("PlayerNumber")
-    position = request.form.get("position")
+    PlayerPos = request.form.get("PlayerPos")
     
-    resultReturn = {"success" : False, "situation": -1} # 0 成功 -1 參數錯誤 -2 資料庫錯誤 -3 帳號不存在 -4 該球員已存在 -5 該背號已存在
+    print(UserID, TeamID, PlayerName, PlayerNumber, PlayerPos)
     
-    if account == None or UserID == None or PlayerName == None or PlayerNumber == None or TeamID == None:
+    resultReturn = {"success" : False, "situation": -1, "ec" : None} # 0 成功 -1 參數錯誤 -2 資料庫錯誤 -3 帳號不存在 -4 該球員已存在 -5 該背號已存在
+    
+    if UserID == None or TeamID == None or PlayerName == None or PlayerNumber == None:
+        resultReturn['ec'] = "Args Error"
+        print("args error")
         return resultReturn
     cnx = mysql.connector.connect(**config)
     cur = cnx.cursor(buffered=True)
 
-    cur.execute("select account from users where account=%s;", (account,))
+    cur.execute("select * from users where UserID=%s;", (UserID,))
     result = cur.fetchall()
     
     cur.execute("select * from Player where UserID=%s and TeamID=%s and PNum=%s;", (UserID, TeamID, PlayerNumber))
@@ -266,25 +270,25 @@ def AddPlayer():
     
     if len(result) == 1 and len(check1) == 0 and len(check2) == 1:
         try:
-            cur.execute("insert into Player(UserID, TeamID, PName, PNum, Position) value(%s, %s, %s, %s, %s)", (UserID, TeamID, PlayerName, PlayerNumber, position))
+            cur.execute("insert into Player(UserID, TeamID, PName, PNum, Position) value(%s, %s, %s, %s, %s)", (UserID, TeamID, PlayerName, PlayerNumber, PlayerPos))
             cnx.commit()
             resultReturn['situation'] = 0
             resultReturn['success'] = True
-        except Exception as ex:
+        except Exception as ec:
             resultReturn['situation'] = -2
-            print(ex)
+            resultReturn['ec'] = str(ec)
         finally:
             cur.close()
             cnx.close()
     elif len(result) != 1:
         resultReturn['situation'] = -3
-        print("-3")
+        resultReturn['ec'] = "帳號不存在"
     elif len(result) == 1 and len(check1) != 0:
         resultReturn['situation'] = -4
-        print("-4")
+        resultReturn['ec'] = "背號已存在"
     elif len(result) == 1 and len(check2) != 1:
         resultReturn['situation'] = -5
-        print("-5")
+        resultReturn['ec'] = "隊伍不存在"
     return resultReturn
 
 @app.route("/AddGame", methods=['GET', 'POST'])
@@ -329,11 +333,18 @@ def AddGame():
 def UpdateUserData():
     account = request.form.get("account")
     UserID = request.form.get("UserID")
+    UserTeamID = request.form.get("UserTeamID")
 
-    resultReturn = {"success" : False, "situation": -1, 
-                    "UserPlayerName" : None, "UserPlayerNumber" : None, "UserPlayerPos": None,
-                    "UserGameID" : None, "GameServe": None, "TeamL": None, "TeamR": None, 
-                    "UserGameDate" : None, "UserGameName" : None}
+    
+    resultReturn = {
+        "success" : False, "situation": -1, 
+        "UserPlayerID": None, "UserPlayerName" : None, "UserPlayerNumber" : None, "UserPlayerPos": None,
+        "UserGameID" : None, "UserGameDate" : None, "UserGameName" : None, 
+        "GameServe": None, "TeamL": None, "TeamR": None,
+        "OtherTeamID": None, "OtherTeamName":None, 
+        "OtherPlayerID": None, "OtherPlayerName" : None, "OtherPlayerNumber" : None, "OtherPlayerPos": None, "OtherPlayerTeamID": None,
+        "ec": None
+    }
     
     if account == None or UserID == None: # 0 成功 -1 參數錯誤 -2 資料庫錯誤 -3 帳號不存在
         return resultReturn
@@ -343,12 +354,14 @@ def UpdateUserData():
     
     cur.execute("select account from users where account=%s;", (account,))
     result = cur.fetchall()
-    UserPlayerID = [], UserPlayerName = []; UserPlayerNumber = [], UserPlayerPos = []
+    UserPlayerID = []; UserPlayerName = []; UserPlayerNumber = []; UserPlayerPos = []
     UserGameID = []; UserGameDate = []; UserGameName = []; GameServe = []; TeamL = []; TeamR = []
+    OtherPlayerID = []; OtherPlayerName = []; OtherPlayerNumber = []; OtherPlayerPos = []; OtherPlayerTeamID = []
+    OtherTeamID = []; OtherTeamName = []
     
     if len(result) == 1:
         try:
-            cur.execute("select * from Player where UserID=%s order by PNum;", (UserID))
+            cur.execute("select * from Player where UserID=%s and TeamID=%s order by PNum;", (UserID, UserTeamID))
             Player = cur.fetchall()
             cur.execute("select * from GameInfo where UserID=%s order by GameDate;", (UserID, ))
             Game = cur.fetchall()
@@ -365,6 +378,21 @@ def UpdateUserData():
                 UserGameDate.append(i[5])
                 UserGameName.append(i[6])
             
+            cur.execute("select * from Player where UserID=%s and TeamID!=%s order by TeamID, PNum;", (UserID, UserTeamID))
+            OtherPlayer = cur.fetchall()
+            cur.execute("select * from Team where UserID=%s and TeamID!=%s;", (UserID, UserTeamID))
+            OtherTeam = cur.fetchall()
+            for i in OtherPlayer:
+                OtherPlayerID.append(i[0])
+                OtherPlayerName.append(i[3])
+                OtherPlayerNumber.append(i[4])
+                OtherPlayerPos.append(i[5])
+                OtherPlayerTeamID.append(i[2])
+            for i in OtherTeam:
+                OtherTeamID.append(i[1])
+                OtherTeamName.append(i[2])
+            
+            resultReturn['UserPlayerID'] = UserPlayerID
             resultReturn['UserPlayerName'] = UserPlayerName
             resultReturn['UserPlayerNumber'] = UserPlayerNumber
             resultReturn['UserPlayerPos'] = UserPlayerPos
@@ -374,11 +402,18 @@ def UpdateUserData():
             resultReturn['TeamR'] = TeamR
             resultReturn['UserGameDate'] = UserGameDate
             resultReturn['UserGameName'] = UserGameName
+            resultReturn["OtherPlayerID"] = OtherPlayerID
+            resultReturn['OtherPlayerName'] = OtherPlayerName
+            resultReturn['OtherPlayerNumber'] = OtherPlayerNumber
+            resultReturn["OtherPlayerPos"] = OtherPlayerPos
+            resultReturn["OtherPlayerTeamID"] = OtherPlayerTeamID
+            resultReturn['OtherTeamID'] = OtherTeamID
+            resultReturn['OtherTeamName'] = OtherTeamName
             resultReturn['success'] = True
             resultReturn['situation'] = 0
-        except Exception as es:
-            print(es)
+        except Exception as ec:
             resultReturn['situation'] = -2
+            resultReturn['ec'] = ec
             return resultReturn
     
         finally:
@@ -390,55 +425,53 @@ def UpdateUserData():
 
 @app.route("/CorrectPlayer", methods=['GET', 'POST'])    
 def CorrectPlayer():
-    account = request.form.get("account")
     PlayerID = request.form.get("PlayerID")
     UserID = request.form.get("UserID")
     PlayerName = request.form.get("PlayerName")
     PlayerNumber = request.form.get("PlayerNumber")
+    PlayerPos = request.form.get("PlayerPos")
     
-    resultReturn = {"success" : False, "situation": -1} # 0 成功 -1 參數錯誤 -2 資料庫錯誤 -3 帳號不存在 -4 該球員已存在 -5 該背號已存在
+    resultReturn = {"success" : False, "situation": -1, "ec": None} # 0 成功 -1 參數錯誤 -2 資料庫錯誤 -3 帳號不存在 -4 該球員已存在 -5 該背號已存在
     
-    if account == None or PlayerID == None or UserID == None or PlayerName == None or PlayerNumber == None :
+    if PlayerID == None or UserID == None or PlayerName == None or PlayerNumber == None or PlayerPos == None :
+        resultReturn['ec'] = "args error!"
         return resultReturn
+
     cnx = mysql.connector.connect(**config)
     cur = cnx.cursor(buffered=True)
 
-    cur.execute("select account from users where account=%s;", (account,))
+    cur.execute("select account from users where UserID=%s;", (UserID,))
     result = cur.fetchall()
     
     cur.execute("select * from Player where PlayerID=%s;", (PlayerID,))
     check1 = cur.fetchall()
     
-    cur.execute("select * from Player where PName=%s and PlayerID != %s;", (PlayerName, PlayerID))
+    cur.execute("select * from Player where PNum=%s and PlayerID != %s;", (PlayerNumber, PlayerID))
     check2 = cur.fetchall()
     
-    cur.execute("select * from Player where PNum=%s and PlayerID != %s;", (PlayerNumber, PlayerID))
-    check3 = cur.fetchall()
-    
-    if len(result) == 1 and len(check1) == 1 and len(check2) == 0 and len(check3) == 0:
+    if len(result) == 1 and len(check1) == 1 and len(check2) == 0:
         try:
-            cur.execute("update Player set PName=%s, PNum=%s where PlayerID=%s;", (PlayerName, PlayerNumber, int(PlayerID)))
+            cur.execute("update Player set PName=%s, PNum=%s, Position=%s where PlayerID=%s;", (PlayerName, PlayerNumber, PlayerPos, PlayerID))
             cnx.commit()
             resultReturn['situation'] = 0
             resultReturn['success'] = True
-        except Exception as ex:
+        except Exception as ec:
             resultReturn['situation'] = -2
-            print(ex)
+            resultReturn['ec'] = "資料庫錯誤!"
         finally:
             cur.close()
             cnx.close()
     elif len(result) != 1:
         resultReturn['situation'] = -3
-        print("-3")
+        resultReturn['ec'] = "此帳號不存在!"
     elif len(check1) != 1:
-        resultReturn['situation'] = -6
-        print("-6")
-    elif len(result) == 1 and len(check2) != 0:
         resultReturn['situation'] = -4
-        print("-4")
-    elif len(result) == 1 and len(check3) != 0:
+        resultReturn['ec'] = "此球員不存在!"
+    elif len(result) == 1 and len(check2) != 0:
         resultReturn['situation'] = -5
-        print("-5")
+        resultReturn['ec'] = "此背號已被使用"
+
+    
     return resultReturn
     
 @app.route("/graphicData", methods=['GET', 'POST'])
@@ -582,11 +615,11 @@ def graphicData():
     set5L = 0; set5R = 0
     
     for data in GameData:
-        tmp = {"set": 0, "format": "", "player1": 0, "player2": 0, "player3": 0, "startx": 0, "starty": 0, "endx": 0, "endy": 0, "behavior": 0, "score": 0}
+        tmp = {"set": 0, "format": "", "TeamID" : 0, "player1": 0, "player2": 0, "player3": 0, "startx": 0, "starty": 0, "endx": 0, "endy": 0, "behavior": 0, "score": 0}
         tmp["set"] = data[3]; tmp["format"] = data[9]; 
         tmp["player1"] = data[6]; tmp["player2"] = data[7]; tmp["player3"] = data[8]
         tmp["startx"] = 10; tmp["starty"] = 11; tmp["endx"] = 12; tmp["endy"] = data[13]
-        tmp["behavior"] = data[14]; tmp["score"] = data[15]
+        tmp["behavior"] = data[14]; tmp["score"] = data[15]; tmp["TeamID"] = data[4]
         if(data[3] == 1):
             set1L = set1L + 1 if data[15] > 0 else set1L
             set1R = set1R + 1 if data[15] < 0 else set1R

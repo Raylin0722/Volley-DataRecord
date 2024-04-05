@@ -27,11 +27,49 @@ public class GameSelect : MonoBehaviour
     public GameObject CorrPlayerCanvas;
     public GameObject AssignCanvas;
     public GameObject WarnCanvas;
+    public GameObject AddOtherCanvas;
+
+    public int numOfGame;
+    public int numOfPlayer;
+    public int UserID;
+    public int UserTeamID;
+    public string UserName;
+    public List<int> UserPlayerID;
+    public List<string> UserPlayerName;
+    public List<int> UserPlayerNumber;
+    public List<int> UserPlayerPos;
+    public List<int> UserGameID;
+    public List<string> UserGameDate;
+    public List<string> UserGameName;
+    public List<int> GameServe;
+    public List<int> TeamL;
+    public List<int> TeamR;
+    public List<int> OtherTeamID;
+    public List<string> OtherTeamName;
+    public List<int> OtherPlayerID;
+    public List<int> OtherPlayerNumber;
+    public List<string> OtherPlayerName;
+    public List<int> OtherPlayerPos;
+    public List<int> OtherPlayerTeamID;
+    public InputField PName;
+    public InputField PNum;
+    public Dropdown PPos;
+    public InputField GName;
+    public TMP_InputField GDate;
+    public Text PWarning;
+    public Text GWarning;
+    public GameObject CorrTarget;
+    public InputField TeamName;
+    public Text TeamWarning;
+    public Text WarningMsg;
+    public InputField PCorrName;
+    public InputField PCorrNum;
+    public Dropdown PCorrPos;
+    public Text PCWarning;
 
     public class ServerToUser{
         public bool success;
         public int situation;
-        public int TeamID;
         public List<int> UserPlayerID;
         public List<string> UserPlayerName;
         public List<int> UserPlayerNumber;
@@ -39,36 +77,30 @@ public class GameSelect : MonoBehaviour
         public List<int> UserGameID;
         public List<string> UserGameDate;
         public List<string> UserGameName;
+        public List<int> GameServe;
+        public List<int> TeamL;
+        public List<int> TeamR;
         public List<int> OtherTeamID;
         public List<string> OtherTeamName;
         public List<int> OtherPlayerID;
         public List<int> OtherPlayerNumber;
         public List<string> OtherPlayerName;
         public List<int> OtherPlayerPos;
-        
+        public List<int> OtherPlayerTeamID;
+        public string ec;
     }
-
     public class Return{
         public bool success;
         public int situation;
+        public string ec;
     }
-
-    public int numOfGame;
-    public int numOfPlayer;
-    public int UserID;
-    public string UserName;
-    public List<int> UserPlayerID;
-    public List<string> UserPlayerName;
-    public List<int> UserPlayerNumber;
-    public List<int> UserGameID;
-    public List<string> UserGameDate;
-    public List<string> UserGameName;
 
     private void Awake(){
         UserName = UserData.Instance.UserName; //後面要連伺服器
         numOfGame = UserData.Instance.numOfGame; // 後面要連伺服器
         numOfPlayer = UserData.Instance.numOfPlayer;
         UserID = UserData.Instance.UserID;
+        UserTeamID = UserData.Instance.TeamID;
         User.text = "User: " + UserName;
         CallUpdateUserData();
     }
@@ -80,19 +112,16 @@ public class GameSelect : MonoBehaviour
         CorrPlayerCanvas.SetActive(false);
         AssignCanvas.SetActive(false);
         WarnCanvas.SetActive(false);
+        AddOtherCanvas.SetActive(false);
+
         StartCoroutine(DealView());
     }
 
-    public InputField PName;
-    public InputField PNum;
-    public InputField GName;
-    public TMP_InputField GDate;
-    public Text PWarning;
-    public Text GWarning;
-    public GameObject CorrTarget;
+    
     public void CallAddPlayer(){
         Regex regexNum = new Regex("^[0-9]+$");
         Regex regexName = new Regex("^[\u4e00-\u9fa50-9A-Za-z_]+$");
+        
         if(string.IsNullOrEmpty(PName.text)){
             PWarning.text = "球員名稱欄位不能為空";
             Debug.Log("球員名稱欄位不能為空");
@@ -116,14 +145,70 @@ public class GameSelect : MonoBehaviour
             return;
         }
         int PNumIN = int.Parse(PNum.text);
-        if(PNumIN<0 || PNumIN > 100){
+        if(PNumIN < 0 || PNumIN > 100){
             PWarning.text = "背號請輸入 0 - 100!";
             Debug.Log("背號請輸入 0 - 100!");
             return;
         }
-
-        StartCoroutine(AddPlayer(PNumIN, PNameIn));
         
+        StartCoroutine(AddPlayer(PNumIN, PNameIn, PPos.value));
+        
+    }
+    public IEnumerator AddPlayer(int PlayerNumber, string PlayerName, int PlayerPos){
+        WWWForm form = new WWWForm();
+        form.AddField("UserID", UserID);
+        form.AddField("TeamID", UserTeamID);
+        form.AddField("PlayerNumber", PlayerNumber);
+        form.AddField("PlayerName", PlayerName);
+        form.AddField("PlayerPos", PlayerPos);
+
+        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/AddPlayer", form);
+        yield return www.SendWebRequest();
+
+        Return result = new Return();
+        if(www.result == UnityWebRequest.Result.Success){
+            string response = www.downloadHandler.text;
+            print(response);
+            result = JsonUtility.FromJson<Return>(response);
+            if(result.success == false){
+                switch (result.situation){
+                    case -1:
+                        Debug.Log("參數傳送錯誤!"); 
+                        PWarning.text = "參數傳送錯誤!";
+                        break;
+                    case -2:
+                        Debug.Log("資料庫錯誤!"); 
+                        PWarning.text = "資料庫錯誤!";
+                        break;
+                    case -3:
+                        Debug.Log("帳號不存在!"); 
+                        PWarning.text = "帳號不存在!";
+                        break;
+                    case -4:
+                        Debug.Log("該背號已存在!"); 
+                        PWarning.text = "該背號已存在!";
+                        break;
+                    case -5:
+                        Debug.Log("隊伍不存在!"); 
+                        PWarning.text = "隊伍不存在!";
+                        break;
+                }
+            }
+            else{
+                Debug.Log("Success!");
+                yield return StartCoroutine(UpdateUserData());
+                PWarning.text = "新增成功!";
+                yield return StartCoroutine(DealView());
+                yield return new WaitForSeconds(1f);
+                MainCanvas.SetActive(true);
+                AddPlayerCanvas.SetActive(false);
+                AddGameCanvas.SetActive(false);
+            }
+        }
+        else{
+            Debug.Log("未連接到伺服器!");
+        }
+
     }
     public void CallAddGame(){
         Regex regexName = new Regex("^[\u4e00-\u9fa50-9A-Za-z_]+$");
@@ -143,6 +228,57 @@ public class GameSelect : MonoBehaviour
         }
 
         StartCoroutine(AddGame(GDate.text, GNameIN));
+    }
+    public IEnumerator AddGame(string GameDate, string GameName){
+        yield return new WaitForSeconds(1f);
+        WWWForm form = new WWWForm();
+        form.AddField("account", UserName);
+        form.AddField("UserID", UserID);
+        form.AddField("GameDate", GameDate);
+        form.AddField("GameName", GameName);
+
+        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/AddGame", form);
+        yield return www.SendWebRequest();
+        Return result = new Return();
+        if(www.result == UnityWebRequest.Result.Success){
+            string response = www.downloadHandler.text;
+            result = JsonUtility.FromJson<Return>(response);
+            if(result.success == false){
+                switch (result.situation){
+                    
+                    case -1:
+                        Debug.Log("參數傳送錯誤!"); 
+                        GWarning.text = "參數傳送錯誤!";
+                        break;
+                    case -2:
+                        Debug.Log("資料庫錯誤!"); 
+                        GWarning.text = "資料庫錯誤!";
+                        break;
+                    case -3:
+                        Debug.Log("帳號不存在!"); 
+                        GWarning.text = "帳號不存在!";
+                        break;
+                    case -4:
+                        Debug.Log("該比賽已存在!"); 
+                        GWarning.text = "該比賽已存在!";
+                        break;
+                }
+            }
+            else{
+                Debug.Log("Success!");
+                yield return StartCoroutine(UpdateUserData());
+                GWarning.text = "新增成功!";
+                yield return StartCoroutine(DealView());
+                yield return new WaitForSeconds(1f);
+                MainCanvas.SetActive(true);
+                AddPlayerCanvas.SetActive(false);
+                AddGameCanvas.SetActive(false);
+
+            }
+        }
+        else{
+            Debug.Log("未連接到伺服器!");
+        }
     }
     public void CallCorrPlayer(){
         Regex regexNum = new Regex("^[0-9]+$");
@@ -176,14 +312,94 @@ public class GameSelect : MonoBehaviour
             return;
         }
         int PlayerID = CorrTarget.GetComponent<ID>().ObjID;
-        StartCoroutine(CorrectPlayer(PCorrNumIN, PCorrNameIn, PlayerID));
+        StartCoroutine(CorrectPlayer(PCorrNumIN, PCorrNameIn, PlayerID, PCorrPos.value));
 
 
     }
     public void CallUpdateUserData(){
         StartCoroutine(UpdateUserData());
     }
+    public IEnumerator UpdateUserData(){
+        print("in");
+        WWWForm form = new WWWForm();
+        form.AddField("account", UserName);
+        form.AddField("UserID", UserID);
+        form.AddField("UserTeamID", UserTeamID);
 
+        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/UpdateUserData", form);
+
+        yield return www.SendWebRequest();
+        print("send");
+        if(www.result == UnityWebRequest.Result.Success){
+            string response = www.downloadHandler.text;
+            print(response);
+            UserPlayerID = new List<int>(); //OK
+            UserPlayerName = new List<string>(); //OK
+            UserPlayerNumber = new List<int>(); //OK
+            UserPlayerPos = new List<int>(); //OK
+            UserGameID = new List<int>(); //OK
+            UserGameDate = new List<string>(); //OK
+            UserGameName = new List<string>(); //OK
+            GameServe = new List<int>();
+            TeamL = new List<int>();
+            TeamR = new List<int>();
+            OtherTeamID = new List<int>();
+            OtherTeamName = new List<string>();
+            OtherPlayerID = new List<int>();
+            OtherPlayerNumber = new List<int>();
+            OtherPlayerName = new List<string>();
+            OtherPlayerPos = new List<int>();
+            OtherPlayerTeamID = new List<int>();
+
+            ServerToUser userReturn = JsonUtility.FromJson<ServerToUser>(response);
+            print(userReturn.UserPlayerID.Count);
+            if(userReturn.success == true){
+                for(int i = 0; i < userReturn.UserPlayerID.Count; i++){
+                    UserPlayerID.Add(userReturn.UserPlayerID[i]);
+                    UserPlayerNumber.Add(userReturn.UserPlayerNumber[i]);
+                    UserPlayerName.Add(userReturn.UserPlayerName[i]);
+                    UserPlayerPos.Add(userReturn.UserPlayerPos[i]);
+                }
+                for(int i = 0; i < userReturn.UserGameID.Count; i++){
+                    UserGameID.Add(userReturn.UserGameID[i]);
+                    UserGameName.Add(userReturn.UserGameName[i]);
+                    DateTimeOffset dateTimeOffset = DateTimeOffset.ParseExact(userReturn.UserGameDate[i], "ddd, dd MMM yyyy HH:mm:ss 'GMT'", 
+                        System.Globalization.CultureInfo.InvariantCulture);
+                    string formattedDate = dateTimeOffset.ToString("yyyy-MM-dd");
+                    UserGameDate.Add(formattedDate);
+                    GameServe.Add(userReturn.GameServe[i]);
+                    TeamL.Add(userReturn.TeamL[i]);
+                    TeamR.Add(userReturn.TeamR[i]);
+                }
+                for(int i = 0; i < userReturn.OtherTeamID.Count; i++){
+                    OtherTeamID.Add(userReturn.OtherTeamID[i]);
+                    OtherTeamName.Add(userReturn.OtherTeamName[i]);
+                }
+                for(int i = 0; i < userReturn.OtherPlayerID.Count; i++){
+                    OtherPlayerID.Add(userReturn.OtherPlayerID[i]);
+                    OtherPlayerName.Add(userReturn.OtherPlayerName[i]);
+                    OtherPlayerNumber.Add(userReturn.OtherPlayerNumber[i]);
+                    OtherPlayerPos.Add(userReturn.OtherPlayerPos[i]);
+                    OtherPlayerTeamID.Add(userReturn.OtherPlayerTeamID[i]);
+                }
+                Debug.Log("Success!");
+            }
+            else if(userReturn.success == false){
+                switch (userReturn.situation){
+                    case -1:
+                        Debug.Log("參數錯誤");
+                        break;
+                    case -2:
+                        Debug.Log("資料庫錯誤");
+                        break;
+                    case -3:
+                        Debug.Log("帳號不存在");
+                        break;
+                }
+            }
+        }
+        
+    }
     public void LogOut(){
         
         GameObject[] dontDestroyObjects = GameObject.FindGameObjectsWithTag("DontDestroy");
@@ -192,12 +408,10 @@ public class GameSelect : MonoBehaviour
         SceneManager.LoadScene("StartMenu");
     
     }
-
     public IEnumerator waitsecond(float second){
         yield return new WaitForSeconds(second);
     }
-    public InputField TeamName;
-    public Text TeamWarning;
+    
     public void ClickGame(){
         
         GameObject obj = EventSystem.current.currentSelectedGameObject;
@@ -259,7 +473,7 @@ public class GameSelect : MonoBehaviour
 
         
     }
-    public Text WarningMsg;
+    
     public void ComfirmEnter(){
         UserData.Instance.UserPlayerID = AssignPlayerID;
         UserData.Instance.UserPlayerName = AssignPlayerName;
@@ -283,165 +497,6 @@ public class GameSelect : MonoBehaviour
         MainCanvas.SetActive(false);
         CorrPlayerCanvas.SetActive(true);
         
-    }
-    public IEnumerator UpdateUserData(){
-
-        WWWForm form = new WWWForm();
-        form.AddField("account", UserName);
-        form.AddField("UserID", UserID);
-
-        UnityWebRequest www = UnityWebRequest.Post("https://volley.csie.ntnu.edu.tw/UpdateUserData", form);
-
-        yield return www.SendWebRequest();
-
-        if(www.result == UnityWebRequest.Result.Success){
-            string response = www.downloadHandler.text;
-            print(response);
-            UserPlayerID = new List<int>();
-            UserPlayerName = new List<string>();
-            UserPlayerNumber = new List<int>();
-            UserGameID = new List<int>();
-            UserGameDate = new List<string>();
-            UserGameName = new List<string>();
-            ServerToUser userRetuen = JsonUtility.FromJson<ServerToUser>(response);
-            Debug.Log(response);
-            if(userRetuen.success == true){
-                for(int i = 0; i < userRetuen.UserPlayerID.Count; i++){
-                    UserPlayerID.Add(userRetuen.UserPlayerID[i]);
-                    UserPlayerNumber.Add(userRetuen.UserPlayerNumber[i]);
-                    UserPlayerName.Add(userRetuen.UserPlayerName[i]);
-                }
-                for(int i = 0; i < userRetuen.UserGameID.Count; i++){
-                    UserGameID.Add(userRetuen.UserGameID[i]);
-                    UserGameName.Add(userRetuen.UserGameName[i]);
-                    DateTimeOffset dateTimeOffset = DateTimeOffset.ParseExact(userRetuen.UserGameDate[i], "ddd, dd MMM yyyy HH:mm:ss 'GMT'", 
-                        System.Globalization.CultureInfo.InvariantCulture);
-                    string formattedDate = dateTimeOffset.ToString("yyyy-MM-dd");
-                    UserGameDate.Add(formattedDate);
-                }
-                Debug.Log("Success!");
-            }
-            else if(userRetuen.success == false){
-                switch (userRetuen.situation){
-                    case -1:
-                        Debug.Log("參數錯誤");
-                        break;
-                    case -2:
-                        Debug.Log("資料庫錯誤");
-                        break;
-                    case -3:
-                        Debug.Log("帳號不存在");
-                        break;
-                }
-            }
-        }
-        
-    }
-    public IEnumerator AddPlayer(int PlayerNumber, string PlayerName){
-        WWWForm form = new WWWForm();
-        form.AddField("account", UserName);
-        form.AddField("UserID", UserID);
-        form.AddField("PlayerNumber", PlayerNumber);
-        form.AddField("PlayerName", PlayerName);
-
-        UnityWebRequest www = UnityWebRequest.Post("https://volley.csie.ntnu.edu.tw/AddPlayer", form);
-        yield return www.SendWebRequest();
-
-        Return result = new Return();
-        if(www.result == UnityWebRequest.Result.Success){
-            string response = www.downloadHandler.text;
-            result = JsonUtility.FromJson<Return>(response);
-            if(result.success == false){
-                switch (result.situation){
-                    
-                    case -1:
-                        Debug.Log("參數傳送錯誤!"); 
-                        PWarning.text = "參數傳送錯誤!";
-                        break;
-                    case -2:
-                        Debug.Log("資料庫錯誤!"); 
-                        PWarning.text = "資料庫錯誤!";
-                        break;
-                    case -3:
-                        Debug.Log("帳號不存在!"); 
-                        PWarning.text = "帳號不存在!";
-                        break;
-                    case -4:
-                        Debug.Log("該球員已存在!"); 
-                        PWarning.text = "該球員已存在!";
-                        break;
-                    case -5:
-                        Debug.Log("該背號已存在!"); 
-                        PWarning.text = "該背號已存在!";
-                        break;
-                }
-            }
-            else{
-                Debug.Log("Success!");
-                yield return StartCoroutine(UpdateUserData());
-                PWarning.text = "新增成功!";
-                yield return StartCoroutine(DealView());
-                yield return new WaitForSeconds(1f);
-                MainCanvas.SetActive(true);
-                AddPlayerCanvas.SetActive(false);
-                AddGameCanvas.SetActive(false);
-            }
-        }
-        else{
-            Debug.Log("未連接到伺服器!");
-        }
-
-    }
-    public IEnumerator AddGame(string GameDate, string GameName){
-        yield return new WaitForSeconds(1f);
-        WWWForm form = new WWWForm();
-        form.AddField("account", UserName);
-        form.AddField("UserID", UserID);
-        form.AddField("GameDate", GameDate);
-        form.AddField("GameName", GameName);
-
-        UnityWebRequest www = UnityWebRequest.Post("https://volley.csie.ntnu.edu.tw/AddGame", form);
-        yield return www.SendWebRequest();
-        Return result = new Return();
-        if(www.result == UnityWebRequest.Result.Success){
-            string response = www.downloadHandler.text;
-            result = JsonUtility.FromJson<Return>(response);
-            if(result.success == false){
-                switch (result.situation){
-                    
-                    case -1:
-                        Debug.Log("參數傳送錯誤!"); 
-                        GWarning.text = "參數傳送錯誤!";
-                        break;
-                    case -2:
-                        Debug.Log("資料庫錯誤!"); 
-                        GWarning.text = "資料庫錯誤!";
-                        break;
-                    case -3:
-                        Debug.Log("帳號不存在!"); 
-                        GWarning.text = "帳號不存在!";
-                        break;
-                    case -4:
-                        Debug.Log("該比賽已存在!"); 
-                        GWarning.text = "該比賽已存在!";
-                        break;
-                }
-            }
-            else{
-                Debug.Log("Success!");
-                yield return StartCoroutine(UpdateUserData());
-                GWarning.text = "新增成功!";
-                yield return StartCoroutine(DealView());
-                yield return new WaitForSeconds(1f);
-                MainCanvas.SetActive(true);
-                AddPlayerCanvas.SetActive(false);
-                AddGameCanvas.SetActive(false);
-
-            }
-        }
-        else{
-            Debug.Log("未連接到伺服器!");
-        }
     }
     public void CallAdd(){
         GameObject obj = EventSystem.current.currentSelectedGameObject;
@@ -524,19 +579,15 @@ public class GameSelect : MonoBehaviour
 
         yield return null;
     }
-    
-    public InputField PCorrName;
-    public InputField PCorrNum;
-    public Text PCWarning;
-    public IEnumerator CorrectPlayer(int PlayerNumber, string PlayerName, int PlayerID){
+    public IEnumerator CorrectPlayer(int PlayerNumber, string PlayerName, int PlayerID, int PlayerPos){
         WWWForm form = new WWWForm();
-        form.AddField("account", UserName);
         form.AddField("UserID", UserID);
         form.AddField("PlayerID", PlayerID);
         form.AddField("PlayerNumber", PlayerNumber);
         form.AddField("PlayerName", PlayerName);
+        form.AddField("PlayerPos", PlayerPos);
 
-        UnityWebRequest www = UnityWebRequest.Post("https://volley.csie.ntnu.edu.tw/CorrectPlayer", form);
+        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/CorrectPlayer", form);
         yield return www.SendWebRequest();
 
         Return result = new Return();
@@ -567,8 +618,8 @@ public class GameSelect : MonoBehaviour
                         PCWarning.text = "該背號已被使用!";
                         break;
                     case -6:
-                        Debug.Log("修該球員的資料不存在!");
-                        PCWarning.text = "修該球員的資料不存在!";
+                        Debug.Log("修改球員的資料不存在!");
+                        PCWarning.text = "修改球員的資料不存在!";
                         break;
                 }
             }
