@@ -29,7 +29,8 @@ create table GameInfo(
     TeamL int,
     TeamR int,
     GameDate Date,
-    GameName varchar(30)
+    GameName varchar(30), 
+    SetInfo bool
 )engine = InnoDB default charset=utf8mb4 collate=utf8mb4_bin;
 
 create table SetWinner(

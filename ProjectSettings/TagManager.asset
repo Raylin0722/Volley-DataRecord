@@ -21,6 +21,9 @@ TagManager:
   - AssignPlayer
   - LeftPoint
   - RightPoint
+  - AddTeam
+  - AddOtherPlayer
+  - AddOther
   layers:
   - Default
   - TransparentFX

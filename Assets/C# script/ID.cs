@@ -6,4 +6,5 @@ public class ID : MonoBehaviour
 {
     //此腳本用於GameSelect 的 Prefabs 儲存ID用
     public int ObjID;
+    public int TeamID;
 }

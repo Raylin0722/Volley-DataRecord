@@ -21,6 +21,7 @@ public class Login : MonoBehaviour
         public string UserName;
         public int UserID;
         public int TeamID;
+        public string TeamName;
         public int numOfGame;
         public int numOfPlayer;
         public string ec;
@@ -64,6 +65,7 @@ public class Login : MonoBehaviour
                 UserData.Instance.TeamID = result.TeamID;
                 UserData.Instance.numOfGame = result.numOfGame;
                 UserData.Instance.numOfPlayer = result.numOfPlayer;
+                UserData.Instance.UserTeamName = result.TeamName;
             }
         }
         else{
@@ -100,7 +102,7 @@ public class Login : MonoBehaviour
                 break;
             case -6:
                 Debug.Log(result.ec);
-                WarnMessage.text = "資料庫錯誤(users)!";
+                WarnMessage.text = "帳號密碼錯誤!";
                 break;
             case -7:
                 Debug.Log("連線錯誤!");
@@ -138,5 +140,15 @@ public class Login : MonoBehaviour
         SceneManager.LoadScene("StartMenu");
         
     }
-
+    public void Test(){
+        StartCoroutine(LoadSceneAsync("MainScene"));
+    }
+    IEnumerator LoadSceneAsync(string sceneName)
+{
+    AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+    while (!asyncLoad.isDone)
+    {
+        yield return null;
+    }
+}
 }
