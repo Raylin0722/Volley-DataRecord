@@ -95,7 +95,7 @@ public class dealDB : MonoBehaviour
         //GameID = UserData.Instance.GameID;
         UserID = 1;
         GameID = 1;
-        CallinitDB();
+        //CallinitDB();
     }
 
 

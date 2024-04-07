@@ -4763,7 +4763,7 @@ GameObject:
   - component: {fileID: 895018771}
   - component: {fileID: 895018773}
   - component: {fileID: 895018775}
-  - component: {fileID: 895018776}
+  - component: {fileID: 895018777}
   m_Layer: 5
   m_Name: MainCanvas
   m_TagString: Untagged
@@ -4927,7 +4927,7 @@ MonoBehaviour:
   serverData: {fileID: 386398051}
   leftServeTag: {fileID: 295465790}
   rightServeTag: {fileID: 732978794}
---- !u!114 &895018776
+--- !u!114 &895018777
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4936,30 +4936,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 895018766}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cef8f62d4cd03484aa9792365b74b080, type: 3}
+  m_Script: {fileID: 11500000, guid: 5fa233289da0d454f829913abec205a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UserName: 
-  UserID: 0
-  TeamID: 0
-  numOfGame: 0
-  numOfPlayer: 0
-  GameID: 0
-  GameName: 
-  leftTeamNum: 0
-  rightTeamNum: 0
-  UserPlayerID: 
-  UserPlayerName: []
-  UserPlayerNumber: 
-  UserPlayerPlayPos: 
-  EnemyPlayerID: 
-  EnemyPlayerName: []
-  EnemyPlayerNumber: 
-  EnemyPlayerPlayPos: 
-  UserTeamName: 
-  EnemyTeamName: 
-  whoServe: 0
-  leftRight: 0
 --- !u!4 &904731652 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1818683654263121360, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
@@ -5224,7 +5203,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.0010098219, y: 0.005493164}
+  m_AnchoredPosition: {x: 0.0010098219, y: 0.0009765625}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &908573765
