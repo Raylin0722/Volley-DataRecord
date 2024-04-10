@@ -346,7 +346,7 @@ def UpdateUserData():
         "GameServe": None, "TeamL": None, "TeamR": None,
         "OtherTeamID": None, "OtherTeamName":None, 
         "OtherPlayerID": None, "OtherPlayerName" : None, "OtherPlayerNumber" : None, "OtherPlayerPos": None, "OtherPlayerTeamID": None,
-        "ec": None
+        "GameAlreadySet": None, "GameAlreadyFinish": None, "ec": None
     }
     
     if account == None or UserID == None: # 0 成功 -1 參數錯誤 -2 資料庫錯誤 -3 帳號不存在
@@ -360,7 +360,7 @@ def UpdateUserData():
     UserPlayerID = []; UserPlayerName = []; UserPlayerNumber = []; UserPlayerPos = []
     UserGameID = []; UserGameDate = []; UserGameName = []; GameServe = []; TeamL = []; TeamR = []
     OtherPlayerID = []; OtherPlayerName = []; OtherPlayerNumber = []; OtherPlayerPos = []; OtherPlayerTeamID = []
-    OtherTeamID = []; OtherTeamName = []
+    OtherTeamID = []; OtherTeamName = []; GameAlreadySet = []; GameAlreadyFinish = []
     
     if len(result) == 1:
         try:
@@ -380,6 +380,8 @@ def UpdateUserData():
                 TeamR.append(i[4])
                 UserGameDate.append(i[5])
                 UserGameName.append(i[6])
+                GameAlreadySet.append(i[7])
+                GameAlreadyFinish.append(i[8])
             
             cur.execute("select * from Player where UserID=%s and TeamID!=%s order by TeamID, PNum;", (UserID, UserTeamID))
             OtherPlayer = cur.fetchall()
@@ -405,6 +407,8 @@ def UpdateUserData():
             resultReturn['TeamR'] = TeamR
             resultReturn['UserGameDate'] = UserGameDate
             resultReturn['UserGameName'] = UserGameName
+            resultReturn['GameAlreadySet'] = GameAlreadySet
+            resultReturn['GameAlreadyFinish'] = GameAlreadyFinish
             resultReturn["OtherPlayerID"] = OtherPlayerID
             resultReturn['OtherPlayerName'] = OtherPlayerName
             resultReturn['OtherPlayerNumber'] = OtherPlayerNumber

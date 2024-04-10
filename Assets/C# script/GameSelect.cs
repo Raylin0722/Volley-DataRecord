@@ -92,6 +92,8 @@ public class GameSelect : MonoBehaviour
     public List<int> OtherAssignPlayerNumber;
     public List<int> OtherAssignPlayerPos;
     public List<int> OtherAssignPlayerTeamID;
+    public List<bool> GameAlreadySet;
+    public List<bool> GameAlreadyFinish;
     public RectTransform OtherAddContent;
     public RectTransform OtherNotAddContent;
     public GameObject OtherAssignScrollView;
@@ -118,6 +120,8 @@ public class GameSelect : MonoBehaviour
         public List<string> OtherPlayerName;
         public List<int> OtherPlayerPos;
         public List<int> OtherPlayerTeamID;
+        public List<bool> GameAlreadySet;
+        public List<bool> GameAlreadyFinish;
         public string ec;
     }
     public class Return{
@@ -376,6 +380,9 @@ public class GameSelect : MonoBehaviour
             OtherPlayerName = new List<string>();
             OtherPlayerPos = new List<int>();
             OtherPlayerTeamID = new List<int>();
+            GameAlreadySet = new List<bool>();
+            GameAlreadyFinish = new List<bool>();
+
 
             ServerToUser userReturn = JsonUtility.FromJson<ServerToUser>(response);
             print(userReturn.UserPlayerID.Count);
@@ -441,54 +448,70 @@ public class GameSelect : MonoBehaviour
         
         GameObject obj = EventSystem.current.currentSelectedGameObject;
         int GameID = obj.GetComponent<ID>().ObjID;
+        int Set;
         for(int i = 0; i < UserGameID.Count; i++){
             if(UserGameID[i] == GameID){
                 UserData.Instance.GameName = UserGameName[i];
+                if(GameAlreadySet[i] && GameAlreadyFinish[i])
+                    Set = 1;
+                
+                else if(GameAlreadySet[i] && !GameAlreadyFinish[i])
+                    Set = 2;
+                else
+                    Set = 3;
                 break;
             }
         }
+        if(Set == 3){ // 未設定比賽
+            UserData.Instance.GameID = GameID;
+            UserTeamName.text = UserData.Instance.UserTeamName;
+            UserData.Instance.GameName = obj.GetComponentsInChildren<Text>()[1].text;
+            
+            NotAssignPlayerID = new List<int>();
+            NotAssignPlayerName = new List<string>();
+            NotAssignPlayerNumber = new List<int>();
+            NotAssignPlayerPos = new List<int>();
+            AssignPlayerID = new List<int>();
+            AssignPlayerName = new List<string>();
+            AssignPlayerNumber = new List<int>();
+            AssignPlayerPos = new List<int>();
 
-        UserData.Instance.GameID = GameID;
-        UserTeamName.text = UserData.Instance.UserTeamName;
-        UserData.Instance.GameName = obj.GetComponentsInChildren<Text>()[1].text;
+            OtherNotAssignPlayerID = new List<int>();
+            OtherNotAssignPlayerName = new List<string>();
+            OtherNotAssignPlayerNumber = new List<int>();
+            OtherNotAssignPlayerTeamID = new List<int>();
+            OtherAssignPlayerID = new List<int>();
+            OtherAssignPlayerName = new List<string>();
+            OtherAssignPlayerNumber = new List<int>();
+            OtherAssignPlayerTeamID = new List<int>();
+
+
+            for(int i = 0; i < UserPlayerID.Count; i++){
+                NotAssignPlayerID.Add(UserPlayerID[i]);
+                NotAssignPlayerName.Add(UserPlayerName[i]);
+                NotAssignPlayerNumber.Add(UserPlayerNumber[i]);
+                NotAssignPlayerPos.Add(UserPlayerPos[i]);
+            }
+
+            for(int i = 0; i < OtherNotAssignPlayerID.Count; i++){
+                OtherNotAssignPlayerID.Add(UserPlayerID[i]);
+                OtherNotAssignPlayerName.Add(UserPlayerName[i]);
+                OtherNotAssignPlayerNumber.Add(UserPlayerNumber[i]);
+                OtherNotAssignPlayerTeamID.Add(OtherPlayerTeamID[i]);
+                OtherNotAssignPlayerPos.Add(OtherPlayerPos[i]);
+            }
+
+            MainCanvas.SetActive(false);
+            AssignCanvas.SetActive(true);
+            StartCoroutine(ShowNotAssign());
+        }
+        else if(Set == 2){
+            print("Error!");
+        }
+        else{ // show data
+
+        }
         
-        NotAssignPlayerID = new List<int>();
-        NotAssignPlayerName = new List<string>();
-        NotAssignPlayerNumber = new List<int>();
-        NotAssignPlayerPos = new List<int>();
-        AssignPlayerID = new List<int>();
-        AssignPlayerName = new List<string>();
-        AssignPlayerNumber = new List<int>();
-        AssignPlayerPos = new List<int>();
-
-        OtherNotAssignPlayerID = new List<int>();
-        OtherNotAssignPlayerName = new List<string>();
-        OtherNotAssignPlayerNumber = new List<int>();
-        OtherNotAssignPlayerTeamID = new List<int>();
-        OtherAssignPlayerID = new List<int>();
-        OtherAssignPlayerName = new List<string>();
-        OtherAssignPlayerNumber = new List<int>();
-        OtherAssignPlayerTeamID = new List<int>();
-
-
-        for(int i = 0; i < UserPlayerID.Count; i++){
-            NotAssignPlayerID.Add(UserPlayerID[i]);
-            NotAssignPlayerName.Add(UserPlayerName[i]);
-            NotAssignPlayerNumber.Add(UserPlayerNumber[i]);
-            NotAssignPlayerPos.Add(UserPlayerPos[i]);
-        }
-
-        for(int i = 0; i < OtherNotAssignPlayerID.Count; i++){
-            OtherNotAssignPlayerID.Add(UserPlayerID[i]);
-            OtherNotAssignPlayerName.Add(UserPlayerName[i]);
-            OtherNotAssignPlayerNumber.Add(UserPlayerNumber[i]);
-            OtherNotAssignPlayerTeamID.Add(OtherPlayerTeamID[i]);
-            OtherNotAssignPlayerPos.Add(OtherPlayerPos[i]);
-        }
-
-        MainCanvas.SetActive(false);
-        AssignCanvas.SetActive(true);
-        StartCoroutine(ShowNotAssign());
 
     }
     public void GoToAssignOther(){
