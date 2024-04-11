@@ -448,7 +448,7 @@ public class GameSelect : MonoBehaviour
         
         GameObject obj = EventSystem.current.currentSelectedGameObject;
         int GameID = obj.GetComponent<ID>().ObjID;
-        int Set;
+        int Set = 0;
         for(int i = 0; i < UserGameID.Count; i++){
             if(UserGameID[i] == GameID){
                 UserData.Instance.GameName = UserGameName[i];

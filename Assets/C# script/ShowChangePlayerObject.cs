@@ -6,11 +6,14 @@ using UnityEngine.SceneManagement;
 
 public class ShowshowListPlayerObject : MonoBehaviour
 {
-    /*[SerializeField] GameObject List;
+    [SerializeField] GameObject List;
     [SerializeField] GameObject ShowSelfPlayerButtom;
     [SerializeField] GameObject ShowEnemyPlayerButtom;
     [SerializeField] GameObject[] AllofSelfPlayer;
     [SerializeField] GameObject[] AllofEnemyPlayer;
+    public GameObject GameView;
+    public GameObject deleteNewData;
+    public bool change = false;
     public int showList = 0;
     public int showSelfPlayer = 0;
     public int showEnemyPlayer = 0;
@@ -45,26 +48,24 @@ public class ShowshowListPlayerObject : MonoBehaviour
             showSelfPlayer = 0;
         showPlayer();
     }
-    void showPlayer() {
-        if(showSelfPlayer == 1) {
-            for(int i = 0;i < 12;i++) {
-                if(!string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[i,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.SelfPlayerInfo[i,1]))
-                    AllofSelfPlayer[i].SetActive(true);
+    public void showPlayer() {
+        if(!change){
+            GameView.SetActive(false);
+            deleteNewData.SetActive(false);
+            for(int i = 0; i < 6; i++) {
+                AllofSelfPlayer[i].SetActive(true);
+                AllofEnemyPlayer[i + 6].SetActive(true);
             }
+            change = true;
         }
-        if(showSelfPlayer == 0) {
-            for(int i = 0;i < 12;i++)
+        else{
+            GameView.SetActive(true);
+            deleteNewData.SetActive(true);
+            for(int i = 0; i < 6; i++) {
                 AllofSelfPlayer[i].SetActive(false);
-        }
-        if(showEnemyPlayer == 1) {
-            for(int i = 0;i < 12;i++) {
-                if(!string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[i,0]) && !string.IsNullOrWhiteSpace(SaveAndLoadName.EnemyPlayerInfo[i,1]))
-                    AllofEnemyPlayer[i].SetActive(true);
+                AllofEnemyPlayer[i + 6].SetActive(false);
             }
+            change = false;
         }
-        if(showEnemyPlayer == 0) {
-            for(int i = 0;i < 12;i++)
-                AllofEnemyPlayer[i].SetActive(false);
-        }
-    }*/
+    }
 }

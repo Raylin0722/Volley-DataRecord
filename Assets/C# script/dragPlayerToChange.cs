@@ -7,8 +7,11 @@ using TMPro;
 public class dragPlayerToChange : MonoBehaviour {
     private Vector3 initialPosition;
     Vector2 difference = Vector2.zero;
-    [SerializeField] public string PlayerName;
-    [SerializeField] public string PlayerNum;
+    [SerializeField] public string playerName;
+    [SerializeField] public string playerNum;
+    [SerializeField] public int playerPlayPos;
+    [SerializeField] public bool FirstPlayer;
+    [SerializeField] public int timeOfChange;
     [SerializeField] int typeofPlayer;
     public void OnMouseDown() {
         initialPosition = transform.position;
@@ -35,6 +38,9 @@ public class dragPlayerToChange : MonoBehaviour {
     [SerializeField] GameObject BPlayer5;
     [SerializeField] GameObject BPlayer6;
     public void checkPlayerToSwtich() {
+        if(FirstPlayer == false && timeOfChange == 0)
+            return;
+        
         if(typeofPlayer == 0) {
             Bounds boundsPlayer = allofPlayer.GetComponent<Renderer>().bounds;
             Bounds boundsWPlayer1 = WPlayer1.GetComponent<Renderer>().bounds;
@@ -43,18 +49,30 @@ public class dragPlayerToChange : MonoBehaviour {
             Bounds boundsWPlayer4 = WPlayer4.GetComponent<Renderer>().bounds;
             Bounds boundsWPlayer5 = WPlayer5.GetComponent<Renderer>().bounds;
             Bounds boundsWPlayer6 = WPlayer6.GetComponent<Renderer>().bounds;
-            if(boundsPlayer.Intersects(boundsWPlayer1))
+            if(boundsPlayer.Intersects(boundsWPlayer1) ){
                 SwitchPlayerInfo(WPlayer1);
-            else if(boundsPlayer.Intersects(boundsWPlayer2))
+                print("WP1");
+            }
+            else if(boundsPlayer.Intersects(boundsWPlayer2)){
                 SwitchPlayerInfo(WPlayer2);
-            else if(boundsPlayer.Intersects(boundsWPlayer3))
+                print("WP2");
+            }
+            else if(boundsPlayer.Intersects(boundsWPlayer3)){
                 SwitchPlayerInfo(WPlayer3);
-            else if(boundsPlayer.Intersects(boundsWPlayer4))
+                print("WP3");
+            }
+            else if(boundsPlayer.Intersects(boundsWPlayer4)){
                 SwitchPlayerInfo(WPlayer4);
-            else if(boundsPlayer.Intersects(boundsWPlayer5))
+                print("WP4");
+            }
+            else if(boundsPlayer.Intersects(boundsWPlayer5)){
                 SwitchPlayerInfo(WPlayer5);
-            else if(boundsPlayer.Intersects(boundsWPlayer6))
+                print("WP5");
+            }
+            else if(boundsPlayer.Intersects(boundsWPlayer6)){
                 SwitchPlayerInfo(WPlayer6);
+                print("WP6");
+            }
         }
         if(typeofPlayer == 1) {
             Bounds boundsPlayer = allofPlayer.GetComponent<Renderer>().bounds;
@@ -64,52 +82,38 @@ public class dragPlayerToChange : MonoBehaviour {
             Bounds boundsBPlayer4 = BPlayer4.GetComponent<Renderer>().bounds;
             Bounds boundsBPlayer5 = BPlayer5.GetComponent<Renderer>().bounds;
             Bounds boundsBPlayer6 = BPlayer6.GetComponent<Renderer>().bounds;
-            if(boundsPlayer.Intersects(boundsBPlayer1))
+            if(boundsPlayer.Intersects(boundsBPlayer1)){
                 SwitchPlayerInfo(BPlayer1);
-            else if(boundsPlayer.Intersects(boundsBPlayer2))
+                print("BP1");
+            }
+            else if(boundsPlayer.Intersects(boundsBPlayer2)){
                 SwitchPlayerInfo(BPlayer2);
-            else if(boundsPlayer.Intersects(boundsBPlayer3))
+                print("BP2");
+            }
+            else if(boundsPlayer.Intersects(boundsBPlayer3)){
                 SwitchPlayerInfo(BPlayer3);
-            else if(boundsPlayer.Intersects(boundsBPlayer4))
+                print("BP3");
+            }
+            else if(boundsPlayer.Intersects(boundsBPlayer4)){
                 SwitchPlayerInfo(BPlayer4);
-            else if(boundsPlayer.Intersects(boundsBPlayer5))
+                print("BP4");
+            }
+            else if(boundsPlayer.Intersects(boundsBPlayer5)){
                 SwitchPlayerInfo(BPlayer5);
-            else if(boundsPlayer.Intersects(boundsBPlayer6))
+                print("BP5");
+            }
+            else if(boundsPlayer.Intersects(boundsBPlayer6)){
                 SwitchPlayerInfo(BPlayer6);
+                print("BP6");
+            }
         }
     }
     public void SwitchPlayerInfo(GameObject playertoSwitch) {
         playertoSwitch.gameObject.GetComponentInChildren<TextMeshPro>().text = allofPlayer.gameObject.GetComponentInChildren<TextMeshPro>().text;
-        playertoSwitch.gameObject.GetComponent<dragPlayer>().playerNum = allofPlayer.gameObject.GetComponent<dragPlayerToChange>().PlayerNum;
-        playertoSwitch.gameObject.GetComponent<dragPlayer>().playerName = allofPlayer.gameObject.GetComponent<dragPlayerToChange>().PlayerName;
+        playertoSwitch.gameObject.GetComponent<dragPlayer>().playerNum = allofPlayer.gameObject.GetComponent<dragPlayerToChange>().playerNum;
+        playertoSwitch.gameObject.GetComponent<dragPlayer>().playerName = allofPlayer.gameObject.GetComponent<dragPlayerToChange>().playerName;
     }
 
-    void OnDisable(){
-        if(allofPlayer != null)
-            allofPlayer = null;
-        if(WPlayer1 != null)
-            WPlayer1 = null;
-        if(WPlayer2 != null)
-            WPlayer2 = null;
-        if(WPlayer3 != null)
-            WPlayer3 = null;
-        if(WPlayer4 != null)
-            WPlayer4 = null;
-        if(WPlayer5 != null)
-            WPlayer5 = null;
-        if(WPlayer6 != null)
-            WPlayer6 = null;
-        if(BPlayer1 != null)
-            BPlayer1 = null;
-        if(BPlayer2 != null)
-            BPlayer2 = null;
-        if(BPlayer3 != null)
-            BPlayer3 = null;
-        if(BPlayer4 != null)
-            BPlayer4 = null;
-        if(BPlayer5 != null)
-            BPlayer5 = null;
-        if(BPlayer6 != null)
-            BPlayer6 = null;
-    }
+    
+    
 }

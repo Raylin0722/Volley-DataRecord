@@ -32,9 +32,12 @@ public class dragPlayer : MonoBehaviour {
     bool isPress, isClick, isDoubleClick;
     public bool[] isSelect;
     public bool[] updata;
+    public bool[] flashing;
     ClickRecord DataScript;
     SystemData SystemScript;
-    public Color  orginColor;
+    public Color orginColor;
+    public Color flashColor;
+    float flashTime;
     void Start(){
         pressTime = 0f;
         LastClick = DateTime.Now.AddHours(-1);
@@ -53,7 +56,10 @@ public class dragPlayer : MonoBehaviour {
         isSelect[0] = false;
         updata = new bool[1];
         updata[0] = false;
-        
+        flashing = new bool[1];
+        flashing[0] = false;
+        flashColor = new Color(255, 255, 0, 255);
+        flashTime = 0f;
         
     }
     void Update(){
@@ -61,8 +67,10 @@ public class dragPlayer : MonoBehaviour {
             TextMeshPro textMeshPro = gameObject.transform.GetChild(0).gameObject.GetComponent<TextMeshPro>();
             if (textMeshPro != null)
                 textMeshPro.text = playerName;
-            updata[0] = true;
-            
+            updata[0] = true;   
+        }
+        if(flashing[0]){
+            playerFlash();
         }
         
     }
@@ -201,6 +209,9 @@ public class dragPlayer : MonoBehaviour {
             SystemScript.leftPlayers[0].SetActive(false);
             SystemScript.leftPlayers[4].SetActive(false);
             SystemScript.leftPlayers[5].SetActive(false);
+            SystemScript.leftPlayers[1].GetComponent<dragPlayer>().flashing[0] = false;
+            SystemScript.leftPlayers[2].GetComponent<dragPlayer>().flashing[0] = false;
+            SystemScript.leftPlayers[3].GetComponent<dragPlayer>().flashing[0] = false;
         }
         else{
             for(int i = 0; i < 6; i++){
@@ -209,6 +220,9 @@ public class dragPlayer : MonoBehaviour {
             SystemScript.rightPlayers[0].SetActive(false);
             SystemScript.rightPlayers[4].SetActive(false);
             SystemScript.rightPlayers[5].SetActive(false);
+            SystemScript.rightPlayers[1].GetComponent<dragPlayer>().flashing[0] = false;
+            SystemScript.rightPlayers[2].GetComponent<dragPlayer>().flashing[0] = false;
+            SystemScript.rightPlayers[3].GetComponent<dragPlayer>().flashing[0] = false;
         }
     }
     public void ShowRecord(){
@@ -222,7 +236,19 @@ public class dragPlayer : MonoBehaviour {
         print(DataScript.Behavior.Last().complete);
         print(DataScript.Behavior.Last().behavior);
     }
+    void playerFlash(){
 
+        flashTime += Time.deltaTime;
+        if (flashTime % 1 > 0.5f)
+        {
+            this.gameObject.GetComponent<SpriteRenderer>().color = flashColor;
+        }
+        else
+        {
+            this.gameObject.GetComponent<SpriteRenderer>().color = orginColor;
+        }
+        return;
+    }
 }
 
 

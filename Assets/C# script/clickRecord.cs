@@ -34,6 +34,7 @@ public class ClickRecord : MonoBehaviour
     [SerializeField] GameObject pin;
     [SerializeField] GameObject test;
     [SerializeField] GameObject insertBtn;
+    
 
 
     Vector3[] NetLocateXY; 
@@ -93,10 +94,10 @@ public class ClickRecord : MonoBehaviour
             CanBlockXY[i] = CanBlock[i].transform.position;
         }   
         test.GetComponent<RectTransform>().transform.position = NetLocateXY[2];
-        print(string.Format("({0}, {1})", NetLocateXY[2].x, NetLocateXY[2].y));
-        print(string.Format("({0}, {1})", NetLocateXY[3].x, NetLocateXY[3].y));
-        print(string.Format("({0}, {1})", NetLocateXY[4].x, NetLocateXY[4].y));
-        print(string.Format("({0}, {1})", NetLocateXY[5].x, NetLocateXY[5].y));
+        //print(string.Format("({0}, {1})", NetLocateXY[2].x, NetLocateXY[2].y));
+        //print(string.Format("({0}, {1})", NetLocateXY[3].x, NetLocateXY[3].y));
+        //print(string.Format("({0}, {1})", NetLocateXY[4].x, NetLocateXY[4].y));
+        //print(string.Format("({0}, {1})", NetLocateXY[5].x, NetLocateXY[5].y));
     }
     Vector3 GetWorldPositionFromUI(RectTransform uiElement)
     {
@@ -133,6 +134,12 @@ public class ClickRecord : MonoBehaviour
         // 球員
         if (hit.collider != null && Behavior.Count != 1)
         {
+            for(int i = 0; i < 6; i++){
+                SystemScript.leftPlayers[i].GetComponent<dragPlayer>().flashing[0] = false;
+                SystemScript.leftPlayers[i].GetComponent<SpriteRenderer>().color = SystemScript.leftPlayers[i].GetComponent<dragPlayer>().orginColor;
+                SystemScript.rightPlayers[i].GetComponent<dragPlayer>().flashing[0] = false;
+                SystemScript.rightPlayers[i].GetComponent<SpriteRenderer>().color = SystemScript.rightPlayers[i].GetComponent<dragPlayer>().orginColor;
+            }
             return;
         }
         
@@ -173,15 +180,38 @@ public class ClickRecord : MonoBehaviour
                     if(clickSide == target.players.Last().tag){ // 單擊一次 同側 接球
                         print("Catch");
                         target.behavior = 1;
+                        for(int i = 0; i < 6; i++){
+                            if(target.side == LEFT && SystemScript.leftPlayers[i].GetComponent<dragPlayer>().playerPlayPos == 2){
+                                SystemScript.leftPlayers[i].GetComponent<dragPlayer>().flashing[0] = true;
+                                break;
+                            }
+                            else if(target.side == RIGHT && SystemScript.rightPlayers[i].GetComponent<dragPlayer>().playerPlayPos == 2){
+                                SystemScript.rightPlayers[i].GetComponent<dragPlayer>().flashing[0] = true;
+                                break;
+                            }
+                        }
                     }
                     else{  // 單擊一次 異側 攻擊
                         print("Attack");
                         target.behavior = 2;
+                        if(target.side == LEFT){
+                        SystemScript.rightPlayers[1].GetComponent<dragPlayer>().flashing[0] = true;
+                        SystemScript.rightPlayers[2].GetComponent<dragPlayer>().flashing[0] = true;
+                        SystemScript.rightPlayers[3].GetComponent<dragPlayer>().flashing[0] = true;
+                        
+                        }
+                        else if(target.side == RIGHT){
+                            SystemScript.leftPlayers[1].GetComponent<dragPlayer>().flashing[0] = true;
+                            SystemScript.leftPlayers[2].GetComponent<dragPlayer>().flashing[0] = true;
+                            SystemScript.leftPlayers[3].GetComponent<dragPlayer>().flashing[0] = true;
+                            
+                        }
                     }     
                 }
                 else if(target.clickType == 2){ // DOUBLE CLICK
                     print("block");
                     target.behavior = 3;
+    
                 }
                 else if(target.clickType == 3){ // PRESS
 
