@@ -37,7 +37,7 @@ public class dragPlayer : MonoBehaviour {
     SystemData SystemScript;
     public Color orginColor;
     public Color flashColor;
-    float flashTime;
+    public float[] flashTime;
     void Start(){
         pressTime = 0f;
         LastClick = DateTime.Now.AddHours(-1);
@@ -59,7 +59,8 @@ public class dragPlayer : MonoBehaviour {
         flashing = new bool[1];
         flashing[0] = false;
         flashColor = new Color(255, 255, 0, 255);
-        flashTime = 0f;
+        flashTime = new float[1];
+        flashTime[0] = 0f;
         
     }
     void Update(){
@@ -78,7 +79,14 @@ public class dragPlayer : MonoBehaviour {
         if(DataScript.Behavior.Last().complete == false && DataScript.Behavior.Last().behavior == -1)
             return;
         if(!SystemScript.changePosition){
-            
+            for(int i = 0; i < 6; i++){
+                SystemScript.leftPlayers[i].GetComponent<dragPlayer>().flashing[0] = false;
+                SystemScript.leftPlayers[i].GetComponent<dragPlayer>().flashTime[0] = 0f;
+                SystemScript.leftPlayers[i].GetComponent<SpriteRenderer>().color = SystemScript.leftPlayers[i].GetComponent<dragPlayer>().orginColor;
+                SystemScript.rightPlayers[i].GetComponent<dragPlayer>().flashing[0] = false;
+                SystemScript.rightPlayers[i].GetComponent<dragPlayer>().flashTime[0] = 0f;
+                SystemScript.rightPlayers[i].GetComponent<SpriteRenderer>().color = SystemScript.rightPlayers[i].GetComponent<dragPlayer>().orginColor;
+            }
             CancelInvoke();
             StartClick = DateTime.Now;
             TimeSpan twoClickDuring = StartClick - LastClick;
@@ -140,7 +148,7 @@ public class dragPlayer : MonoBehaviour {
             print("Click! ");
             this.gameObject.GetComponent<SpriteRenderer>().color = new Color(255, 0, 0, 1);
             isSelect[0] = true;
-            hideOtherCick();
+            hideOtherClick();
             Record(CLICK);
         }
         else if(!isClick && isDoubleClick && !isPress){
@@ -193,7 +201,7 @@ public class dragPlayer : MonoBehaviour {
         this.gameObject.GetComponent<SpriteRenderer>().color = orginColor;
     }
 
-    void hideOtherCick(){
+    void hideOtherClick(){
         for(int i = 0; i < 6; i++){
             SystemScript.leftPlayers[i].SetActive(false);
             SystemScript.rightPlayers[i].SetActive(false);
@@ -238,8 +246,8 @@ public class dragPlayer : MonoBehaviour {
     }
     void playerFlash(){
 
-        flashTime += Time.deltaTime;
-        if (flashTime % 1 > 0.5f)
+        flashTime[0] += Time.deltaTime;
+        if (flashTime[0] % 1 > 0.5f)
         {
             this.gameObject.GetComponent<SpriteRenderer>().color = flashColor;
         }

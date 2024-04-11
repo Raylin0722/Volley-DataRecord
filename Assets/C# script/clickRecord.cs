@@ -57,6 +57,7 @@ public class ClickRecord : MonoBehaviour
         Serve.players = new List<GameObject>();
         Serve.clicks = new List<Vector2>();
         Serve.side = canvas.GetComponent<RefreshPoint>().whoServe;
+        //Serve.side = UserData.Instance.whoServe;
         print(canvas.GetComponent<RefreshPoint>().whoServe);
         print(Serve.side);
         if(Serve.side == LEFT){
@@ -126,6 +127,8 @@ public class ClickRecord : MonoBehaviour
             }   
         }
     }
+
+    int countL = 0, countR = 0;
     void GetClickTarget(){
 
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -134,12 +137,7 @@ public class ClickRecord : MonoBehaviour
         // 球員
         if (hit.collider != null && Behavior.Count != 1)
         {
-            for(int i = 0; i < 6; i++){
-                SystemScript.leftPlayers[i].GetComponent<dragPlayer>().flashing[0] = false;
-                SystemScript.leftPlayers[i].GetComponent<SpriteRenderer>().color = SystemScript.leftPlayers[i].GetComponent<dragPlayer>().orginColor;
-                SystemScript.rightPlayers[i].GetComponent<dragPlayer>().flashing[0] = false;
-                SystemScript.rightPlayers[i].GetComponent<SpriteRenderer>().color = SystemScript.rightPlayers[i].GetComponent<dragPlayer>().orginColor;
-            }
+            
             return;
         }
         
@@ -180,27 +178,44 @@ public class ClickRecord : MonoBehaviour
                     if(clickSide == target.players.Last().tag){ // 單擊一次 同側 接球
                         print("Catch");
                         target.behavior = 1;
+                        if(target.side == LEFT){
+                            countR = 0;
+                            countL++;
+                        }   
+                        else if(target.side == RIGHT){
+                            countL = 0;
+                            countR++;
+                        } 
                         for(int i = 0; i < 6; i++){
-                            if(target.side == LEFT && SystemScript.leftPlayers[i].GetComponent<dragPlayer>().playerPlayPos == 2){
+                            if(target.side == LEFT && SystemScript.leftPlayers[i].GetComponent<dragPlayer>().playerPlayPos == 2 && countL == 1){
                                 SystemScript.leftPlayers[i].GetComponent<dragPlayer>().flashing[0] = true;
-                                break;
+                                SystemScript.leftPlayers[i].GetComponent<dragPlayer>().flashTime[0] = 0f;
+                                print("A");
                             }
-                            else if(target.side == RIGHT && SystemScript.rightPlayers[i].GetComponent<dragPlayer>().playerPlayPos == 2){
+                           
+                            else if(target.side == RIGHT && SystemScript.rightPlayers[i].GetComponent<dragPlayer>().playerPlayPos == 2 && countR == 1 ){
                                 SystemScript.rightPlayers[i].GetComponent<dragPlayer>().flashing[0] = true;
-                                break;
+                                SystemScript.rightPlayers[i].GetComponent<dragPlayer>().flashTime[0] = 0f;
+                                print("A");
                             }
+                            
                         }
+                    
                     }
                     else{  // 單擊一次 異側 攻擊
                         print("Attack");
                         target.behavior = 2;
                         if(target.side == LEFT){
-                        SystemScript.rightPlayers[1].GetComponent<dragPlayer>().flashing[0] = true;
-                        SystemScript.rightPlayers[2].GetComponent<dragPlayer>().flashing[0] = true;
-                        SystemScript.rightPlayers[3].GetComponent<dragPlayer>().flashing[0] = true;
+                            countL++;
+                            countR = 0;
+                            SystemScript.rightPlayers[1].GetComponent<dragPlayer>().flashing[0] = true;
+                            SystemScript.rightPlayers[2].GetComponent<dragPlayer>().flashing[0] = true;
+                            SystemScript.rightPlayers[3].GetComponent<dragPlayer>().flashing[0] = true;
                         
                         }
                         else if(target.side == RIGHT){
+                            countR++;
+                            countL = 0;
                             SystemScript.leftPlayers[1].GetComponent<dragPlayer>().flashing[0] = true;
                             SystemScript.leftPlayers[2].GetComponent<dragPlayer>().flashing[0] = true;
                             SystemScript.leftPlayers[3].GetComponent<dragPlayer>().flashing[0] = true;
@@ -210,8 +225,9 @@ public class ClickRecord : MonoBehaviour
                 }
                 else if(target.clickType == 2){ // DOUBLE CLICK
                     print("block");
+                    countL = 0;
+                    countR = 0;
                     target.behavior = 3;
-    
                 }
                 else if(target.clickType == 3){ // PRESS
 
@@ -236,7 +252,7 @@ public class ClickRecord : MonoBehaviour
                 SystemScript.leftPlayers[i].SetActive(true);
                 SystemScript.rightPlayers[i].SetActive(true);
             }
-            if(Behavior.Last().players.Count == 1)
+            if(Behavior.Last().players.Count == 1 && Behavior.Last().behavior != 3)
                 Behavior.Last().players[0].SetActive(false);
         }
     }

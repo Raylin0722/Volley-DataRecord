@@ -17,7 +17,8 @@ public class RefreshPoint : MonoBehaviour
     bool lastRound = false, stop = false;
     void Start(){
         systemDataScript = serverData.GetComponent<SystemData>();
-        whoServe = UserData.Instance.whoServe; // 跟伺服器拿資料
+        //whoServe = UserData.Instance.whoServe; // 跟伺服器拿資料
+        whoServe = 1;
         startServe = whoServe; // 跟伺服器拿資料
         if(whoServe == 0){
             leftServeTag.SetActive(true);
