@@ -910,11 +910,13 @@ def GetPlayerCatchPos():
     
     formationSplit = formation.split(" ")
     serachStrL = ""
-    serachStrR = "L% L% L% L% L% L%"
+    serachStrR = "L% L% L% L% L% L% "
 
     for i in range(6):
-        serachStrL += formationSplit[i][1:]
-        serachStrR += formationSplit[i + 6][1:]
+        serachStrL += formationSplit[i] + " "
+        serachStrR += formationSplit[i + 6] + " "
+    serachStrL += "R% R% R% R% R% R%"
+    serachStrR = serachStrR[:-1]
 
     cnx = mysql.connector.connect(**config)
     cur = cnx.cursor(buffered=True)
@@ -926,11 +928,23 @@ def GetPlayerCatchPos():
     check1 = cur.fetchall()
 
     if len(result) == 1 and len(check1) == 1:
-        ()
+        try:
+            cur.execute("select * from GameData where formation like %s;", (serachStrL, ))
+            resultL = cur.fetchall()
+            cur.execute("select * from GameData where formation like %s;", (serachStrR, ))
+            resultR = cur.fetchall()
+        except Exception as ec:
+            resultReturn['situation'] = -2
+            resultReturn['ec'] = str(ec)
+        finally:
+            cur.close()
+            cnx.close()
     elif len(result) != 1:
-        ()
+        resultReturn['situation'] = -3
+        resultReturn['ec'] = "Invalid account!"
     elif len(check1) != 1:
-        ()
+        resultReturn['situation'] = -4
+        resultReturn['ec'] = "GameInfo error!"
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)   

@@ -95,7 +95,6 @@ public class dealDB : MonoBehaviour
         //GameID = UserData.Instance.GameID;
         UserID = 1;
         GameID = 1;
-        //CallinitDB();
     }
 
 
@@ -226,6 +225,12 @@ public class dealDB : MonoBehaviour
     }
 
     public IEnumerator GetPlayerCatchPos(){
+        string sendFormation = "", sendL = "", sendR = "";
+        for(int i = 0; i < 6; i++){
+            sendL += ("L" + SystemScript.leftPlayers[i].GetComponent<dragPlayer>().playerNum + " ");
+            sendR += ("L" + SystemScript.rightPlayers[i].GetComponent<dragPlayer>().playerNum + " ");
+        }
+        sendFormation = sendL + sendR;
         yield return null;
     }
 
