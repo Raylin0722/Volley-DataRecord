@@ -12,9 +12,14 @@ public class RefreshPoint : MonoBehaviour
     [SerializeField] GameObject serverData;
     [SerializeField] GameObject leftServeTag;
     [SerializeField] GameObject rightServeTag;
+    Vector2[,] leftPos = {{new Vector2(1, 2)}, {new Vector2(3, 4)} };
+    Vector2[,] rightPos = {{new Vector2(1, 2)}, {new Vector2(3, 4)} };
+    
     private SystemData systemDataScript;
 
     bool lastRound = false, stop = false;
+    
+    
     void Start(){
         systemDataScript = serverData.GetComponent<SystemData>();
         //whoServe = UserData.Instance.whoServe; // 跟伺服器拿資料
@@ -104,32 +109,32 @@ public class RefreshPoint : MonoBehaviour
     }
     public void rotate(){ // 輪轉
         string tmpName, tmpNum;
-        Vector2 tmpNamePos;
+        int tmpPos;
         if(reClick == LEFT && reWhoServe == RIGHT){
             tmpName = systemDataScript.leftPlayers[0].GetComponent<dragPlayer>().playerName;
             tmpNum = systemDataScript.leftPlayers[0].GetComponent<dragPlayer>().playerNum;
-            //tmpNamePos = systemDataScript.leftPLayersPos[0];
+            tmpPos = systemDataScript.leftPlayers[0].GetComponent<dragPlayer>().playerPlayPos;
             for(int i = 0; i < 5; i++){
                 systemDataScript.leftPlayers[i].GetComponent<dragPlayer>().playerName = systemDataScript.leftPlayers[i + 1].GetComponent<dragPlayer>().playerName;
                 systemDataScript.leftPlayers[i].GetComponent<dragPlayer>().playerNum = systemDataScript.leftPlayers[i + 1].GetComponent<dragPlayer>().playerNum;
-                //systemDataScript.leftPLayersPos[i] = systemDataScript.leftPLayersPos[i + 1];
+                systemDataScript.leftPlayers[i].GetComponent<dragPlayer>().playerPlayPos = systemDataScript.leftPlayers[i + 1].GetComponent<dragPlayer>().playerPlayPos;
             }
             systemDataScript.leftPlayers[5].GetComponent<dragPlayer>().playerName = tmpName;
             systemDataScript.leftPlayers[5].GetComponent<dragPlayer>().playerNum = tmpNum;
-            //systemDataScript.leftPLayersPos[5] = tmpNamePos;
+            systemDataScript.leftPlayers[5].GetComponent<dragPlayer>().playerPlayPos = tmpPos;
         }
         else if(reClick == RIGHT && reWhoServe == LEFT){
             tmpName = systemDataScript.rightPlayers[0].GetComponent<dragPlayer>().playerName;
             tmpNum = systemDataScript.rightPlayers[0].GetComponent<dragPlayer>().playerNum;
-            //tmpNamePos = systemDataScript.rightPlayersPos[0];
+            tmpPos = systemDataScript.rightPlayers[0].GetComponent<dragPlayer>().playerPlayPos;
             for(int i = 0; i < 5; i++){
                 systemDataScript.rightPlayers[i].GetComponent<dragPlayer>().playerName = systemDataScript.rightPlayers[i + 1].GetComponent<dragPlayer>().playerName;
                 systemDataScript.rightPlayers[i].GetComponent<dragPlayer>().playerNum = systemDataScript.rightPlayers[i + 1].GetComponent<dragPlayer>().playerNum;
-                //systemDataScript.rightPlayersPos[i] = systemDataScript.rightPlayersPos[i + 1];
+                systemDataScript.rightPlayers[i].GetComponent<dragPlayer>().playerPlayPos = systemDataScript.rightPlayers[i + 1].GetComponent<dragPlayer>().playerPlayPos;
             }
             systemDataScript.rightPlayers[5].GetComponent<dragPlayer>().playerName = tmpName;
             systemDataScript.rightPlayers[5].GetComponent<dragPlayer>().playerNum = tmpNum;
-            //systemDataScript.rightPlayersPos[5] = tmpPos;
+            systemDataScript.rightPlayers[5].GetComponent<dragPlayer>().playerPlayPos = tmpPos;
         }
         for(int i = 0; i < 6; i++){
             systemDataScript.leftPlayers[i].GetComponent<dragPlayer>().updata[0] = false;
@@ -222,4 +227,26 @@ public class RefreshPoint : MonoBehaviour
 
 
     }     
+
+    void setFormation(){
+        int SetterPos = 0;
+        if(whoServe == LEFT){ // 左方發球 左方正常 右方接球陣
+
+            for(int i = 0; i < 6; i++){
+                if(systemDataScript.leftPlayers[i].GetComponent<dragPlayer>().playerPlayPos == 2){
+                    SetterPos = i;
+                    break;
+                }
+            }
+        }
+        else{ // 右方發球 左方接球陣 右方正常
+            for(int i = 0; i < 6; i++){
+                if(systemDataScript.rightPlayers[i].GetComponent<dragPlayer>().playerPlayPos == 2){
+                    SetterPos = i;
+                    break;
+                }
+            }
+        }
+    }
+
 }

@@ -1890,6 +1890,7 @@ MonoBehaviour:
   leftRight: 0
   leftTeamNum: 0
   rightTeamNum: 0
+  changePlayer: 0
 --- !u!1 &400171618
 GameObject:
   m_ObjectHideFlags: 0
@@ -1973,13 +1974,25 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: ShowshowListPlayerObject, Assembly-CSharp
-        m_MethodName: showPlayer
+      - m_Target: {fileID: 386398054}
+        m_TargetAssemblyTypeName: SystemData, Assembly-CSharp
+        m_MethodName: CplayerPos
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 979111765}
+        m_TargetAssemblyTypeName: SystemData, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -5194,7 +5207,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.0010098219, y: 0.004272461}
+  m_AnchoredPosition: {x: 0.0010098219, y: 0.0010986328}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &908573765

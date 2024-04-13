@@ -62,6 +62,8 @@ public class dragPlayer : MonoBehaviour {
         flashTime = new float[1];
         flashTime[0] = 0f;
         
+        print(this.gameObject);
+        print(this.transform.position);
     }
     void Update(){
         if(!updata[0]){

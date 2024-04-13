@@ -80,7 +80,6 @@ public class ClickRecord : MonoBehaviour
         ServePos[0] = new Vector2(317, 580);
         ServePos[1] = new Vector2(328, 583);
 
-
     }
     void Start()
     {

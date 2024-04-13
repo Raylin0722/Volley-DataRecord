@@ -884,6 +884,53 @@ def SetGameInfo():
         
     return resultReturn
     
+@app.route("/GetPlayerCatchPos", methods=['GET', 'POST'])
+def GetPlayerCatchPos():
+    UserID = request.form.get("UserID")
+    GameID = request.form.get("GameID")
+    formation = request.form.get("formation")
+
+    resultReturn = {"success" : False, "situation": -1, "ec" : None, 
+                    "PL1X" : None, "PL1Y" : None, 
+                    "PL2X" : None, "PL2Y" : None, 
+                    "PL3X" : None, "PL3Y" : None, 
+                    "PL4X" : None, "PL4Y" : None, 
+                    "PL5X" : None, "PL5Y" : None, 
+                    "PL6X" : None, "PL6Y" : None,
+                    "PR1X" : None, "PR1Y" : None, 
+                    "PR2X" : None, "PR2Y" : None, 
+                    "PR3X" : None, "PR3Y" : None, 
+                    "PR4X" : None, "PR4Y" : None, 
+                    "PR5X" : None, "PR5Y" : None, 
+                    "PR6X" : None, "PR6Y" : None 
+                   }
+    if UserID == None or GameID == None or formation == None:
+        resultReturn["ec"] = "args error!"
+        return resultReturn
+    
+    formationSplit = formation.split(" ")
+    serachStrL = ""
+    serachStrR = "L% L% L% L% L% L%"
+
+    for i in range(6):
+        serachStrL += formationSplit[i][1:]
+        serachStrR += formationSplit[i + 6][1:]
+
+    cnx = mysql.connector.connect(**config)
+    cur = cnx.cursor(buffered=True)
+
+    cur.execute("select * from users where UserID=%s;", (UserID, ))
+    result = cur.fetchall()
+    
+    cur.execute("select * from GameInfo where UserID=%s and GameID=%s;", (UserID, GameID))
+    check1 = cur.fetchall()
+
+    if len(result) == 1 and len(check1) == 1:
+        ()
+    elif len(result) != 1:
+        ()
+    elif len(check1) != 1:
+        ()
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)   

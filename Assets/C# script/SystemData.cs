@@ -28,6 +28,7 @@ public class SystemData : MonoBehaviour
     public bool changePosition; //更換位子變數判斷
     public int leftRight;
     public int leftTeamNum, rightTeamNum;
+    public bool changePlayer;
 
     void Start(){
         score = new int[2];
@@ -43,6 +44,7 @@ public class SystemData : MonoBehaviour
         leftPlayersPos = new Vector2[6];
         rightPlayersPos = new Vector2[6];
         changePosition = false;
+        changePlayer = false;
         if(leftRight == 0){ // 使用者 left 0 right 1
             leftTeamName.text = UserData.Instance.UserTeamName;
             rightTeamName.text = UserData.Instance.EnemyTeamName;
@@ -97,6 +99,13 @@ public class SystemData : MonoBehaviour
             changePosition = true;
         else
             changePosition = false;
+    }
+
+    public void CplayerPos(){
+        if(!changePlayer)
+            changePlayer = true;
+        else
+            changePlayer = false;
     }
 
 }

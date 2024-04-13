@@ -220,7 +220,15 @@ public class dealDB : MonoBehaviour
         saveData.Clear();
     }
 
-   
+    public void CallGetPlayerCatchPos(){
+        
+        return;     
+    }
+
+    public IEnumerator GetPlayerCatchPos(){
+        yield return null;
+    }
+
 }
 
 
