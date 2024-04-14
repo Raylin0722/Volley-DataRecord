@@ -888,6 +888,8 @@ def SetGameInfo():
 def GetPlayerCatchPos():
     UserID = request.form.get("UserID")
     GameID = request.form.get("GameID")
+    TeamL = request.form.get("TeamL")
+    TeamR = request.form.get("TeamR")
     formation = request.form.get("formation")
 
     resultReturn = {"success" : False, "situation": -1, "ec" : None, 
@@ -902,21 +904,27 @@ def GetPlayerCatchPos():
                     "PR3X" : None, "PR3Y" : None, 
                     "PR4X" : None, "PR4Y" : None, 
                     "PR5X" : None, "PR5Y" : None, 
-                    "PR6X" : None, "PR6Y" : None 
+                    "PR6X" : None, "PR6Y" : None,
+                    "COUNTL1" : None, "COUNTR1" : None,
+                    "COUNTL2" : None, "COUNTR2" : None,
+                    "COUNTL3" : None, "COUNTR3" : None,
+                    "COUNTL4" : None, "COUNTR4" : None,
+                    "COUNTL5" : None, "COUNTR5" : None,
+                    "COUNTL6" : None, "COUNTR6" : None
                    }
-    if UserID == None or GameID == None or formation == None:
-        resultReturn["ec"] = "args error!"
+    if UserID == None or GameID == None or formation == None or TeamL == None or TeamR == None:
+        resultReturn["ec"] = "args error!" + "".format() 
         return resultReturn
     
     formationSplit = formation.split(" ")
-    serachStrL = ""
-    serachStrR = "L% L% L% L% L% L% "
+    searchStrL = ""
+    searchStrR = "L% L% L% L% L% L% "
 
     for i in range(6):
-        serachStrL += formationSplit[i] + " "
-        serachStrR += formationSplit[i + 6] + " "
-    serachStrL += "R% R% R% R% R% R%"
-    serachStrR = serachStrR[:-1]
+        searchStrL += formationSplit[i] + " "
+        searchStrR += formationSplit[i + 6] + " "
+    searchStrL += "R% R% R% R% R% R%"
+    
 
     cnx = mysql.connector.connect(**config)
     cur = cnx.cursor(buffered=True)
@@ -929,9 +937,9 @@ def GetPlayerCatchPos():
 
     if len(result) == 1 and len(check1) == 1:
         try:
-            cur.execute("select * from GameData where formation like %s;", (serachStrL, ))
+            cur.execute("select * from GameData where UserID=%s and formation like %s and side=0 and TeamID=%s;", (UserID, searchStrL, TeamL))
             resultL = cur.fetchall()
-            cur.execute("select * from GameData where formation like %s;", (serachStrR, ))
+            cur.execute("select * from GameData where UserID=%s and formation like %s and side=1 and TeamID=%s;", (UserID, searchStrR, TeamR))
             resultR = cur.fetchall()
         except Exception as ec:
             resultReturn['situation'] = -2
@@ -945,6 +953,59 @@ def GetPlayerCatchPos():
     elif len(check1) != 1:
         resultReturn['situation'] = -4
         resultReturn['ec'] = "GameInfo error!"
+    try:
+        numL = []; numR = []
+        for i in range(6):
+            numL.append(formationSplit[i][1:])
+            numR.append(formationSplit[i + 6][1:])
+
+        leftOut = {str(numL[0]) : [0, 0, 0], str(numL[1]) : [0, 0, 0], str(numL[2]) : [0, 0, 0],
+                str(numL[3]) : [0, 0, 0], str(numL[4]) : [0, 0, 0], str(numL[5]) : [0, 0, 0]}
+        rightOut = {str(numR[0]) : [0, 0, 0], str(numR[1]) : [0, 0, 0], str(numR[2]) : [0, 0, 0],
+                    str(numR[3]) : [0, 0, 0], str(numR[4]) : [0, 0, 0], str(numR[5]) : [0, 0, 0]}
+
+        for data in resultL:
+            if data[14] == 3:
+                continue
+            leftOut[str(data[6])][0] += data[10]
+            leftOut[str(data[6])][1] += data[11]
+            leftOut[str(data[6])][2] += 1
+        for data in resultR:
+            if data[14] == 3:
+                continue
+            rightOut[str(data[6])][0] += data[10]
+            rightOut[str(data[6])][1] += data[11]
+            rightOut[str(data[6])][2] += 1
+        
+        for i in range(6):
+            if(leftOut[str(numL[i])][2] < 10):
+                resultReturn["PL"+str(i+1)+"X"] = -1
+                resultReturn["PL"+str(i+1)+"Y"] = -1
+                resultReturn["COUNTL"+str(i+1)] = leftOut[str(numL[i])][2]
+            else:
+                resultReturn["PL"+str(i+1)+"X"] = int(leftOut[str(numL[i])][0] / leftOut[str(numL[i])][2])
+                resultReturn["PL"+str(i+1)+"Y"] = int(leftOut[str(numL[i])][1] / leftOut[str(numL[i])][2])
+
+            
+            if(rightOut[str(numR[i])][2] < 10):
+                resultReturn["PR"+str(i+1)+"X"] = -1
+                resultReturn["PR"+str(i+1)+"Y"] = -1
+                resultReturn["COUNTR"+str(i+1)] = rightOut[str(numR[i])][2]
+            else:
+                resultReturn["PR"+str(i+1)+ "X"] = int(rightOut[str(numR[i])][0] / rightOut[str(numR[i])][2])
+                resultReturn["PR"+str(i+1)+ "Y"] = int(rightOut[str(numR[i])][1] / rightOut[str(numR[i])][2])
+        resultReturn['success'] = True
+        resultReturn['situation'] = 0
+    except Exception as ec:
+        resultReturn['ec'] = str(ec)
+        resultReturn['situation'] = -5
+
+    return resultReturn
+                
+            
+    
+
+
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)   

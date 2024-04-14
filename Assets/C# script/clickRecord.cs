@@ -158,7 +158,7 @@ public class ClickRecord : MonoBehaviour
             string leftFormation = "", rightFormation = "";
             for(int i = 0; i < 6; i++){
                 leftFormation += ("L" + SystemScript.leftPlayers[i].GetComponent<dragPlayer>().playerNum + " ");
-                rightFormation += ("L" + SystemScript.rightPlayers[i].GetComponent<dragPlayer>().playerNum + " ");
+                rightFormation += ("R" + SystemScript.rightPlayers[i].GetComponent<dragPlayer>().playerNum + " ");
             }
             target.formation = leftFormation + rightFormation;
             if(Behavior.Last().behavior == -1 && inOrout){ // 發球
