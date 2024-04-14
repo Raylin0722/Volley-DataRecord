@@ -293,17 +293,27 @@ public class dealDB : MonoBehaviour
                 SystemScript.rightGamePos[4] = new Vector3(result.PR5X, result.PR5Y, 0);
                 SystemScript.rightGamePos[5] = new Vector3(result.PR6X, result.PR6Y, 0);   
                 for(int i = 0; i < 6; i++){
-                    Vector3 LTMP, RTmp;
+                    print(string.Format("PL{0} X: {1} Y: {2}", i + 1, SystemScript.leftGamePos[i].x, SystemScript.leftGamePos[i].y));
+                    print(string.Format("PR{0} X: {1} Y: {2}", i + 1, SystemScript.rightGamePos[i].x, SystemScript.rightGamePos[i].y));
+                }
+                for(int i = 0; i < 6; i++){
+                    Vector3 LTmp = new Vector3(), RTmp = new Vector3();
                     Vector3[] NetXY = tmp.NetLocateXY;
-                    LTMP.x = (SystemScript.leftGamePos[i].x) * ((NetXY[3].x - NetXY[2].x) / 500) + (NetXY[2].x);
-                    LTMP.y = -((SystemScript.leftGamePos[i].y) * ((NetXY[2].y - NetXY[4].y) / 800) - (NetXY[2].y));
-                    LTMP.z = NetXY[2].z;
-                    RTmp.x = -((SystemScript.rightGamePos[i].x) * ((NetXY[3].x - NetXY[2].x) / 500) - (NetXY[5].x));
-                    RTmp.y = (SystemScript.rightGamePos[i].y) * ((NetXY[2].y - NetXY[4].y) / 800) + (NetXY[5].y);
-                    RTmp.z = NetXY[2].z;
+                    if(SystemScript.leftGamePos[i].x != -1 && SystemScript.leftGamePos[i].y != -1){
+                        LTmp.x = (SystemScript.leftGamePos[i].x) * ((NetXY[3].x - NetXY[2].x) / 500) + (NetXY[2].x);
+                        LTmp.y = -((SystemScript.leftGamePos[i].y) * ((NetXY[2].y - NetXY[4].y) / 800) - (NetXY[2].y));
+                        LTmp.z = NetXY[2].z;
+                        SystemScript.leftGamePos[i] = new Vector3(LTmp.x, LTmp.y, LTmp.z);
+                    }
+                    if(SystemScript.rightGamePos[i].x != -1 && SystemScript.rightGamePos[i].y != -1){
+                        RTmp.x = -((SystemScript.rightGamePos[i].x) * ((NetXY[3].x - NetXY[2].x) / 500) - (NetXY[5].x));
+                        RTmp.y = (SystemScript.rightGamePos[i].y) * ((NetXY[2].y - NetXY[4].y) / 800) + (NetXY[5].y);
+                        RTmp.z = NetXY[2].z;
+                        SystemScript.rightGamePos[i] = new Vector3(RTmp.x, RTmp.y, RTmp.z);
+                    }
 
-                    SystemScript.leftGamePos[i] = new Vector3(LTMP.x, LTMP.y, LTMP.z);
-                    SystemScript.rightGamePos[i] = new Vector3(RTmp.x, RTmp.y, RTmp.z);
+                    
+                    
                 }
             }
         }

@@ -344,6 +344,8 @@ public class GameSelect : MonoBehaviour
         }
         int PlayerID = CorrTarget.GetComponent<ID>().ObjID;
         int CorrTeamID = CorrTarget.GetComponent<ID>().TeamID;
+        print(PlayerID);
+        print(CorrTeamID);
         StartCoroutine(CorrectPlayer(PCorrNumIN, PCorrNameIn, PlayerID, PCorrPos.value, CorrTeamID));
     }
     public void CallUpdateUserData(){
@@ -639,7 +641,7 @@ public class GameSelect : MonoBehaviour
 
             GameTexts[0].text = UserGameDate[i];
             GameTexts[1].text = UserGameName[i];
-                        newGame.GetComponent<ID>().ObjID = UserGameID[i];
+            newGame.GetComponent<ID>().ObjID = UserGameID[i];
             newGame.GetComponent<Button>().onClick.AddListener(ClickGame);
             // 設定Prefab的位置
             RectTransform rectTransform = newGame.GetComponent<RectTransform>();
@@ -676,7 +678,7 @@ public class GameSelect : MonoBehaviour
             PlayerTexts[3].text = UserData.Instance.UserTeamName;
 
             newPlayer.GetComponent<ID>().ObjID = UserPlayerID[i];
-            newPlayer.GetComponent<ID>().ObjID = UserTeamID;
+            newPlayer.GetComponent<ID>().TeamID = UserTeamID;
             newPlayer.GetComponent<Button>().onClick.AddListener(ClickPlayer);
 
             // 設定Prefab的位置

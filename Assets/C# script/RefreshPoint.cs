@@ -152,10 +152,12 @@ public class RefreshPoint : MonoBehaviour
         }
         for(int i = 0; i < 6; i++){
             if(whoServe == LEFT){ // 左發球 右接球
-                systemDataScript.rightPlayers[i].transform.position = (systemDataScript.rightStartPos[rindex, i]);
+                systemDataScript.rightPlayers[i].transform.position = (systemDataScript.rightStartCatchPos[rindex, i]);
+                systemDataScript.leftPlayers[i].transform.position = (systemDataScript.leftStartServePos[i]);
             }
             else{
-                systemDataScript.leftPlayers[i].transform.position = (systemDataScript.leftStartPos[lindex, i]);
+                systemDataScript.leftPlayers[i].transform.position = (systemDataScript.leftStartCatchPos[lindex, i]);
+                systemDataScript.rightPlayers[i].transform.position = (systemDataScript.rightStartServePos[i]);
             }
         }
         reClick = -1;

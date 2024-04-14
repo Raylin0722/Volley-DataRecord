@@ -924,7 +924,7 @@ def GetPlayerCatchPos():
     for i in range(6):
         searchStrL += formationSplit[i] + " "
         searchStrR += formationSplit[i + 6] + " "
-    searchStrL += "R% R% R% R% R% R%"
+    searchStrL += "R% R% R% R% R% R% "
     
 
     cnx = mysql.connector.connect(**config)

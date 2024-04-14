@@ -114,6 +114,8 @@ public class dragPlayer : MonoBehaviour {
                 else
                     return;
             }
+            SystemScript.CformationTmp[0] = -1;
+            SystemScript.CformationTmp[1] = -1;
             updata[0] = false;
             return;
         }

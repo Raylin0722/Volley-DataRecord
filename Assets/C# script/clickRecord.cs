@@ -56,8 +56,8 @@ public class ClickRecord : MonoBehaviour
         DataBaseScript = database.GetComponent<dealDB>();
 
         ServePos = new Vector2[2];
-        ServePos[0] = new Vector2(317, 580);
-        ServePos[1] = new Vector2(328, 583);
+        ServePos[0] = new Vector2(317.7997f, 580.384f);
+        ServePos[1] = new Vector2(328.9776f, 584.1694f);
 
     }
     void Start()
@@ -173,6 +173,16 @@ public class ClickRecord : MonoBehaviour
                 changePlayerBtn.GetComponent<Button>().interactable = false;
                 changePosBtn.GetComponent<Button>().interactable = false;
                 showDataBtn.GetComponent<Button>().interactable = false;
+                for(int i = 0; i < 6; i++){
+                    if(SystemScript.leftGamePos[i].x != -1 && SystemScript.leftGamePos[i].y != -1){
+                        SystemScript.leftPlayers[i].transform.position = SystemScript.leftGamePos[i];
+                        print(String.Format("{0} {1} {2}", SystemScript.leftGamePos[i].x, SystemScript.leftGamePos[i].y, SystemScript.leftGamePos[i].z));
+                    }
+                    if(SystemScript.rightGamePos[i].x != -1 && SystemScript.rightGamePos[i].y != -1){
+                        SystemScript.rightPlayers[i].transform.position = SystemScript.rightGamePos[i];
+                        print(String.Format("{0} {1} {2}", SystemScript.rightGamePos[i].x, SystemScript.rightGamePos[i].y, SystemScript.rightGamePos[i].z));
+                    }
+                }
             }
             else if(inOrout){ //場內 紀錄
                 // 依照點擊類型 地板點擊次數 球員點擊次數判斷動作
@@ -192,13 +202,11 @@ public class ClickRecord : MonoBehaviour
                             if(target.side == LEFT && SystemScript.leftPlayers[i].GetComponent<dragPlayer>().playerPlayPos == 2 && countL == 1){
                                 SystemScript.leftPlayers[i].GetComponent<dragPlayer>().flashing[0] = true;
                                 SystemScript.leftPlayers[i].GetComponent<dragPlayer>().flashTime[0] = 0f;
-                                print("A");
                             }
                            
                             else if(target.side == RIGHT && SystemScript.rightPlayers[i].GetComponent<dragPlayer>().playerPlayPos == 2 && countR == 1 ){
                                 SystemScript.rightPlayers[i].GetComponent<dragPlayer>().flashing[0] = true;
                                 SystemScript.rightPlayers[i].GetComponent<dragPlayer>().flashTime[0] = 0f;
-                                print("A");
                             }
                             
                         }
