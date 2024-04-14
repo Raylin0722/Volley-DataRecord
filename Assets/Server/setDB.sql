@@ -4,7 +4,8 @@ use Volleyball;
 create table users(
 	UserID int primary key auto_increment,
     account varchar(50) ,
-    hash varchar(64) 
+    hash varchar(64),
+    TeamName varchar(64)
 ) engine = InnoDB default charset=utf8mb4 collate=utf8mb4_bin;	
 
 create table Team(
@@ -93,3 +94,4 @@ create table GameData(
     behavior int, 
     score int
 )engine = InnoDB default charset=utf8mb4 collate=utf8mb4_bin;
+

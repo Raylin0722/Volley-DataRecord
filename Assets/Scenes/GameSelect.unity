@@ -4180,6 +4180,8 @@ MonoBehaviour:
   OtherAssignPlayerNumber: 
   OtherAssignPlayerPos: 
   OtherAssignPlayerTeamID: 
+  GameAlreadySet: 
+  GameAlreadyFinish: 
   OtherAddContent: {fileID: 772347037}
   OtherNotAddContent: {fileID: 1572487693}
   OtherAssignScrollView: {fileID: 230069572}
@@ -5749,7 +5751,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &229636594
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10123,7 +10125,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.3232881}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -31.199, y: 0}
-  m_SizeDelta: {x: 42.8984, y: -510.57236}
+  m_SizeDelta: {x: 42.8984, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &400474444
 MonoBehaviour:
@@ -16864,7 +16866,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 139011467}
         m_TargetAssemblyTypeName: GameSelect, Assembly-CSharp
-        m_MethodName: CallDealView
+        m_MethodName: CallDealOtherView
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -20584,7 +20586,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &877690028
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21692,7 +21694,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.3232881}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -31.199, y: 0}
-  m_SizeDelta: {x: 42.8984, y: -510.57236}
+  m_SizeDelta: {x: 42.8984, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &905185138
 MonoBehaviour:
@@ -26374,7 +26376,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.3232881}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -31.199, y: 0.000061035156}
-  m_SizeDelta: {x: 42.8984, y: 0}
+  m_SizeDelta: {x: 42.8984, y: -510.57236}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1096333890
 MonoBehaviour:
@@ -27124,7 +27126,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.3232881}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -31.199, y: 0.000061035156}
-  m_SizeDelta: {x: 42.8984, y: 0}
+  m_SizeDelta: {x: 42.8984, y: -510.57236}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1120835599
 MonoBehaviour:
@@ -28673,7 +28675,7 @@ RectTransform:
   m_Father: {fileID: 1407581400}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -33954,7 +33956,7 @@ RectTransform:
   m_Father: {fileID: 1189265430}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -40087,7 +40089,7 @@ RectTransform:
   m_Father: {fileID: 137585120}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -41851,7 +41853,7 @@ RectTransform:
   m_Father: {fileID: 1633792658}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -50384,7 +50386,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 139011467}
         m_TargetAssemblyTypeName: GameSelect, Assembly-CSharp
-        m_MethodName: CallOCorrPlayer
+        m_MethodName: CallCorrPlayer
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -53554,7 +53556,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 139011467}
         m_TargetAssemblyTypeName: GameSelect, Assembly-CSharp
-        m_MethodName: Test
+        m_MethodName: CallDealView
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

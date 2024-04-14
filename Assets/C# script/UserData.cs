@@ -35,12 +35,12 @@ public class UserData : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
+        
         Instance = this;
         Instance.tag = "DontDestroy";
         DontDestroyOnLoad(gameObject);
-        Instance = this;
-        /*UserName = "Test";
+        /*Instance = this;
+        UserName = "Test";
         UserID = 1; 
         numOfGame = 1;
         numOfPlayer = 12;

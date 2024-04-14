@@ -28,17 +28,17 @@ public class ClickRecord : MonoBehaviour
     [SerializeField] GameObject canvas;
     [SerializeField] GameObject database;
     [SerializeField] GameObject system;
-    [SerializeField] GameObject[] CanBlock;
     [SerializeField] GameObject[] NetLocate;
     [SerializeField] GameObject selectBlock;
     [SerializeField] GameObject pin;
-    [SerializeField] GameObject test;
     [SerializeField] GameObject insertBtn;
+    [SerializeField] GameObject changePosBtn;
+    [SerializeField] GameObject changePlayerBtn;
+    [SerializeField] GameObject showDataBtn;
     
 
 
-    Vector3[] NetLocateXY; 
-    Vector3[] CanBlockXY;
+    public Vector3[] NetLocateXY; 
     public int[] touchCount;
     private bool isDrag;
     Vector3 startWorldPos, endWorldPos, startPos, endPos;
@@ -50,27 +50,6 @@ public class ClickRecord : MonoBehaviour
     void Awake(){
         SystemScript = system.GetComponent<SystemData>();
         Behavior = new List<ClickData>();
-        ClickData Serve = new ClickData();
-        Serve.behavior = -1;
-        Serve.complete = false;
-        Serve.clickType = -1;
-        Serve.players = new List<GameObject>();
-        Serve.clicks = new List<Vector2>();
-        Serve.side = canvas.GetComponent<RefreshPoint>().whoServe;
-        //Serve.side = UserData.Instance.whoServe;
-        print(canvas.GetComponent<RefreshPoint>().whoServe);
-        print(Serve.side);
-        if(Serve.side == LEFT){
-            Serve.players.Add(SystemScript.leftPlayers[0]);
-            SystemScript.leftPlayers[0].GetComponent<SpriteRenderer>().color = new Color(255, 0, 0, 255);
-        }
-        else{
-            Serve.players.Add(SystemScript.rightPlayers[0]);
-            SystemScript.rightPlayers[0].GetComponent<SpriteRenderer>().color = new Color(255, 0, 0, 255);
-        
-        }
-
-        Behavior.Add(Serve);
         selectBlock.SetActive(false);
         isDrag = false;
         touchCount = new int[2];
@@ -84,16 +63,35 @@ public class ClickRecord : MonoBehaviour
     void Start()
     {
         NetLocateXY = new Vector3[NetLocate.Length];
-        CanBlockXY = new Vector3[CanBlock.Length];
+       
         
         // 前2網 後4左上右上左下右下
         for(int i = 0; i < NetLocate.Length; i++){
             NetLocateXY[i] = NetLocate[i].transform.position;
         }
-        for(int i = 0; i < CanBlock.Length; i++){
-            CanBlockXY[i] = CanBlock[i].transform.position;
-        }   
-        test.GetComponent<RectTransform>().transform.position = NetLocateXY[2];
+        
+        ClickData Serve = new ClickData();
+        Serve.behavior = -1;
+        Serve.complete = false;
+        Serve.clickType = -1;
+        Serve.players = new List<GameObject>();
+        Serve.clicks = new List<Vector2>();
+        //Serve.side = canvas.GetComponent<RefreshPoint>().whoServe;
+        Serve.side = UserData.Instance.whoServe;
+        print(canvas.GetComponent<RefreshPoint>().whoServe);
+        print(Serve.side);
+        if(Serve.side == LEFT){
+            Serve.players.Add(SystemScript.leftPlayers[0]);
+            SystemScript.leftPlayers[0].GetComponent<SpriteRenderer>().color = new Color(255, 0, 0, 255);
+        }
+        else{
+            Serve.players.Add(SystemScript.rightPlayers[0]);
+            SystemScript.rightPlayers[0].GetComponent<SpriteRenderer>().color = new Color(255, 0, 0, 255);
+        
+        }
+
+        Behavior.Add(Serve);
+        
         //print(string.Format("({0}, {1})", NetLocateXY[2].x, NetLocateXY[2].y));
         //print(string.Format("({0}, {1})", NetLocateXY[3].x, NetLocateXY[3].y));
         //print(string.Format("({0}, {1})", NetLocateXY[4].x, NetLocateXY[4].y));
@@ -111,6 +109,9 @@ public class ClickRecord : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(SystemScript.changePlayer){
+            return;
+        }
         if(!SystemScript.changePosition){
             if(Input.GetMouseButtonDown(0)){
                 startWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -169,7 +170,9 @@ public class ClickRecord : MonoBehaviour
                 Behavior.RemoveAt(Behavior.Count - 1);
                 Behavior.Add(target);
                 Behavior.Last().players[0].GetComponent<SpriteRenderer>().color = Behavior.Last().players[0].GetComponent<dragPlayer>().orginColor;
-
+                changePlayerBtn.GetComponent<Button>().interactable = false;
+                changePosBtn.GetComponent<Button>().interactable = false;
+                showDataBtn.GetComponent<Button>().interactable = false;
             }
             else if(inOrout){ //場內 紀錄
                 // 依照點擊類型 地板點擊次數 球員點擊次數判斷動作
@@ -336,9 +339,16 @@ public class ClickRecord : MonoBehaviour
 
     public void refreshPlayer(){
         insertBtn.GetComponent<Button>().interactable = true;
+        changePosBtn.GetComponent<Button>().interactable = true;
+        changePlayerBtn.GetComponent<Button>().interactable = true;
+        showDataBtn.GetComponent<Button>().interactable = true;
         for(int i = 0; i < 6; i++){
             SystemScript.leftPlayers[i].SetActive(true);
             SystemScript.rightPlayers[i].SetActive(true);
+            SystemScript.leftPlayers[i].GetComponent<dragPlayer>().flashing[0] = false;
+            SystemScript.leftPlayers[i].GetComponent<dragPlayer>().flashTime[0] = 0f;
+            SystemScript.rightPlayers[i].GetComponent<dragPlayer>().flashing[0] = false;
+            SystemScript.rightPlayers[i].GetComponent<dragPlayer>().flashTime[0] = 0f;
             SystemScript.leftPlayers[i].GetComponent<SpriteRenderer>().color = SystemScript.leftPlayers[i].GetComponent<dragPlayer>().orginColor;
             SystemScript.rightPlayers[i].GetComponent<SpriteRenderer>().color = SystemScript.rightPlayers[i].GetComponent<dragPlayer>().orginColor;
         }
@@ -435,6 +445,9 @@ public class ClickRecord : MonoBehaviour
                 }
                 pin.SetActive(false);
                 Behavior.Add(Serve);
+                changePlayerBtn.GetComponent<Button>().interactable = true;
+                changePosBtn.GetComponent<Button>().interactable = true;
+                showDataBtn.GetComponent<Button>().interactable = true;
             }
             else{
                 Behavior.RemoveAt(Behavior.Count - 1);

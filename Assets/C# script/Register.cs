@@ -74,7 +74,7 @@ public class Register : MonoBehaviour
         form.AddField("account", accountField.text);
         form.AddField("password", hashPwd);
 
-        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/register", form);
+        UnityWebRequest www = UnityWebRequest.Post("https://volley.csie.ntnu.edu.tw/register", form);
         
         dataReturn result = new dataReturn();
 
@@ -179,7 +179,7 @@ public class Register : MonoBehaviour
         form.AddField("UserID", UserData.Instance.UserID);
         form.AddField("TeamName", TeamField.text);
 
-        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/SetTeam", form);
+        UnityWebRequest www = UnityWebRequest.Post("https://volley.csie.ntnu.edu.tw/SetTeam", form);
 
         TeamReturn result = new TeamReturn();
 
@@ -201,6 +201,7 @@ public class Register : MonoBehaviour
             case 0:
                 Debug.Log("成功!");
                 TeamWarnMessage.text = "成功!";
+                UserData.Instance.UserTeamName = TeamField.text;
                 SceneManager.LoadScene("GameSelect");
                 break;
             case -2:

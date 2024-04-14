@@ -38,6 +38,13 @@ public class dragPlayer : MonoBehaviour {
     public Color orginColor;
     public Color flashColor;
     public float[] flashTime;
+    
+    void Awake(){
+        if(this.gameObject.tag == "Right")
+            orginColor = this.gameObject.GetComponent<SpriteRenderer>().color;
+        else
+            orginColor = new Color(255, 255, 255, 255);
+    }
     void Start(){
         pressTime = 0f;
         LastClick = DateTime.Now.AddHours(-1);
@@ -46,10 +53,7 @@ public class dragPlayer : MonoBehaviour {
         isPress = false;
         isClick = false;
         isDoubleClick = false;
-        if(this.gameObject.tag == "Right")
-            orginColor = this.gameObject.GetComponent<SpriteRenderer>().color;
-        else
-            orginColor = new Color(255, 255, 255, 255);
+        
         DataScript = BeGameObject.GetComponent<ClickRecord>();
         SystemScript = system.GetComponent<SystemData>();
         isSelect = new bool[1];
@@ -78,6 +82,41 @@ public class dragPlayer : MonoBehaviour {
         
     }
     void OnMouseDown(){
+        if(SystemScript.changePlayer){
+            dragPlayerToChange changeTmp;
+            string tmpName = playerName, tmpNum = playerNum;
+            int tmpPos = playerPlayPos;
+            
+            if(SystemScript.CformationTmp[0] != -1){
+                int index = SystemScript.CformationTmp[1];
+                if(SystemScript.CformationTmp[0] == 0 && this.gameObject.tag == "Left"){
+                    changeTmp = SystemScript.changeLeftPlayers[index].GetComponent<dragPlayerToChange>();
+
+                    playerName = changeTmp.playerName;
+                    playerNum = changeTmp.playerNum;
+                    playerPlayPos = changeTmp.playerPlayPos;
+                    changeTmp.playerName = tmpName;
+                    changeTmp.playerNum = tmpNum;
+                    changeTmp.playerPlayPos = tmpPos;
+                    changeTmp.refresh[0] = false;
+                    
+                }
+                else if(SystemScript.CformationTmp[0] == 1 && this.gameObject.tag == "Right"){
+                    changeTmp = SystemScript.changeRightPlayers[index].GetComponent<dragPlayerToChange>();
+                    playerName = changeTmp.playerName;
+                    playerNum = changeTmp.playerNum;
+                    playerPlayPos = changeTmp.playerPlayPos;
+                    changeTmp.playerName = tmpName;
+                    changeTmp.playerNum = tmpNum;
+                    changeTmp.playerPlayPos = tmpPos;
+                    changeTmp.refresh[0] = false;
+                }
+                else
+                    return;
+            }
+            updata[0] = false;
+            return;
+        }
         if(DataScript.Behavior.Last().complete == false && DataScript.Behavior.Last().behavior == -1)
             return;
         if(!SystemScript.changePosition){
@@ -202,7 +241,6 @@ public class dragPlayer : MonoBehaviour {
     void colorBack(){
         this.gameObject.GetComponent<SpriteRenderer>().color = orginColor;
     }
-
     void hideOtherClick(){
         for(int i = 0; i < 6; i++){
             SystemScript.leftPlayers[i].SetActive(false);
@@ -250,13 +288,11 @@ public class dragPlayer : MonoBehaviour {
 
         flashTime[0] += Time.deltaTime;
         if (flashTime[0] % 1 > 0.5f)
-        {
             this.gameObject.GetComponent<SpriteRenderer>().color = flashColor;
-        }
+
         else
-        {
             this.gameObject.GetComponent<SpriteRenderer>().color = orginColor;
-        }
+
         return;
     }
 }

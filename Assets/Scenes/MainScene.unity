@@ -232,6 +232,10 @@ PrefabInstance:
       value: Left
       objectReference: {fileID: 0}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 386398051}
+    - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
       value: 
       objectReference: {fileID: 493849245}
@@ -390,7 +394,7 @@ PrefabInstance:
     - target: {fileID: 494475276491014076, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: BeGameObject
       value: 
-      objectReference: {fileID: 2044950599}
+      objectReference: {fileID: 386398051}
     - target: {fileID: 494475276491014076, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: block.Array.size
       value: 1
@@ -592,7 +596,7 @@ PrefabInstance:
     - target: {fileID: 494475276491014076, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: BeGameObject
       value: 
-      objectReference: {fileID: 2044950599}
+      objectReference: {fileID: 386398051}
     - target: {fileID: 2901413900856689188, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -836,6 +840,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Left
       objectReference: {fileID: 0}
+    - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 386398051}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
       value: 
@@ -1486,6 +1494,10 @@ PrefabInstance:
       value: Left
       objectReference: {fileID: 0}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 386398051}
+    - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
       value: 
       objectReference: {fileID: 493849245}
@@ -1715,7 +1727,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2044950600}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ClickRecord, Assembly-CSharp
         m_MethodName: deleteNewData
         m_Mode: 1
@@ -1776,6 +1788,7 @@ GameObject:
   - component: {fileID: 386398053}
   - component: {fileID: 386398052}
   - component: {fileID: 386398054}
+  - component: {fileID: 386398055}
   m_Layer: 0
   m_Name: database
   m_TagString: Untagged
@@ -1874,8 +1887,10 @@ MonoBehaviour:
   - {fileID: 151503675}
   - {fileID: 2068145842}
   - {fileID: 1813630062}
-  leftPlayersPos: []
-  rightPlayersPos: []
+  gameView: {fileID: 372302189}
+  deleteNewData: {fileID: 378878806}
+  leftGamePos: []
+  rightGamePos: []
   point: 
   score: 
   leftScoreText: {fileID: 43933714}
@@ -1888,9 +1903,43 @@ MonoBehaviour:
   setServe: 0
   changePosition: 0
   leftRight: 0
-  leftTeamNum: 0
-  rightTeamNum: 0
+  leftTeamNum: 
+  rightTeamNum: 
   changePlayer: 0
+  Clibero: 0
+  liberoTarget: 
+  liberoHasChange: 
+  CformationTmp: 
+--- !u!114 &386398055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 386398051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc24088c94ced3745a2818710dc5059d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvas: {fileID: 895018766}
+  database: {fileID: 386398051}
+  system: {fileID: 386398051}
+  NetLocate:
+  - {fileID: 442470855}
+  - {fileID: 1296604260}
+  - {fileID: 298411855}
+  - {fileID: 704832376}
+  - {fileID: 400650952}
+  - {fileID: 1909855388}
+  selectBlock: {fileID: 1284169997}
+  pin: {fileID: 861151842}
+  insertBtn: {fileID: 1318467343}
+  changePosBtn: {fileID: 826565338}
+  changePlayerBtn: {fileID: 400171618}
+  showDataBtn: {fileID: 1812274014}
+  NetLocateXY: []
+  touchCount: 
 --- !u!1 &400171618
 GameObject:
   m_ObjectHideFlags: 0
@@ -1976,7 +2025,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 386398054}
         m_TargetAssemblyTypeName: SystemData, Assembly-CSharp
-        m_MethodName: CplayerPos
+        m_MethodName: Cformation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2610,6 +2659,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3731718385525240048, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 386398051}
+    - target: {fileID: 3731718385525240048, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: BPlayer1
       value: 
       objectReference: {fileID: 754452191}
@@ -2770,9 +2823,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 2044950600}
+      - m_Target: {fileID: 386398055}
         m_TargetAssemblyTypeName: ClickRecord, Assembly-CSharp
-        m_MethodName: refreshPlayer
+        m_MethodName: clickRectoData
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2782,9 +2835,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 2044950600}
+      - m_Target: {fileID: 386398055}
         m_TargetAssemblyTypeName: ClickRecord, Assembly-CSharp
-        m_MethodName: clickRectoData
+        m_MethodName: refreshPlayer
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3029,6 +3082,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3731718385525240048, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 386398051}
     - target: {fileID: 3731718385525240048, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: BPlayer1
       value: 
@@ -3324,6 +3381,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3731718385525240048, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 386398051}
     - target: {fileID: 3731718385525240048, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: BPlayer1
       value: 
@@ -3646,7 +3707,7 @@ PrefabInstance:
     - target: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: BeGameObject
       value: 
-      objectReference: {fileID: 2044950599}
+      objectReference: {fileID: 386398051}
     - target: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: block.Array.size
       value: 1
@@ -4006,6 +4067,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3731718385525240048, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 386398051}
     - target: {fileID: 3731718385525240048, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: BPlayer1
       value: 
@@ -4507,7 +4572,7 @@ PrefabInstance:
     - target: {fileID: 494475276491014076, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: BeGameObject
       value: 
-      objectReference: {fileID: 2044950599}
+      objectReference: {fileID: 386398051}
     - target: {fileID: 494475276491014076, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: playerPlayPos
       value: 2
@@ -5023,7 +5088,7 @@ PrefabInstance:
     - target: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: BeGameObject
       value: 
-      objectReference: {fileID: 2044950599}
+      objectReference: {fileID: 386398051}
     - target: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: block.Array.size
       value: 1
@@ -5207,7 +5272,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.0010098219, y: 0.0010986328}
+  m_AnchoredPosition: {x: 0.0010098219, y: 0.0029296875}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &908573765
@@ -5348,6 +5413,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Left
       objectReference: {fileID: 0}
+    - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 386398051}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
       value: 
@@ -5797,7 +5866,7 @@ PrefabInstance:
     - target: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: BeGameObject
       value: 
-      objectReference: {fileID: 2044950599}
+      objectReference: {fileID: 386398051}
     - target: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: playerPlayPos
       value: 2
@@ -5971,6 +6040,10 @@ PrefabInstance:
       value: Left
       objectReference: {fileID: 0}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 386398051}
+    - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
       value: 
       objectReference: {fileID: 493849245}
@@ -6130,6 +6203,10 @@ PrefabInstance:
       value: Left
       objectReference: {fileID: 0}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 386398051}
+    - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
       value: 
       objectReference: {fileID: 493849245}
@@ -6238,6 +6315,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3731718385525240048, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 386398051}
     - target: {fileID: 3731718385525240048, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: BPlayer1
       value: 
@@ -6598,6 +6679,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3731718385525240048, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 386398051}
     - target: {fileID: 3731718385525240048, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: BPlayer1
       value: 
@@ -7013,6 +7098,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3731718385525240048, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 386398051}
+    - target: {fileID: 3731718385525240048, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: BPlayer1
       value: 
       objectReference: {fileID: 754452191}
@@ -7177,9 +7266,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 2044950600}
-        m_TargetAssemblyTypeName: ClickRecord, Assembly-CSharp
-        m_MethodName: clickInsert
+      - m_Target: {fileID: 895018775}
+        m_TargetAssemblyTypeName: RefreshPoint, Assembly-CSharp
+        m_MethodName: rotate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7192,6 +7281,30 @@ MonoBehaviour:
       - m_Target: {fileID: 386398052}
         m_TargetAssemblyTypeName: dealDB, Assembly-CSharp
         m_MethodName: CallInsertData
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 386398052}
+        m_TargetAssemblyTypeName: dealDB, Assembly-CSharp
+        m_MethodName: CallGetPlayerCatchPos
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 386398055}
+        m_TargetAssemblyTypeName: ClickRecord, Assembly-CSharp
+        m_MethodName: clickInsert
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7628,6 +7741,10 @@ PrefabInstance:
       value: Left
       objectReference: {fileID: 0}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 386398051}
+    - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
       value: 
       objectReference: {fileID: 493849245}
@@ -7828,6 +7945,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3731718385525240048, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 386398051}
     - target: {fileID: 3731718385525240048, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: BPlayer1
       value: 
@@ -8345,6 +8466,10 @@ PrefabInstance:
       value: Left
       objectReference: {fileID: 0}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 386398051}
+    - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
       value: 
       objectReference: {fileID: 493849245}
@@ -8458,6 +8583,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3731718385525240048, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 386398051}
     - target: {fileID: 3731718385525240048, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: BPlayer1
       value: 
@@ -8711,7 +8840,7 @@ PrefabInstance:
     - target: {fileID: 494475276491014076, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: BeGameObject
       value: 
-      objectReference: {fileID: 2044950599}
+      objectReference: {fileID: 386398051}
     - target: {fileID: 494475276491014076, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: block.Array.size
       value: 1
@@ -8948,6 +9077,10 @@ PrefabInstance:
       value: Left
       objectReference: {fileID: 0}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 386398051}
+    - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
       value: 
       objectReference: {fileID: 493849245}
@@ -9053,6 +9186,10 @@ PrefabInstance:
       value: Left
       objectReference: {fileID: 0}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 386398051}
+    - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
       value: 
       objectReference: {fileID: 493849245}
@@ -9136,7 +9273,7 @@ PrefabInstance:
     - target: {fileID: 494475276491014076, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: BeGameObject
       value: 
-      objectReference: {fileID: 2044950599}
+      objectReference: {fileID: 386398051}
     - target: {fileID: 494475276491014076, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: block.Array.size
       value: 1
@@ -9460,18 +9597,6 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 895018775}
         m_TargetAssemblyTypeName: RefreshPoint, Assembly-CSharp
-        m_MethodName: rotate
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 895018775}
-        m_TargetAssemblyTypeName: RefreshPoint, Assembly-CSharp
         m_MethodName: addPoint
         m_Mode: 1
         m_Arguments:
@@ -9482,9 +9607,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 2044950600}
+      - m_Target: {fileID: 386398055}
         m_TargetAssemblyTypeName: ClickRecord, Assembly-CSharp
-        m_MethodName: refreshPlayer
+        m_MethodName: clickRectoData
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9494,9 +9619,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 2044950600}
+      - m_Target: {fileID: 386398055}
         m_TargetAssemblyTypeName: ClickRecord, Assembly-CSharp
-        m_MethodName: clickRectoData
+        m_MethodName: refreshPlayer
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9660,6 +9785,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Left
       objectReference: {fileID: 0}
+    - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 386398051}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
       value: 
@@ -9942,7 +10071,7 @@ PrefabInstance:
     - target: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: BeGameObject
       value: 
-      objectReference: {fileID: 2044950599}
+      objectReference: {fileID: 386398051}
     - target: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: block.Array.size
       value: 1
@@ -10468,6 +10597,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3731718385525240048, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 386398051}
+    - target: {fileID: 3731718385525240048, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: BPlayer1
       value: 
       objectReference: {fileID: 754452191}
@@ -10682,7 +10815,7 @@ PrefabInstance:
     - target: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: BeGameObject
       value: 
-      objectReference: {fileID: 2044950599}
+      objectReference: {fileID: 386398051}
     - target: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: block.Array.size
       value: 1
@@ -11302,6 +11435,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
     - target: {fileID: 3731718385525240048, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 386398051}
+    - target: {fileID: 3731718385525240048, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: BPlayer1
       value: 
       objectReference: {fileID: 754452191}
@@ -11684,72 +11821,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!1 &2044950599
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2044950601}
-  - component: {fileID: 2044950600}
-  m_Layer: 0
-  m_Name: ClickCheck
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2044950600
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2044950599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc24088c94ced3745a2818710dc5059d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvas: {fileID: 895018766}
-  database: {fileID: 386398051}
-  system: {fileID: 386398051}
-  CanBlock:
-  - {fileID: 1512382898}
-  - {fileID: 998208265}
-  - {fileID: 1886248336}
-  - {fileID: 1121326184}
-  - {fileID: 1464556583}
-  - {fileID: 1005157243}
-  NetLocate:
-  - {fileID: 442470855}
-  - {fileID: 1296604260}
-  - {fileID: 298411855}
-  - {fileID: 704832376}
-  - {fileID: 400650952}
-  - {fileID: 1909855388}
-  selectBlock: {fileID: 1284169997}
-  pin: {fileID: 861151842}
-  test: {fileID: 2010203997}
-  insertBtn: {fileID: 1318467343}
-  touchCount: 
---- !u!4 &2044950601
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2044950599}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 319.72604, y: 581.35565, z: -0.27990618}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &2061307092 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4445825568703991068, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
@@ -11966,7 +12037,7 @@ PrefabInstance:
     - target: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: BeGameObject
       value: 
-      objectReference: {fileID: 2044950599}
+      objectReference: {fileID: 386398051}
     - target: {fileID: 6505826943382900087, guid: d6e04f79b0e2d48f4a32d391064b51b9, type: 3}
       propertyPath: block.Array.size
       value: 1
@@ -12175,6 +12246,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 386398051}
+    - target: {fileID: 8410469840002714440, guid: 74874abadcf860d40a02c98d4366067c, type: 3}
       propertyPath: WPlayer1
       value: 
       objectReference: {fileID: 493849245}
@@ -12251,6 +12326,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3731718385525240048, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
+      propertyPath: system
+      value: 
+      objectReference: {fileID: 386398051}
     - target: {fileID: 3731718385525240048, guid: 93534f1af0d838f409c1f3a8ddbbe346, type: 3}
       propertyPath: BPlayer1
       value: 
@@ -12359,7 +12438,7 @@ PrefabInstance:
     - target: {fileID: 494475276491014076, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: BeGameObject
       value: 
-      objectReference: {fileID: 2044950599}
+      objectReference: {fileID: 386398051}
     - target: {fileID: 494475276491014076, guid: 10d78acf57e924dba865a8615e6eb881, type: 3}
       propertyPath: block.Array.size
       value: 1
@@ -12521,5 +12600,4 @@ SceneRoots:
   m_Roots:
   - {fileID: 705379306}
   - {fileID: 1229234720}
-  - {fileID: 2044950601}
   - {fileID: 1281225358}

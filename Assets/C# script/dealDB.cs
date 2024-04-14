@@ -91,11 +91,9 @@ public class dealDB : MonoBehaviour
     // Start is called before the first frame update
     void Awake(){
         saveData = new List<Data>(); // 儲存資料用
-        //UserName = UserData.Instance.UserName; //後面要連伺服器
-        //UserID = UserData.Instance.UserID;
-        //GameID = UserData.Instance.GameID;
-        UserID = 1;
-        GameID = 1;
+        UserName = UserData.Instance.UserName; //後面要連伺服器
+        UserID = UserData.Instance.UserID;
+        GameID = UserData.Instance.GameID;
         SystemScript = this.gameObject.GetComponent<SystemData>();
     }
 
@@ -222,10 +220,28 @@ public class dealDB : MonoBehaviour
     }
 
     public void CallGetPlayerCatchPos(){
-        
+        StartCoroutine(GetPlayerCatchPos());
         return;     
     }
 
+    public class PosReturn {
+        public bool success;
+        public int situation;
+        public string ec;
+        public int PL1X, PL1Y;
+        public int PL2X, PL2Y;
+        public int PL3X, PL3Y;
+        public int PL4X, PL4Y;
+        public int PL5X, PL5Y;
+        public int PL6X, PL6Y;
+        public int PR1X, PR1Y;
+        public int PR2X, PR2Y;
+        public int PR3X, PR3Y;
+        public int PR4X, PR4Y;
+        public int PR5X, PR5Y;
+        public int PR6X, PR6Y;
+        
+    }
     public IEnumerator GetPlayerCatchPos(){
         string sendFormation = "", sendL = "", sendR = "";
         for(int i = 0; i < 6; i++){
@@ -233,6 +249,7 @@ public class dealDB : MonoBehaviour
             sendR += ("R" + SystemScript.rightPlayers[i].GetComponent<dragPlayer>().playerNum + " ");
         }
         sendFormation = sendL + sendR;
+
         WWWForm form = new WWWForm();
         form.AddField("UserID", UserID);
         form.AddField("GameID", GameID);
@@ -243,8 +260,56 @@ public class dealDB : MonoBehaviour
         UnityWebRequest www = UnityWebRequest.Post("https://volley.csie.ntnu.edu.tw/GetPlayerCatchPos", form);
         yield return www.SendWebRequest();
 
+        PosReturn result = new PosReturn();
+        if(www.result == UnityWebRequest.Result.Success){
+            string response = www.downloadHandler.text;
+            result = JsonUtility.FromJson<PosReturn>(response);
+            if(result.success == false){
+                switch (result.situation){
+                    case -1:
+                    case -2:
+                    case -3:
+                    case -4:
+                    case -5:
+                    case -6:
+                        print(result.ec);
+                        break;
+                }
+            }
+            else{
+                ClickRecord tmp = this.gameObject.GetComponent<ClickRecord>();
+                print("Success!");
+                SystemScript.leftGamePos[0] = new Vector3(result.PL1X, result.PL1Y, 0);
+                SystemScript.leftGamePos[1] = new Vector3(result.PL2X, result.PL2Y, 0);
+                SystemScript.leftGamePos[2] = new Vector3(result.PL3X, result.PL3Y, 0);
+                SystemScript.leftGamePos[3] = new Vector3(result.PL4X, result.PL4Y, 0);
+                SystemScript.leftGamePos[4] = new Vector3(result.PL5X, result.PL5Y, 0);
+                SystemScript.leftGamePos[5] = new Vector3(result.PL6X, result.PL6Y, 0);
 
+                SystemScript.rightGamePos[0] = new Vector3(result.PR1X, result.PR1Y, 0);
+                SystemScript.rightGamePos[1] = new Vector3(result.PR2X, result.PR2Y, 0);
+                SystemScript.rightGamePos[2] = new Vector3(result.PR3X, result.PR3Y, 0);
+                SystemScript.rightGamePos[3] = new Vector3(result.PR4X, result.PR4Y, 0);
+                SystemScript.rightGamePos[4] = new Vector3(result.PR5X, result.PR5Y, 0);
+                SystemScript.rightGamePos[5] = new Vector3(result.PR6X, result.PR6Y, 0);   
+                for(int i = 0; i < 6; i++){
+                    Vector3 LTMP, RTmp;
+                    Vector3[] NetXY = tmp.NetLocateXY;
+                    LTMP.x = (SystemScript.leftGamePos[i].x) * ((NetXY[3].x - NetXY[2].x) / 500) + (NetXY[2].x);
+                    LTMP.y = -((SystemScript.leftGamePos[i].y) * ((NetXY[2].y - NetXY[4].y) / 800) - (NetXY[2].y));
+                    LTMP.z = NetXY[2].z;
+                    RTmp.x = -((SystemScript.rightGamePos[i].x) * ((NetXY[3].x - NetXY[2].x) / 500) - (NetXY[5].x));
+                    RTmp.y = (SystemScript.rightGamePos[i].y) * ((NetXY[2].y - NetXY[4].y) / 800) + (NetXY[5].y);
+                    RTmp.z = NetXY[2].z;
 
+                    SystemScript.leftGamePos[i] = new Vector3(LTMP.x, LTMP.y, LTMP.z);
+                    SystemScript.rightGamePos[i] = new Vector3(RTmp.x, RTmp.y, RTmp.z);
+                }
+            }
+        }
+        else{
+            Debug.Log("未連接到伺服器!");
+        }
 
     }
 

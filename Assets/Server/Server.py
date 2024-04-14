@@ -141,7 +141,7 @@ def initDB():
     cnx = mysql.connector.connect(**config)
     cur = cnx.cursor(buffered=True)
     
-    cur.execute("select * from users where id=%s;", (UserID, ))
+    cur.execute("select * from users where UserID=%s;", (UserID, ))
     check1 = cur.fetchall()
     
     if len(check1) == 1: # 帳號存在
@@ -181,7 +181,7 @@ def insertData():
     cnx = mysql.connector.connect(**config)
     cur = cnx.cursor(buffered=True)
     
-    cur.execute("select * from users where id=%s;", (UserID, ))
+    cur.execute("select * from users where UserID=%s;", (UserID, ))
     check1 = cur.fetchall()
     print(check1)
 
@@ -314,7 +314,7 @@ def AddGame():
     if len(result) == 1 and len(check) == 0:
         try:
             GameDate = datetime.strptime(GameDate, "%Y-%m-%d")
-            cur.execute("insert into GameInfo(UserID, Serve, TeamL, TeamR, GameDate, GameName) value(%s, %s, %s, %s, %s, %s)", (UserID, -1, -1, -1, GameDate, GameName))
+            cur.execute("insert into GameInfo(UserID, Serve, TeamL, TeamR, GameDate, GameName, SetInfo, GameFinish) value(%s, %s, %s, %s, %s, %s, false, false)", (UserID, -1, -1, -1, GameDate, GameName))
             cnx.commit()
             resultReturn['situation'] = 0
             resultReturn['success'] = True
@@ -380,8 +380,15 @@ def UpdateUserData():
                 TeamR.append(i[4])
                 UserGameDate.append(i[5])
                 UserGameName.append(i[6])
-                GameAlreadySet.append(i[7])
-                GameAlreadyFinish.append(i[8])
+                if(i[7] == 0):
+                    GameAlreadySet.append(False)
+                else:
+                    GameAlreadySet.append(True) 
+                if(i[8] == 0):
+                    GameAlreadyFinish.append(False)
+                else:
+                    GameAlreadyFinish.append(True) 
+                
             
             cur.execute("select * from Player where UserID=%s and TeamID!=%s order by TeamID, PNum;", (UserID, UserTeamID))
             OtherPlayer = cur.fetchall()
@@ -858,7 +865,7 @@ def SetGameInfo():
                         (UserID, GameID, PL1, PL2, PL3, PL4, PL5, PL6, PR1, PR2, PR3, PR4, PR5, PR6))
             cur.execute("insert into SetSide(UserID, GameID, TeamL1, TeamL2, TeamL3, TeamL4, TeamL5) value(%s, %s, %s, %s, %s, %s, %s)", 
                         (UserID, GameID, leftTeamNum, rightTeamNum, leftTeamNum, rightTeamNum, leftTeamNum))
-            cur.execute("update GameInfo set Serve=%s, TeamL=%s, TeamR=%s, SetInfo=%s where UserID=%s and GameID=%s;", (ServeSide, leftTeamNum, rightTeamNum, UserID, GameID, True))
+            cur.execute("update GameInfo set Serve=%s, TeamL=%s, TeamR=%s, SetInfo=%s where UserID=%s and GameID=%s;", (ServeSide, leftTeamNum, rightTeamNum, True, UserID, GameID))
             cnx.commit()
             resultReturn["situation"] = 0
             resultReturn["success"] = True
@@ -904,13 +911,7 @@ def GetPlayerCatchPos():
                     "PR3X" : None, "PR3Y" : None, 
                     "PR4X" : None, "PR4Y" : None, 
                     "PR5X" : None, "PR5Y" : None, 
-                    "PR6X" : None, "PR6Y" : None,
-                    "COUNTL1" : None, "COUNTR1" : None,
-                    "COUNTL2" : None, "COUNTR2" : None,
-                    "COUNTL3" : None, "COUNTR3" : None,
-                    "COUNTL4" : None, "COUNTR4" : None,
-                    "COUNTL5" : None, "COUNTR5" : None,
-                    "COUNTL6" : None, "COUNTR6" : None
+                    "PR6X" : None, "PR6Y" : None
                    }
     if UserID == None or GameID == None or formation == None or TeamL == None or TeamR == None:
         resultReturn["ec"] = "args error!" + "".format() 
@@ -981,7 +982,6 @@ def GetPlayerCatchPos():
             if(leftOut[str(numL[i])][2] < 10):
                 resultReturn["PL"+str(i+1)+"X"] = -1
                 resultReturn["PL"+str(i+1)+"Y"] = -1
-                resultReturn["COUNTL"+str(i+1)] = leftOut[str(numL[i])][2]
             else:
                 resultReturn["PL"+str(i+1)+"X"] = int(leftOut[str(numL[i])][0] / leftOut[str(numL[i])][2])
                 resultReturn["PL"+str(i+1)+"Y"] = int(leftOut[str(numL[i])][1] / leftOut[str(numL[i])][2])
@@ -990,7 +990,6 @@ def GetPlayerCatchPos():
             if(rightOut[str(numR[i])][2] < 10):
                 resultReturn["PR"+str(i+1)+"X"] = -1
                 resultReturn["PR"+str(i+1)+"Y"] = -1
-                resultReturn["COUNTR"+str(i+1)] = rightOut[str(numR[i])][2]
             else:
                 resultReturn["PR"+str(i+1)+ "X"] = int(rightOut[str(numR[i])][0] / rightOut[str(numR[i])][2])
                 resultReturn["PR"+str(i+1)+ "Y"] = int(rightOut[str(numR[i])][1] / rightOut[str(numR[i])][2])

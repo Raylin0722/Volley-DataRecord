@@ -12,8 +12,7 @@ public class RefreshPoint : MonoBehaviour
     [SerializeField] GameObject serverData;
     [SerializeField] GameObject leftServeTag;
     [SerializeField] GameObject rightServeTag;
-    Vector2[,] leftPos = {{new Vector2(1, 2)}, {new Vector2(3, 4)} };
-    Vector2[,] rightPos = {{new Vector2(1, 2)}, {new Vector2(3, 4)} };
+    
     
     private SystemData systemDataScript;
 
@@ -22,8 +21,8 @@ public class RefreshPoint : MonoBehaviour
     
     void Start(){
         systemDataScript = serverData.GetComponent<SystemData>();
-        //whoServe = UserData.Instance.whoServe; // 跟伺服器拿資料
-        whoServe = 1;
+        whoServe = UserData.Instance.whoServe; // 跟伺服器拿資料
+        //whoServe = 1;
         startServe = whoServe; // 跟伺服器拿資料
         if(whoServe == 0){
             leftServeTag.SetActive(true);
@@ -122,6 +121,8 @@ public class RefreshPoint : MonoBehaviour
             systemDataScript.leftPlayers[5].GetComponent<dragPlayer>().playerName = tmpName;
             systemDataScript.leftPlayers[5].GetComponent<dragPlayer>().playerNum = tmpNum;
             systemDataScript.leftPlayers[5].GetComponent<dragPlayer>().playerPlayPos = tmpPos;
+
+
         }
         else if(reClick == RIGHT && reWhoServe == LEFT){
             tmpName = systemDataScript.rightPlayers[0].GetComponent<dragPlayer>().playerName;
@@ -142,7 +143,21 @@ public class RefreshPoint : MonoBehaviour
             systemDataScript.leftPlayers[i].SetActive(true);
             systemDataScript.rightPlayers[i].SetActive(true);
         }
-
+        int lindex = -1, rindex = -1;
+        for(int i = 0; i < 6; i++){
+            if(systemDataScript.leftPlayers[i].GetComponent<dragPlayer>().playerPlayPos == 2)
+                lindex = i;
+            if(systemDataScript.rightPlayers[i].GetComponent<dragPlayer>().playerPlayPos == 2)
+                rindex = i;
+        }
+        for(int i = 0; i < 6; i++){
+            if(whoServe == LEFT){ // 左發球 右接球
+                systemDataScript.rightPlayers[i].transform.position = (systemDataScript.rightStartPos[rindex, i]);
+            }
+            else{
+                systemDataScript.leftPlayers[i].transform.position = (systemDataScript.leftStartPos[lindex, i]);
+            }
+        }
         reClick = -1;
     }
     public void changeSideServe(){ // 局換發
