@@ -347,7 +347,7 @@ public class ClickRecord : MonoBehaviour
     public void clickRectoData(){
         int round = SystemScript.score[LEFT] + SystemScript.score[RIGHT] + 1;
         dealDB.Data tmp;
-        int teamNum = Behavior[0].side == LEFT ? SystemScript.leftTeamNum : SystemScript.rightTeamNum;
+        int teamNum = Behavior[0].side == LEFT ? SystemScript.leftTeamNum[0] : SystemScript.rightTeamNum[0];
         Vector2 tmpEnd = Behavior[0].clicks[0];
         Vector2 tmpStart = ServePos[Behavior[0].side];
         
@@ -373,7 +373,7 @@ public class ClickRecord : MonoBehaviour
         DataBaseScript.saveData.Add(tmp);
         
         for(int i = 1; i < Behavior.Count; i++){
-            teamNum = Behavior[i].side == LEFT ? SystemScript.leftTeamNum : SystemScript.rightTeamNum;
+            teamNum = Behavior[i].side == LEFT ? SystemScript.leftTeamNum[0] : SystemScript.rightTeamNum[0];
             tmpEnd = Behavior[i].clicks[0];
             tmpStart = Behavior[i - 1].clicks[0];
             if(Behavior[i].side == LEFT){

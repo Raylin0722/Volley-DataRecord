@@ -224,8 +224,10 @@ public class RefreshPoint : MonoBehaviour
             systemDataScript.rightPlayers[i].GetComponent<dragPlayer>().updata[0] = false;
             systemDataScript.leftPlayers[i].GetComponent<dragPlayer>().updata[0] = false;
         }
-
-
+        int tmpID;
+        tmpID =  systemDataScript.leftTeamNum[0];
+        systemDataScript.leftTeamNum[0] = systemDataScript.rightTeamNum[0];
+        systemDataScript.rightTeamNum[0] = tmpID;
     }     
 
     void setFormation(){

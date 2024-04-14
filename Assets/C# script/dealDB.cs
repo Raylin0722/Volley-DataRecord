@@ -85,6 +85,7 @@ public class dealDB : MonoBehaviour
     public string UserName;
 
     [SerializeField] GameObject insertBtn;
+    private SystemData SystemScript;
 
 
     // Start is called before the first frame update
@@ -95,6 +96,7 @@ public class dealDB : MonoBehaviour
         //GameID = UserData.Instance.GameID;
         UserID = 1;
         GameID = 1;
+        SystemScript = this.gameObject.GetComponent<SystemData>();
     }
 
 
@@ -228,10 +230,22 @@ public class dealDB : MonoBehaviour
         string sendFormation = "", sendL = "", sendR = "";
         for(int i = 0; i < 6; i++){
             sendL += ("L" + SystemScript.leftPlayers[i].GetComponent<dragPlayer>().playerNum + " ");
-            sendR += ("L" + SystemScript.rightPlayers[i].GetComponent<dragPlayer>().playerNum + " ");
+            sendR += ("R" + SystemScript.rightPlayers[i].GetComponent<dragPlayer>().playerNum + " ");
         }
         sendFormation = sendL + sendR;
-        yield return null;
+        WWWForm form = new WWWForm();
+        form.AddField("UserID", UserID);
+        form.AddField("GameID", GameID);
+        form.AddField("TeamL", SystemScript.leftTeamNum[0]);
+        form.AddField("TeamR", SystemScript.rightTeamNum[0]);
+        form.AddField("formation", sendFormation);
+        
+        UnityWebRequest www = UnityWebRequest.Post("https://volley.csie.ntnu.edu.tw/GetPlayerCatchPos", form);
+        yield return www.SendWebRequest();
+
+
+
+
     }
 
 }

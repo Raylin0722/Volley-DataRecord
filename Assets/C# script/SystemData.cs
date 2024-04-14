@@ -27,7 +27,7 @@ public class SystemData : MonoBehaviour
     public List<dealDB.Data> saveData; // 資料儲存
     public bool changePosition; //更換位子變數判斷
     public int leftRight;
-    public int leftTeamNum, rightTeamNum;
+    public int[] leftTeamNum, rightTeamNum;
     public bool changePlayer;
 
     void Start(){
@@ -39,8 +39,10 @@ public class SystemData : MonoBehaviour
         rightPointText.text = "00";
         saveData = new List<dealDB.Data>();
         leftRight = UserData.Instance.leftRight;
-        leftTeamNum = UserData.Instance.leftTeamNum;
-        rightTeamNum = UserData.Instance.rightTeamNum;
+        leftTeamNum = new int[1];
+        leftTeamNum[0] = UserData.Instance.leftTeamNum;
+        rightTeamNum = new int[1];
+        rightTeamNum[0] = UserData.Instance.rightTeamNum;
         leftPlayersPos = new Vector2[6];
         rightPlayersPos = new Vector2[6];
         changePosition = false;
