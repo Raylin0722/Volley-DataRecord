@@ -150,12 +150,18 @@ public class RefreshPoint : MonoBehaviour
             if(systemDataScript.rightPlayers[i].GetComponent<dragPlayer>().playerPlayPos == 2)
                 rindex = i;
         }
+        
         for(int i = 0; i < 6; i++){
+            
             if(whoServe == LEFT){ // 左發球 右接球
+                if(rindex == -1)
+                    break;
                 systemDataScript.rightPlayers[i].transform.position = (systemDataScript.rightStartCatchPos[rindex, i]);
                 systemDataScript.leftPlayers[i].transform.position = (systemDataScript.leftStartServePos[i]);
             }
             else{
+                if(lindex == -1)
+                    break;
                 systemDataScript.leftPlayers[i].transform.position = (systemDataScript.leftStartCatchPos[lindex, i]);
                 systemDataScript.rightPlayers[i].transform.position = (systemDataScript.rightStartServePos[i]);
             }

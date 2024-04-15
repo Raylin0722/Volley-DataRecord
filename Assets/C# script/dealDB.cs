@@ -296,6 +296,7 @@ public class dealDB : MonoBehaviour
                     print(string.Format("PL{0} X: {1} Y: {2}", i + 1, SystemScript.leftGamePos[i].x, SystemScript.leftGamePos[i].y));
                     print(string.Format("PR{0} X: {1} Y: {2}", i + 1, SystemScript.rightGamePos[i].x, SystemScript.rightGamePos[i].y));
                 }
+                bool[] checking = new bool[12]; 
                 for(int i = 0; i < 6; i++){
                     Vector3 LTmp = new Vector3(), RTmp = new Vector3();
                     Vector3[] NetXY = tmp.NetLocateXY;
@@ -304,16 +305,26 @@ public class dealDB : MonoBehaviour
                         LTmp.y = -((SystemScript.leftGamePos[i].y) * ((NetXY[2].y - NetXY[4].y) / 800) - (NetXY[2].y));
                         LTmp.z = NetXY[2].z;
                         SystemScript.leftGamePos[i] = new Vector3(LTmp.x, LTmp.y, LTmp.z);
+                        checking[i] = true;
                     }
+                    
                     if(SystemScript.rightGamePos[i].x != -1 && SystemScript.rightGamePos[i].y != -1){
                         RTmp.x = -((SystemScript.rightGamePos[i].x) * ((NetXY[3].x - NetXY[2].x) / 500) - (NetXY[5].x));
                         RTmp.y = (SystemScript.rightGamePos[i].y) * ((NetXY[2].y - NetXY[4].y) / 800) + (NetXY[5].y);
                         RTmp.z = NetXY[2].z;
                         SystemScript.rightGamePos[i] = new Vector3(RTmp.x, RTmp.y, RTmp.z);
+                        checking[i+6] = true;
                     }
 
-                    
-                    
+                }
+                Vector3[] orginPos = {new Vector3(319.3675f, 580.7668f, 0f), new Vector3(321.4072f, 580.7688f, 0f), new Vector3(322.2231f, 582.0926f, 0f), new Vector3(321.4072f, 583.4184f, 0f), new Vector3(319.3675f, 583.4184f, 0f), new Vector3(320.1834f, 582.0926f, 0f), new Vector3(327.2784f, 583.3668f, 0f), new Vector3(325.2387f, 583.3668f, 0f), new Vector3(324.6268f, 582.041f, 0f), new Vector3(325.2387f, 580.7151f, 0f), new Vector3(327.2784f, 580.7151f, 0f), new Vector3(326.4625f, 582.041f, 0f)};
+                for(int i = 0; i < 6; i++){
+                    if(checking[i] == false){
+                        SystemScript.leftGamePos[i] = orginPos[i];
+                    }
+                    if(checking[i+6] == false){
+                        SystemScript.rightGamePos[i] = orginPos[i+6];
+                    }
                 }
             }
         }
