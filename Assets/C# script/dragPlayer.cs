@@ -22,6 +22,7 @@ public class dragPlayer : MonoBehaviour {
     [SerializeField] public int playerPlayPos;
     [SerializeField] GameObject BeGameObject;
     [SerializeField] GameObject system;
+    [SerializeField] Sprite[] shapeOfPlayer;
     private Vector3 initialPosition; // 球員初始位置
     private Vector3 AfterDragPosition; // 球員移動後位置
     Vector2 difference = Vector2.zero;
@@ -71,10 +72,23 @@ public class dragPlayer : MonoBehaviour {
     }
     void Update(){
         if(!updata[0]){
-            TextMeshPro textMeshPro = gameObject.transform.GetChild(0).gameObject.GetComponent<TextMeshPro>();
-            if (textMeshPro != null)
-                textMeshPro.text = playerName;
+            Text text = gameObject.transform.GetChild(0).gameObject.GetComponent<Text>();
+            if (text != null)
+                text.text = playerName;
             updata[0] = true;   
+            if(playerPlayPos == 0 && playerPlayPos == 3){ // 主攻 對角
+                this.gameObject.GetComponent<SpriteRenderer>().sprite = shapeOfPlayer[0];
+            }
+            else if(playerPlayPos == 1){ 
+                this.gameObject.GetComponent<SpriteRenderer>().sprite = shapeOfPlayer[1];
+            }
+            else if(playerPlayPos == 2){
+                this.gameObject.GetComponent<SpriteRenderer>().sprite = shapeOfPlayer[2];
+            }
+            else if(playerPlayPos == 4){
+                this.gameObject.GetComponent<SpriteRenderer>().sprite = shapeOfPlayer[3];
+            }
+            
         }
         if(flashing[0]){
             playerFlash();

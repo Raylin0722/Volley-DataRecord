@@ -551,9 +551,7 @@ public class GameSelect : MonoBehaviour
         PCorrName.text = ObjTexts[1].text;
         PCWarning.text = "";
         int PlayerID = CorrTarget.GetComponent<ID>().ObjID;
-        print(PlayerID);
-        print(ObjTexts[0].text);
-        print(ObjTexts[1].text);
+        
         MainCanvas.SetActive(false);
         CorrPlayerCanvas.SetActive(true);
         
