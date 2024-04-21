@@ -49,6 +49,7 @@ public class SystemData : MonoBehaviour
     public int[] liberoTarget;
     public bool[] liberoHasChange;
     public int[] CformationTmp;
+    public int nameMode;
     void Start(){
         
         score = new int[2];
@@ -72,6 +73,7 @@ public class SystemData : MonoBehaviour
         liberoTarget = new int[2]{-1, -1};
         liberoHasChange = new bool[2]{false, false};
         CformationTmp = new int[2]{-1, -1};
+        nameMode = 0;
         if(leftRight == 0){ // 使用者 left 0 right 1
             leftTeamName.text = UserData.Instance.UserTeamName;
             rightTeamName.text = UserData.Instance.EnemyTeamName;
@@ -188,6 +190,28 @@ public class SystemData : MonoBehaviour
             gameView.SetActive(true);
             deleteNewData.SetActive(true);
         }
+    }
+    public Text ChangeNameBtn;
+    public void changeNameMode(){
+        nameMode = 1 - nameMode;
+        ChangeNameBtn.text = nameMode == 0 ? "名稱" : "背號";
+        for(int i = 0; i < 6; i++){
+            leftPlayers[i].GetComponent<dragPlayer>().updata[0] = false;
+            rightPlayers[i].GetComponent<dragPlayer>().updata[0] = false;
+        }
+        return;
+    }
+
+    [SerializeField] public GameObject Main;
+    [SerializeField] public GameObject Setting;
+
+    public void startSetting(){
+        Main.SetActive(false);
+        Setting.SetActive(true);
+    }
+    public void exitSetting(){
+        Main.SetActive(true);
+        Setting.SetActive(false);
     }
 
     /*public void AutoCLibero(){

@@ -466,7 +466,7 @@ public class GameSelect : MonoBehaviour
                 break;
             }
         }
-        if(Set == 3){ // 未設定比賽
+        if(Set == 3 || Set == 2){ // 未設定比賽
             UserData.Instance.GameID = GameID;
             UserTeamName.text = UserData.Instance.UserTeamName;
             UserData.Instance.GameName = obj.GetComponentsInChildren<Text>()[1].text;
@@ -580,8 +580,14 @@ public class GameSelect : MonoBehaviour
             MainCanvas.SetActive(true);
             AddPlayerCanvas.SetActive(false);
             AddGameCanvas.SetActive(false);
-            AddOtherCanvas.SetActive(false);
             AssignOthTeamCanvas.SetActive(false);
+            CorrPlayerCanvas.SetActive(false);
+            AddOtherPlayerCanvas.SetActive(false);
+            AddOtherCanvas.SetActive(false);
+            AddTeamCanvas.SetActive(false);
+            OCorrPlayerCanvas.SetActive(false);
+            AssignCanvas.SetActive(false);
+            SetGameInfoCanvas.SetActive(false);
         }
         else if(obj.tag == "CorrPlayer"){
             MainCanvas.SetActive(true);
