@@ -91,7 +91,30 @@ public class ClickRecord : MonoBehaviour
         }
 
         Behavior.Add(Serve);
+
+        int lindex = -1, rindex = -1;
+        for(int i = 0; i < 6; i++){
+            if(SystemScript.leftPlayers[i].GetComponent<dragPlayer>().playerPlayPos == 2)
+                lindex = i;
+            if(SystemScript.rightPlayers[i].GetComponent<dragPlayer>().playerPlayPos == 2)
+                rindex = i;
+        }
         
+        for(int i = 0; i < 6; i++){
+            
+            if(UserData.Instance.whoServe == LEFT){ // 左發球 右接球
+                if(rindex == -1)
+                    break;
+                SystemScript.rightPlayers[i].transform.position = (SystemScript.rightStartCatchPos[rindex, i]);
+                SystemScript.leftPlayers[i].transform.position = (SystemScript.leftStartServePos[i]);
+            }
+            else{
+                if(lindex == -1)
+                    break;
+                SystemScript.leftPlayers[i].transform.position = (SystemScript.leftStartCatchPos[lindex, i]);
+                SystemScript.rightPlayers[i].transform.position = (SystemScript.rightStartServePos[i]);
+            }
+        }
         //print(string.Format("({0}, {1})", NetLocateXY[2].x, NetLocateXY[2].y));
         //print(string.Format("({0}, {1})", NetLocateXY[3].x, NetLocateXY[3].y));
         //print(string.Format("({0}, {1})", NetLocateXY[4].x, NetLocateXY[4].y));
@@ -173,15 +196,27 @@ public class ClickRecord : MonoBehaviour
                 changePlayerBtn.GetComponent<Button>().interactable = false;
                 changePosBtn.GetComponent<Button>().interactable = false;
                 showDataBtn.GetComponent<Button>().interactable = false;
+                
+                Vector3[] OLPos = {new Vector3(319.3678f, 580.7668f, 0f), new Vector3(321.4072f, 580.7688f, 0f), new Vector3(322.2231f, 582.0926f, 0f),
+                                   new Vector3(321.4072f, 583.4184f, 0f), new Vector3(319.3675f, 583.4184f, 0f), new Vector3(320.1834f, 582.0926f, 0f)};
+                Vector3[] ORPos = {new Vector3(327.2784f, 583.3668f, 0f), new Vector3(325.2387f, 583.3668f, 0f), new Vector3(324.6268f, 582.041f, 0f), 
+                                   new Vector3(325.2387f, 580.7151f, 0f), new Vector3(327.2784f, 580.7151f, 0f), new Vector3(326.4625f, 582.041f, 0f)};
+                
                 for(int i = 0; i < 6; i++){
                     if(SystemScript.leftGamePos[i].x != -1 && SystemScript.leftGamePos[i].y != -1){
                         SystemScript.leftPlayers[i].transform.position = SystemScript.leftGamePos[i];
                         print(String.Format("{0} {1} {2}", SystemScript.leftGamePos[i].x, SystemScript.leftGamePos[i].y, SystemScript.leftGamePos[i].z));
                     }
+                    else
+                        SystemScript.leftPlayers[i].transform.position = OLPos[i];                
+
+                    
                     if(SystemScript.rightGamePos[i].x != -1 && SystemScript.rightGamePos[i].y != -1){
                         SystemScript.rightPlayers[i].transform.position = SystemScript.rightGamePos[i];
                         print(String.Format("{0} {1} {2}", SystemScript.rightGamePos[i].x, SystemScript.rightGamePos[i].y, SystemScript.rightGamePos[i].z));
                     }
+                    else
+                        SystemScript.rightPlayers[i].transform.position = ORPos[i];
                 }
             }
             else if(inOrout){ //場內 紀錄
