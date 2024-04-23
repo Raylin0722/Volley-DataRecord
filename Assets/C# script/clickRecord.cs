@@ -467,6 +467,12 @@ public class ClickRecord : MonoBehaviour
         if(canvas.GetComponent<RefreshPoint>().reClick == -1){ // 沒按得分
             if(Behavior.Count == 1){
                 Behavior.RemoveAt(Behavior.Count - 1);
+
+                for(int i = 0; i < 6; i++){
+                    SystemScript.leftPlayers[i].GetComponent<SpriteRenderer>().color = SystemScript.leftPlayers[i].GetComponent<dragPlayer>().orginColor;
+                    SystemScript.rightPlayers[i].GetComponent<SpriteRenderer>().color = SystemScript.rightPlayers[i].GetComponent<dragPlayer>().orginColor;
+                }
+
                 ClickData Serve = new ClickData();
                 Serve.behavior = -1;
                 Serve.complete = false;
@@ -491,9 +497,14 @@ public class ClickRecord : MonoBehaviour
                 changePlayerBtn.GetComponent<Button>().interactable = true;
                 changePosBtn.GetComponent<Button>().interactable = true;
                 showDataBtn.GetComponent<Button>().interactable = true;
+                
             }
             else{
                 Behavior.RemoveAt(Behavior.Count - 1);
+                for(int i = 0; i < 6; i++){
+                    SystemScript.leftPlayers[i].GetComponent<SpriteRenderer>().color = SystemScript.leftPlayers[i].GetComponent<dragPlayer>().orginColor;
+                    SystemScript.rightPlayers[i].GetComponent<SpriteRenderer>().color = SystemScript.rightPlayers[i].GetComponent<dragPlayer>().orginColor;
+                }
                 for(int i = 0; i < 6; i++){
                     SystemScript.leftPlayers[i].SetActive(true);
                     SystemScript.rightPlayers[i].SetActive(true);
@@ -508,9 +519,10 @@ public class ClickRecord : MonoBehaviour
         }
         else{ // 有按得分
             canvas.GetComponent<RefreshPoint>().back();
+            if(DataBaseScript.saveData.Count > 0)
+                DataBaseScript.saveData.Clear();
         }
-        if(DataBaseScript.saveData.Count > 0)
-            DataBaseScript.saveData.Clear();
+        
 
 
     }

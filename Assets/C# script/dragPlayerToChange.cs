@@ -26,7 +26,7 @@ public class dragPlayerToChange : MonoBehaviour {
         if(!refresh[0]){
             TextMeshPro textMeshPro = gameObject.transform.GetChild(0).gameObject.GetComponent<TextMeshPro>();
             if (textMeshPro != null)
-                textMeshPro.text = playerName;
+                textMeshPro.text = playerName[playerName.Length - 1].ToString();
             refresh[0] = true;   
         }
     }
