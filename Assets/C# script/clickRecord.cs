@@ -526,4 +526,56 @@ public class ClickRecord : MonoBehaviour
 
 
     }
+    public RectTransform DataContent;
+    public GameObject DataScrollView;
+    public GameObject Data;
+    public float prefabHeight = 100f;
+    public IEnumerator DealDataScrollView(){
+
+        // 初始化ScrollView的滾動位置
+        for (int i = 0; i < DataContent.childCount; i++){
+            Destroy(DataContent.GetChild(i).gameObject);
+        }
+        
+        DataScrollView.GetComponent<ScrollRect>().verticalNormalizedPosition = 0f;
+
+        for (int i = 0; i < Behavior.Count; i++)
+        {
+            // 透過Instantiate生成Prefab
+            GameObject newData = Instantiate(Data, DataContent);
+
+            Text[] DataText = newData.GetComponentsInChildren<Text>();
+            dragPlayer tmpPlayer = Behavior[i].players.Last().GetComponent<dragPlayer>();
+            switch (Behavior[i].behavior){
+                case 1:
+                    DataText[1].text = "接球";
+                    DataText[0].text = SystemScript.nameMode == 0 ? tmpPlayer.playerName[tmpPlayer.playerName.Length - 1].ToString() : tmpPlayer.playerNum;
+                    break;
+                case 2:
+                    DataText[1].text = "攻擊";
+                    DataText[0].text = SystemScript.nameMode == 0 ? tmpPlayer.playerName[tmpPlayer.playerName.Length - 1].ToString() : tmpPlayer.playerNum;
+                    break;
+                case 3:
+                    DataText[1].text = "攔網";
+                    DataText[0].text = "";
+                    for(int j = 0; j < Behavior[i].players.Count; j++){
+                        DataText[0].text += SystemScript.nameMode == 0 ? tmpPlayer.playerName[tmpPlayer.playerName.Length - 1].ToString() : tmpPlayer.playerNum;
+                        DataText[0].text += " ";
+                    }
+                    break;
+            }
+
+            // 設定Prefab的位置
+            RectTransform rectTransform = newData.GetComponent<RectTransform>();
+            rectTransform.anchoredPosition = new Vector2(0, -i * prefabHeight);
+        }
+        
+        DataContent.sizeDelta = new Vector2(DataContent.sizeDelta.x, 0 * prefabHeight);
+
+        yield return null;
+    }
+    public void CalDealDataScrollView(){
+        StartCoroutine(DealDataScrollView());
+    }
+
 }
