@@ -377,7 +377,7 @@ public class ClickRecord : MonoBehaviour
         }
         Behavior.Add(Serve);
         
-
+        CalDealDataScrollView();
 
     }
 
@@ -524,7 +524,7 @@ public class ClickRecord : MonoBehaviour
                 DataBaseScript.saveData.Clear();
         }
         
-
+        CalDealDataScrollView();
 
     }
     public RectTransform DataContent;
