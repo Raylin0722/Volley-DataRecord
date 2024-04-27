@@ -218,6 +218,7 @@ public class ClickRecord : MonoBehaviour
                     else
                         SystemScript.rightPlayers[i].transform.position = ORPos[i];
                 }
+                CalDealDataScrollView();
             }
             else if(inOrout){ //場內 紀錄
                 // 依照點擊類型 地板點擊次數 球員點擊次數判斷動作
@@ -291,7 +292,7 @@ public class ClickRecord : MonoBehaviour
                     Behavior.Last().players[i].GetComponent<SpriteRenderer>().color = Behavior.Last().players[i].GetComponent<dragPlayer>().orginColor;
                     
                 }
-                
+                CalDealDataScrollView();
             }
             for(int i = 0; i < 6; i++){
                 SystemScript.leftPlayers[i].SetActive(true);
@@ -547,6 +548,10 @@ public class ClickRecord : MonoBehaviour
             Text[] DataText = newData.GetComponentsInChildren<Text>();
             dragPlayer tmpPlayer = Behavior[i].players.Last().GetComponent<dragPlayer>();
             switch (Behavior[i].behavior){
+                case -1:
+                    DataText[1].text = "發球";
+                    DataText[0].text = SystemScript.nameMode == 0 ? tmpPlayer.playerName[tmpPlayer.playerName.Length - 1].ToString() : tmpPlayer.playerNum;
+                    break;
                 case 1:
                     DataText[1].text = "接球";
                     DataText[0].text = SystemScript.nameMode == 0 ? tmpPlayer.playerName[tmpPlayer.playerName.Length - 1].ToString() : tmpPlayer.playerNum;
@@ -567,7 +572,7 @@ public class ClickRecord : MonoBehaviour
 
             // 設定Prefab的位置
             RectTransform rectTransform = newData.GetComponent<RectTransform>();
-            rectTransform.anchoredPosition = new Vector2(0, -i * prefabHeight);
+            rectTransform.anchoredPosition = new Vector2(0, -i * prefabHeight - 50);
         }
         
         DataContent.sizeDelta = new Vector2(DataContent.sizeDelta.x, 0 * prefabHeight);
