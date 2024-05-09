@@ -10,6 +10,8 @@ public class SystemData : MonoBehaviour
     public string formation; // 紀錄當前陣容
     [SerializeField] public GameObject[] leftPlayers; // 左方球員
     [SerializeField] public GameObject[] rightPlayers; // 右方球員
+    public int[,] leftLibero;
+    public int[,] rightLibero;
     [SerializeField] public GameObject[] changeLeftPlayers;
     [SerializeField] public GameObject[] changeRightPlayers;
     [SerializeField] public GameObject gameView;
@@ -50,6 +52,8 @@ public class SystemData : MonoBehaviour
     public bool[] liberoHasChange;
     public int[] CformationTmp;
     public int nameMode;
+    public Text[] leftLiberoName;
+    public Text[] rightLiberoName;
     void Start(){
         
         score = new int[2];
@@ -70,10 +74,14 @@ public class SystemData : MonoBehaviour
         changePosition = false;
         changePlayer = false;
         Clibero = false; // 不自動換
-        liberoTarget = new int[2]{-1, -1};
         liberoHasChange = new bool[2]{false, false};
         CformationTmp = new int[2]{-1, -1};
+        leftLibero = new int[2, 2];
+        rightLibero = new int[2, 2];
         nameMode = 0;
+
+        
+
         if(leftRight == 0){ // 使用者 left 0 right 1
             leftTeamName.text = UserData.Instance.UserTeamName;
             rightTeamName.text = UserData.Instance.EnemyTeamName;
@@ -100,6 +108,45 @@ public class SystemData : MonoBehaviour
                 changeLeftPlayers[i].GetComponent<dragPlayerToChange>().side = new int[1]{0};
                 changeRightPlayers[i].GetComponent<dragPlayerToChange>().side = new int[1]{1};
 
+            }
+            int lc= 0, rc = 0;
+            for(int i = 0 ; i < 12; i++){
+                if(UserData.Instance.UserPlayerPlayPos[i] == 4 && lc < 2){
+                    leftLibero[lc, 0] = UserData.Instance.UserPlayerNumber[i];
+                    leftLiberoName[lc].text = UserData.Instance.UserPlayerName[i];
+                    lc++;
+                }
+                if(UserData.Instance.EnemyPlayerPlayPos[i] == 4 && rc < 2){
+                    rightLibero[rc, 0] = UserData.Instance.EnemyPlayerNumber[i];
+                    rightLiberoName[rc].text = UserData.Instance.EnemyPlayerName[i];
+                    rc++;
+                }
+                if(rc>=2 && lc >=2)
+                    break;
+            }
+            List<string> leftOption = new List<string>();
+            List<string> rightOption = new List<string>();
+
+            leftOption.Add(" ");
+            rightOption.Add(" ");
+
+            for(int i = 0; i < 6; i++){
+                if(UserData.Instance.UserPlayerPlayPos[i] != 4)
+                    leftOption.Add(UserData.Instance.UserPlayerName[i]);
+                if(UserData.Instance.EnemyPlayerPlayPos[i] != 4)
+                    rightOption.Add(UserData.Instance.EnemyPlayerName[i]);
+            }
+            for(int i = 0; i < 2; i++){
+                leftLiberoC[i].ClearOptions();
+                rightLiberoC[i].ClearOptions();
+                leftLiberoC[i].AddOptions(leftOption);
+                rightLiberoC[i].AddOptions(rightOption);
+                leftLiberoC[i].onValueChanged.AddListener(delegate {
+                    changeLiberoChoice(leftLiberoC[i], leftLiberoC, leftOption);
+                });
+                rightLiberoC[i].onValueChanged.AddListener(delegate {
+                    changeLiberoChoice(rightLiberoC[i], rightLiberoC, rightOption);
+                });
             }
             
         }
@@ -129,7 +176,45 @@ public class SystemData : MonoBehaviour
                 changeLeftPlayers[i].GetComponent<dragPlayerToChange>().side = new int[1]{0};
                 changeRightPlayers[i].GetComponent<dragPlayerToChange>().side = new int[1]{1};
             }
-            
+            int lc= 0, rc = 0;
+            for(int i = 0 ; i < 12; i++){
+                if(UserData.Instance.UserPlayerPlayPos[i] == 4 && rc < 2){
+                    rightLibero[rc, 0] = UserData.Instance.UserPlayerNumber[i];
+                    rightLiberoName[rc].text = UserData.Instance.UserPlayerName[i];
+                    rc++;
+                }
+                if(UserData.Instance.EnemyPlayerPlayPos[i] == 4 && lc < 2){
+                    leftLibero[rc, 0] = UserData.Instance.EnemyPlayerNumber[i];
+                    leftLiberoName[lc].text = UserData.Instance.EnemyPlayerName[i];
+                    lc++;
+                }
+                if(rc>=2 && lc >=2)
+                    break;
+            }
+            List<string> leftOption = new List<string>();
+            List<string> rightOption = new List<string>();
+
+            leftOption.Add(" ");
+            rightOption.Add(" ");
+
+            for(int i = 0; i < 6; i++){
+                if(UserData.Instance.UserPlayerPlayPos[i] != 4)
+                    rightOption.Add(UserData.Instance.UserPlayerName[i]);
+                if(UserData.Instance.EnemyPlayerPlayPos[i] != 4)
+                    leftOption.Add(UserData.Instance.EnemyPlayerName[i]);
+            }
+            for(int i = 0; i < 2; i++){
+                leftLiberoC[i].ClearOptions();
+                rightLiberoC[i].ClearOptions();
+                leftLiberoC[i].AddOptions(leftOption);
+                rightLiberoC[i].AddOptions(rightOption);
+                leftLiberoC[i].onValueChanged.AddListener(delegate {
+                    changeLiberoChoice(leftLiberoC[i], leftLiberoC, leftOption);
+                });
+                rightLiberoC[i].onValueChanged.AddListener(delegate {
+                    changeLiberoChoice(rightLiberoC[i], rightLiberoC, rightOption);
+                });
+            }
         }
         /*leftStartCatchPos = new Vector3[6,6]{{318.7087, 580.1398, 0}, {320.0315, 580.1104, 0}, {322.7357, 582.462, 0}, {321.0015, 583.9317, 0}, {319.9433, 582.9029, 0}, {320.3842, 581.3156, 0}, 
                                         {319.5905, 580.1839, 0}, {322.7064, 580.3015, 0}, {320.5605, 583.1821, 0}, {321.9715, 583.9758, 0}, {318.8851, 582.4473, 0}, {319.9493, 581.536, 0},
@@ -213,32 +298,53 @@ public class SystemData : MonoBehaviour
         Main.SetActive(true);
         Setting.SetActive(false);
     }
+    public Dropdown[] leftLiberoC;
+    public Dropdown[] rightLiberoC;
 
-    /*public void AutoCLibero(){
-        if(Clibero){
-            
-            if(liberoTarget[0] > 0){
-
-            }
-            else if(liberoHasChange[0]){
-                for(int i = 1; i <= 3; i++){
-                    if(leftPlayers[i].GetComponent<dragPlayer>().playerPlayPos == 4){
-                        liberoTarget[]
-                    }
-                }
-            }
-
-            if(liberoTarget[1] > 0){
-
-            }
-            else if(liberoHasChange[1]){
-                for(int i = 1; i <=3; i++){
-                    
-                }
-            }
-
-            
+    public void SetChangeLibero(){
+        for(int i = 0; i < 2; i++){
+            if(leftLiberoC[i].value == 0)
+                leftLibero[i, 1] = -1;
+            else
+                leftLibero[i, 1] = leftLiberoC[i].value;
+            if(rightLiberoC[i].value == 0)
+                rightLibero[i, 1] = -1;
+            else
+                rightLibero[i, 1] = rightLiberoC[i].value;
         }
-    }*/
+    }
+    public void changeLiberoChoice(Dropdown change, Dropdown[] dropdowns, List<string>options){
+        List<string> allOptions = new List<string>(options);
+        foreach (Dropdown dropdown in dropdowns)
+        {
+            if (dropdown != change)
+            {
+                allOptions.Remove(dropdown.options[dropdown.value].text);
+            }
+        }
+        
+        // 保存当前选中的选项
+        string selectedOption = change.options[change.value].text;
+
+        // 更新所有Dropdown的选项
+        foreach (Dropdown dropdown in dropdowns)
+        {
+            dropdown.ClearOptions();
+            dropdown.AddOptions(allOptions);
+
+            // 重新选中之前选中的选项
+            if (dropdown == change && allOptions.Contains(selectedOption))
+            {
+                dropdown.value = allOptions.IndexOf(selectedOption);
+            }
+            else
+            {
+                dropdown.value = 0;
+            }
+        }
+    }
+    public void AutoCLibero(){
+        
+    }
 
 }
