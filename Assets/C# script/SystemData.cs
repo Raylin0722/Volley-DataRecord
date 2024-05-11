@@ -144,8 +144,8 @@ public class SystemData : MonoBehaviour
             List<string> leftOption = new List<string>();
             List<string> rightOption = new List<string>();
 
-            leftOption.Add(" ");
-            rightOption.Add(" ");
+            leftOption.Add("未設定");
+            rightOption.Add("未設定");
 
             for(int i = 0; i < 6; i++){
                 if(UserData.Instance.UserPlayerPlayPos[i] != 4)
@@ -393,6 +393,7 @@ public class SystemData : MonoBehaviour
         changeLiberoChoice(leftLiberoC, leftOption);
         changeLiberoChoice(rightLiberoC, rightOption);
         SetChangeLibero();
+        AutoCLibero();
     }
     public GameObject Canvas;
     RefreshPoint PointScript;
