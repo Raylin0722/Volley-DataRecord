@@ -124,6 +124,14 @@ public class SystemData : MonoBehaviour
                 if(rc>=2 && lc >=2)
                     break;
             }
+            for(int i = 0; i < 2-lc; i++){
+                leftLiberoC[i].interactable = false;
+                leftLiberoName[i].text = "未設定";
+            }
+            for(int i = 0; i < 2-rc; i++){
+                rightLiberoC[i].interactable = false;
+                rightLiberoName[i].text = "未設定";
+            }
             List<string> leftOption = new List<string>();
             List<string> rightOption = new List<string>();
 
@@ -190,6 +198,14 @@ public class SystemData : MonoBehaviour
                 }
                 if(rc>=2 && lc >=2)
                     break;
+            }
+            for(int i = 0; i < 2-lc; i++){
+                leftLiberoC[i].interactable = false;
+                leftLiberoName[i].text = "未設定";
+            }
+            for(int i = 0; i < 2-rc; i++){
+                rightLiberoC[i].interactable = false;
+                rightLiberoName[i].text = "未設定";
             }
             List<string> leftOption = new List<string>();
             List<string> rightOption = new List<string>();
@@ -303,14 +319,18 @@ public class SystemData : MonoBehaviour
 
     public void SetChangeLibero(){
         for(int i = 0; i < 2; i++){
-            if(leftLiberoC[i].value == 0)
+            if(leftLiberoC[i].value == 0){
                 leftLibero[i, 1] = -1;
-            else
+            }
+            else{
                 leftLibero[i, 1] = leftLiberoC[i].value;
-            if(rightLiberoC[i].value == 0)
+            }
+            if(rightLiberoC[i].value == 0){
                 rightLibero[i, 1] = -1;
-            else
+            }
+            else{
                 rightLibero[i, 1] = rightLiberoC[i].value;
+            }
         }
     }
     public void changeLiberoChoice(Dropdown change, Dropdown[] dropdowns, List<string>options){
