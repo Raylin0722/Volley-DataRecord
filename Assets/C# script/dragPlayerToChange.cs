@@ -33,14 +33,16 @@ public class dragPlayerToChange : MonoBehaviour {
     public void OnMouseDown() {
         for(int i = 0; i < 6; i++){
             if(side[0] == 0){ // LEFT
-                if(SystemScript.changeLeftPlayers[i] == this.gameObject){
+                if(SystemScript.changeLeftPlayers[i] == this.gameObject && 
+                   SystemScript.changeLeftPlayers[i].GetComponent<dragPlayer>().playerPlayPos != 4){
                     SystemScript.CformationTmp[0] = side[0];
                     SystemScript.CformationTmp[1] = i;
                     break;
                 }
             }
             else{ // RIGHT
-                if(SystemScript.changeRightPlayers[i] == this.gameObject){
+                if(SystemScript.changeRightPlayers[i] == this.gameObject &&
+                   SystemScript.changeRightPlayers[i].GetComponent<dragPlayer>().playerPlayPos != 4){
                     SystemScript.CformationTmp[0] = side[0];
                     SystemScript.CformationTmp[1] = i;
                     break;

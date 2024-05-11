@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
+using System;
 
 public class SystemData : MonoBehaviour
 {
@@ -54,6 +55,12 @@ public class SystemData : MonoBehaviour
     public int nameMode;
     public Text[] leftLiberoName;
     public Text[] rightLiberoName;
+    List<string> leftOption = new List<string>();
+    List<string> rightOption = new List<string>();
+    dragPlayer[] leftDrag;
+    dragPlayer[] rightDrag;
+
+        
     void Start(){
         
         score = new int[2];
@@ -76,8 +83,8 @@ public class SystemData : MonoBehaviour
         Clibero = false; // 不自動換
         liberoHasChange = new bool[2]{false, false};
         CformationTmp = new int[2]{-1, -1};
-        leftLibero = new int[2, 2];
-        rightLibero = new int[2, 2];
+        leftLibero = new int[2, 3];
+        rightLibero = new int[2, 3];
         nameMode = 0;
 
         
@@ -125,11 +132,13 @@ public class SystemData : MonoBehaviour
                     break;
             }
             for(int i = 0; i < 2-lc; i++){
-                leftLiberoC[i].interactable = false;
+                leftLiberoC[2*i].interactable = false;
+                leftLiberoC[2*i+1].interactable = false;
                 leftLiberoName[i].text = "未設定";
             }
             for(int i = 0; i < 2-rc; i++){
-                rightLiberoC[i].interactable = false;
+                rightLiberoC[2*i].interactable = false;
+                rightLiberoC[2*i+1].interactable = false;
                 rightLiberoName[i].text = "未設定";
             }
             List<string> leftOption = new List<string>();
@@ -144,17 +153,11 @@ public class SystemData : MonoBehaviour
                 if(UserData.Instance.EnemyPlayerPlayPos[i] != 4)
                     rightOption.Add(UserData.Instance.EnemyPlayerName[i]);
             }
-            for(int i = 0; i < 2; i++){
+            for(int i = 0; i < 4; i++){
                 leftLiberoC[i].ClearOptions();
                 rightLiberoC[i].ClearOptions();
                 leftLiberoC[i].AddOptions(leftOption);
                 rightLiberoC[i].AddOptions(rightOption);
-                leftLiberoC[i].onValueChanged.AddListener(delegate {
-                    changeLiberoChoice(leftLiberoC[i], leftLiberoC, leftOption);
-                });
-                rightLiberoC[i].onValueChanged.AddListener(delegate {
-                    changeLiberoChoice(rightLiberoC[i], rightLiberoC, rightOption);
-                });
             }
             
         }
@@ -200,18 +203,18 @@ public class SystemData : MonoBehaviour
                     break;
             }
             for(int i = 0; i < 2-lc; i++){
-                leftLiberoC[i].interactable = false;
+                leftLiberoC[2*i].interactable = false;
+                leftLiberoC[2*i+1].interactable = false;
                 leftLiberoName[i].text = "未設定";
             }
             for(int i = 0; i < 2-rc; i++){
-                rightLiberoC[i].interactable = false;
+                rightLiberoC[2*i].interactable = false;
+                rightLiberoC[2*i+1].interactable = false;
                 rightLiberoName[i].text = "未設定";
             }
-            List<string> leftOption = new List<string>();
-            List<string> rightOption = new List<string>();
-
-            leftOption.Add(" ");
-            rightOption.Add(" ");
+            
+            leftOption.Add("未設定");
+            rightOption.Add("未設定");
 
             for(int i = 0; i < 6; i++){
                 if(UserData.Instance.UserPlayerPlayPos[i] != 4)
@@ -219,19 +222,21 @@ public class SystemData : MonoBehaviour
                 if(UserData.Instance.EnemyPlayerPlayPos[i] != 4)
                     leftOption.Add(UserData.Instance.EnemyPlayerName[i]);
             }
-            for(int i = 0; i < 2; i++){
+            for(int i = 0; i < 4; i++){
                 leftLiberoC[i].ClearOptions();
                 rightLiberoC[i].ClearOptions();
                 leftLiberoC[i].AddOptions(leftOption);
                 rightLiberoC[i].AddOptions(rightOption);
-                leftLiberoC[i].onValueChanged.AddListener(delegate {
-                    changeLiberoChoice(leftLiberoC[i], leftLiberoC, leftOption);
-                });
-                rightLiberoC[i].onValueChanged.AddListener(delegate {
-                    changeLiberoChoice(rightLiberoC[i], rightLiberoC, rightOption);
-                });
             }
+
         }
+        leftDrag = new dragPlayer[6];
+        rightDrag = new dragPlayer[6];
+        for(int i = 0; i < 6; i++){
+            leftDrag[i] = leftPlayers[i].GetComponent<dragPlayer>();
+            rightDrag[i] = rightPlayers[i].GetComponent<dragPlayer>();
+        }
+
         /*leftStartCatchPos = new Vector3[6,6]{{318.7087, 580.1398, 0}, {320.0315, 580.1104, 0}, {322.7357, 582.462, 0}, {321.0015, 583.9317, 0}, {319.9433, 582.9029, 0}, {320.3842, 581.3156, 0}, 
                                         {319.5905, 580.1839, 0}, {322.7064, 580.3015, 0}, {320.5605, 583.1821, 0}, {321.9715, 583.9758, 0}, {318.8851, 582.4473, 0}, {319.9493, 581.536, 0},
                                         {319.7963, 580.3015, 0}, {322.3536, 580.5072, 0}, {322.2948, 582.1827, 0}, {320.3842, 583.9464, 0}, {319.5023, 582.5355, 0}, {318.7675, 581.2715, 0},
@@ -318,53 +323,236 @@ public class SystemData : MonoBehaviour
     public Dropdown[] rightLiberoC;
 
     public void SetChangeLibero(){
+
         for(int i = 0; i < 2; i++){
-            if(leftLiberoC[i].value == 0){
-                leftLibero[i, 1] = -1;
+            if(leftLiberoC[2*i].options[leftLiberoC[2*i].value].text == "未設定"){
+                leftLibero[i, 1] = 0;
             }
             else{
-                leftLibero[i, 1] = leftLiberoC[i].value;
+                for(int j = 0; j < 6; j++){
+                    if(leftDrag[j].playerName == leftLiberoC[2*i].options[leftLiberoC[2*i].value].text)
+                        leftLibero[i, 1] = Int32.Parse(leftDrag[j].playerNum);
+                }
             }
-            if(rightLiberoC[i].value == 0){
-                rightLibero[i, 1] = -1;
+
+            if(leftLiberoC[2*i+1].options[leftLiberoC[2*i+1].value].text == "未設定"){
+                leftLibero[i, 2] = 0;
             }
             else{
-                rightLibero[i, 1] = rightLiberoC[i].value;
+                for(int j = 0; j < 6; j++){
+                    if(leftDrag[j].playerName == leftLiberoC[2*i+1].options[leftLiberoC[2*i+1].value].text)
+                        leftLibero[i, 2] = Int32.Parse(leftDrag[j].playerNum);
+                }
+            }
+
+            if(rightLiberoC[2*i].options[rightLiberoC[2*i].value].text == "未設定"){
+                rightLibero[i, 1] = 0;
+            }
+            else{
+                for(int j = 0; j < 6; j++){
+                    if(rightDrag[j].playerName == rightLiberoC[2*i].options[rightLiberoC[2*i].value].text)
+                        rightLibero[i, 1] = Int32.Parse(rightDrag[j].playerNum);
+                }
+                
+            }
+
+            if(rightLiberoC[2*i+1].options[rightLiberoC[2*i+1].value].text == "未設定"){
+                rightLibero[i, 2] = 0;
+            }
+            else{
+                for(int j = 0; j < 6; j++){
+                    if(rightDrag[j].playerName == rightLiberoC[2*i+1].options[rightLiberoC[2*i+1].value].text)
+                        rightLibero[i, 2] = Int32.Parse(rightDrag[j].playerNum);
+                }
             }
         }
     }
-    public void changeLiberoChoice(Dropdown change, Dropdown[] dropdowns, List<string>options){
-        List<string> allOptions = new List<string>(options);
-        foreach (Dropdown dropdown in dropdowns)
-        {
-            if (dropdown != change)
-            {
-                allOptions.Remove(dropdown.options[dropdown.value].text);
+    public void changeLiberoChoice(Dropdown[] dropdowns, List<string>options){
+        string[] select = new string[dropdowns.Length];
+        List<string> newOption = new List<string>(options);
+
+
+        for(int i = 0; i < dropdowns.Length; i++){
+            select[i] = dropdowns[i].options[dropdowns[i].value].text;
+            if(select[i] != "未設定" && newOption.Contains(select[i])){
+                newOption.Remove(select[i]);
             }
         }
+
+        for(int i = 0; i < dropdowns.Length; i++){
+            dropdowns[i].ClearOptions();
+            List<string> tmpOption = new List<string>(newOption);
+            tmpOption.Add(select[i]);
+            dropdowns[i].AddOptions(tmpOption);
+            dropdowns[i].value = tmpOption.Count-1;
+        }
+
         
-        // 保存当前选中的选项
-        string selectedOption = change.options[change.value].text;
-
-        // 更新所有Dropdown的选项
-        foreach (Dropdown dropdown in dropdowns)
-        {
-            dropdown.ClearOptions();
-            dropdown.AddOptions(allOptions);
-
-            // 重新选中之前选中的选项
-            if (dropdown == change && allOptions.Contains(selectedOption))
-            {
-                dropdown.value = allOptions.IndexOf(selectedOption);
-            }
-            else
-            {
-                dropdown.value = 0;
-            }
-        }
     }
+    public void SetLibero(){
+        changeLiberoChoice(leftLiberoC, leftOption);
+        changeLiberoChoice(rightLiberoC, rightOption);
+        SetChangeLibero();
+    }
+    public GameObject Canvas;
+    RefreshPoint PointScript;
     public void AutoCLibero(){
-        
+        PointScript = Canvas.GetComponent<RefreshPoint>();        
+
+        for(int i = 0; i < 2; i++){
+            
+            if(leftLibero[i,1]!=0){
+                if(Int32.Parse(leftDrag[1].playerNum) == leftLibero[i,0] || 
+                   Int32.Parse(leftDrag[2].playerNum) == leftLibero[i,0] || 
+                   Int32.Parse(leftDrag[3].playerNum) == leftLibero[i,0]){ // 自由球員在前排
+                    string tmpName="", tmpNum="";
+                    int tmpPos=0, change=0 ;
+                    change = leftLibero[i, 1] < 0 ? 1 : 2; 
+                    for(int j = 0; j < 6; j++){
+                        if((leftRight == 0 ? UserData.Instance.UserPlayerNumber[j] : UserData.Instance.EnemyPlayerNumber[j]) == leftLibero[i, change]){
+                            tmpNum = leftRight == 0 ? UserData.Instance.UserPlayerNumber[j].ToString() : UserData.Instance.EnemyPlayerNumber[j].ToString();
+                            tmpName = leftRight == 0 ? UserData.Instance.UserPlayerName[j] : UserData.Instance.EnemyPlayerName[j];
+                            tmpPos = leftRight == 0 ? UserData.Instance.UserPlayerPlayPos[j] : UserData.Instance.EnemyPlayerPlayPos[j];
+                            break;
+                        }
+                    }
+                    
+                    foreach(int j in  new List<int>{1,2,3}){
+                        if(Int32.Parse(leftDrag[j].playerNum) == leftLibero[i, 0]){
+                            leftDrag[j].playerNum = tmpNum;
+                            leftDrag[j].playerPlayPos = tmpPos;
+                            leftDrag[j].playerName = tmpName;
+                            leftDrag[j].updata[0] = false;
+                        }
+                    }
+                    leftLiberoC[i].interactable = true;
+                }
+                else if(Int32.Parse(leftDrag[0].playerNum) == leftLibero[i,0] || 
+                        Int32.Parse(leftDrag[4].playerNum) == leftLibero[i,0] || 
+                        Int32.Parse(leftDrag[5].playerNum) == leftLibero[i,0]){ // 自由球員在後排
+                    leftLiberoC[i].interactable = false;
+                }
+                else{ // 自由球員未在場上
+                    if((Int32.Parse(leftDrag[0].playerNum) == leftLibero[i,1] || 
+                        Int32.Parse(leftDrag[4].playerNum) == leftLibero[i,1] || 
+                        Int32.Parse(leftDrag[5].playerNum) == leftLibero[i,1] ||
+                        Int32.Parse(leftDrag[0].playerNum) == leftLibero[i,2] || 
+                        Int32.Parse(leftDrag[4].playerNum) == leftLibero[i,2] || 
+                        Int32.Parse(leftDrag[5].playerNum) == leftLibero[i,2])&& 
+                        PointScript.whoServe == 1){ // 目標球員在後排
+                        string tmpName="", tmpNum="";
+                        int tmpPos=0;
+                        for(int j = 0; j < 12; j++){
+                            if((leftRight == 0 ? UserData.Instance.UserPlayerNumber[j] : UserData.Instance.EnemyPlayerNumber[j]) == leftLibero[i, 0]){
+                                tmpNum = leftRight == 0 ? UserData.Instance.UserPlayerNumber[j].ToString() : UserData.Instance.EnemyPlayerNumber[j].ToString();
+                                tmpName = leftRight == 0 ? UserData.Instance.UserPlayerName[j] : UserData.Instance.EnemyPlayerName[j];
+                                tmpPos = leftRight == 0 ? UserData.Instance.UserPlayerPlayPos[j] : UserData.Instance.EnemyPlayerPlayPos[j];
+                                break;
+                            }
+                        }
+                        foreach(int j in new List<int>{0, 4, 5}){
+                            if(Int32.Parse(leftDrag[j].playerNum) == leftLibero[i,1]){
+                                leftDrag[j].playerName = tmpName;
+                                leftDrag[j].playerNum = tmpNum;
+                                leftDrag[j].playerPlayPos = tmpPos;
+                                leftDrag[j].updata[0] = false;
+                                leftLibero[i,1] *= -1;
+                                break;
+                            }
+                            else if(Int32.Parse(leftDrag[j].playerNum) == leftLibero[i,2]){
+                                leftDrag[j].playerName = tmpName;
+                                leftDrag[j].playerNum = tmpNum;
+                                leftDrag[j].playerPlayPos = tmpPos;
+                                leftDrag[j].updata[0] = false;
+                                leftLibero[i,2] *= -1;
+                                break;
+                            }
+                            
+                        }
+
+                    }
+                    
+                    leftLiberoC[i].interactable = false;
+                }
+            }
+
+            if(rightLibero[i,1]!=0){
+                if(Int32.Parse(rightDrag[1].playerNum) == rightLibero[i,0] || 
+                   Int32.Parse(rightDrag[2].playerNum) == rightLibero[i,0] || 
+                   Int32.Parse(rightDrag[3].playerNum) == rightLibero[i,0]){ // 自由球員在前排
+                    string tmpName="", tmpNum="";
+                    int tmpPos=0, change=0 ;
+                    change = rightLibero[i, 1] < 0 ? 1 : 2; 
+                    for(int j = 0; j < 6; j++){
+                        if((leftRight == 1 ? UserData.Instance.UserPlayerNumber[j] : UserData.Instance.EnemyPlayerNumber[j]) == rightLibero[i, change]){
+                            tmpNum = leftRight == 1 ? UserData.Instance.UserPlayerNumber[j].ToString() : UserData.Instance.EnemyPlayerNumber[j].ToString();
+                            tmpName = leftRight == 1 ? UserData.Instance.UserPlayerName[j] : UserData.Instance.EnemyPlayerName[j];
+                            tmpPos = leftRight == 1 ? UserData.Instance.UserPlayerPlayPos[j] : UserData.Instance.EnemyPlayerPlayPos[j];
+                            break;
+                        }
+                    }
+                    
+                    foreach(int j in  new List<int>{1,2,3}){
+                        if(Int32.Parse(rightDrag[j].playerNum) == rightLibero[i, 0]){
+                            rightDrag[j].playerNum = tmpNum;
+                            rightDrag[j].playerPlayPos = tmpPos;
+                            rightDrag[j].playerName = tmpName;
+                            rightDrag[j].updata[0] = false;
+                        }
+                    }
+                    rightLiberoC[i].interactable = true;
+                }
+                else if(Int32.Parse(rightDrag[0].playerNum) == rightLibero[i,0] || 
+                        Int32.Parse(rightDrag[4].playerNum) == rightLibero[i,0] || 
+                        Int32.Parse(rightDrag[5].playerNum) == rightLibero[i,0]){ // 自由球員在後排
+                    rightLiberoC[i].interactable = false;
+                }
+                else{ // 自由球員未在場上
+                    if((Int32.Parse(rightDrag[0].playerNum) == rightLibero[i,1] || 
+                        Int32.Parse(rightDrag[4].playerNum) == rightLibero[i,1] || 
+                        Int32.Parse(rightDrag[5].playerNum) == rightLibero[i,1] ||
+                        Int32.Parse(rightDrag[0].playerNum) == rightLibero[i,2] || 
+                        Int32.Parse(rightDrag[4].playerNum) == rightLibero[i,2] || 
+                        Int32.Parse(rightDrag[5].playerNum) == rightLibero[i,2])&& 
+                        PointScript.whoServe == 1){ // 目標球員在後排
+                        string tmpName="", tmpNum="";
+                        int tmpPos=0;
+                        for(int j = 0; j < 12; j++){
+                            if((leftRight == 1 ? UserData.Instance.UserPlayerNumber[j] : UserData.Instance.EnemyPlayerNumber[j]) == rightLibero[i, 0]){
+                                tmpNum = leftRight == 1 ? UserData.Instance.UserPlayerNumber[j].ToString() : UserData.Instance.EnemyPlayerNumber[j].ToString();
+                                tmpName = leftRight == 1 ? UserData.Instance.UserPlayerName[j] : UserData.Instance.EnemyPlayerName[j];
+                                tmpPos = leftRight == 1 ? UserData.Instance.UserPlayerPlayPos[j] : UserData.Instance.EnemyPlayerPlayPos[j];
+                                break;
+                            }
+                        }
+                        foreach(int j in new List<int>{0, 4, 5}){
+                            if(Int32.Parse(rightDrag[j].playerNum) == rightLibero[i,1]){
+                                rightDrag[j].playerName = tmpName;
+                                rightDrag[j].playerNum = tmpNum;
+                                rightDrag[j].playerPlayPos = tmpPos;
+                                rightDrag[j].updata[0] = false;
+                                rightLibero[i,1] *= -1;
+                                break;
+                            }
+                            else if(Int32.Parse(rightDrag[j].playerNum) == rightLibero[i,2]){
+                                rightDrag[j].playerName = tmpName;
+                                rightDrag[j].playerNum = tmpNum;
+                                rightDrag[j].playerPlayPos = tmpPos;
+                                rightDrag[j].updata[0] = false;
+                                rightLibero[i,2] *= -1;
+                                break;
+                            }
+                            
+                        }
+
+                    }
+                    
+                    rightLiberoC[i].interactable = false;
+                }
+            }
+
+            
+        }
     }
 
 }
