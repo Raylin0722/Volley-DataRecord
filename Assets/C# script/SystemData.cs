@@ -55,10 +55,10 @@ public class SystemData : MonoBehaviour
     public int nameMode;
     public Text[] leftLiberoName;
     public Text[] rightLiberoName;
-    List<string> leftOption = new List<string>();
-    List<string> rightOption = new List<string>();
-    dragPlayer[] leftDrag;
-    dragPlayer[] rightDrag;
+    public List<string> leftOption;
+    public List<string> rightOption;
+    public dragPlayer[] leftDrag;
+    public dragPlayer[] rightDrag;
 
         
     void Start(){
@@ -87,7 +87,8 @@ public class SystemData : MonoBehaviour
         rightLibero = new int[2, 3];
         nameMode = 0;
 
-        
+        leftOption = new List<string>();
+        rightOption = new List<string>();
 
         if(leftRight == 0){ // 使用者 left 0 right 1
             leftTeamName.text = UserData.Instance.UserTeamName;
@@ -121,11 +122,15 @@ public class SystemData : MonoBehaviour
                 if(UserData.Instance.UserPlayerPlayPos[i] == 4 && lc < 2){
                     leftLibero[lc, 0] = UserData.Instance.UserPlayerNumber[i];
                     leftLiberoName[lc].text = UserData.Instance.UserPlayerName[i];
+                    leftLibero[lc, 1] = 0;
+                    leftLibero[lc, 2] = 0;
                     lc++;
                 }
                 if(UserData.Instance.EnemyPlayerPlayPos[i] == 4 && rc < 2){
                     rightLibero[rc, 0] = UserData.Instance.EnemyPlayerNumber[i];
                     rightLiberoName[rc].text = UserData.Instance.EnemyPlayerName[i];
+                    rightLibero[rc, 1] = 0;
+                    rightLibero[rc, 2] = 0;
                     rc++;
                 }
                 if(rc>=2 && lc >=2)
@@ -145,8 +150,8 @@ public class SystemData : MonoBehaviour
                 rightLiberoName[i].text = "未設定";
             }
 
-            List<string> leftOption = new List<string>();
-            List<string> rightOption = new List<string>();
+            leftOption.Clear();
+            rightOption.Clear();
 
             leftOption.Add("未設定");
             rightOption.Add("未設定");
@@ -157,8 +162,7 @@ public class SystemData : MonoBehaviour
                 if(UserData.Instance.EnemyPlayerPlayPos[i] != 4)
                     rightOption.Add(UserData.Instance.EnemyPlayerName[i]);
             }
-            print(leftOption);
-            print(rightOption);
+            
             for(int i = 0; i < 4; i++){
                 leftLiberoC[i].ClearOptions();
                 rightLiberoC[i].ClearOptions();
@@ -198,11 +202,15 @@ public class SystemData : MonoBehaviour
                 if(UserData.Instance.UserPlayerPlayPos[i] == 4 && rc < 2){
                     rightLibero[rc, 0] = UserData.Instance.UserPlayerNumber[i];
                     rightLiberoName[rc].text = UserData.Instance.UserPlayerName[i];
+                    rightLibero[rc, 1] = 0;
+                    rightLibero[rc, 2] = 0;
                     rc++;
                 }
                 if(UserData.Instance.EnemyPlayerPlayPos[i] == 4 && lc < 2){
                     leftLibero[rc, 0] = UserData.Instance.EnemyPlayerNumber[i];
                     leftLiberoName[lc].text = UserData.Instance.EnemyPlayerName[i];
+                    leftLibero[lc, 1] = 0;
+                    leftLibero[lc, 2] = 0;
                     lc++;
                 }
                 if(rc>=2 && lc >=2)
@@ -218,6 +226,8 @@ public class SystemData : MonoBehaviour
                 rightLiberoC[2*i+1].interactable = false;
                 rightLiberoName[i].text = "未設定";
             }
+            leftOption.Clear();
+            rightOption.Clear();
             
             leftOption.Add("未設定");
             rightOption.Add("未設定");
@@ -365,11 +375,12 @@ public class SystemData : MonoBehaviour
     }
     public void changeLiberoChoice(Dropdown[] dropdowns, int leftOrRight){
         string[] select = new string[dropdowns.Length];
-        List<string> newOption = new List<string>(leftOrRight == 0 ? leftOption : rightOption);
-        print(newOption.Count);
-
-        for(int i = 0; i < newOption.Count; i++)
-            print(newOption[i]);
+        List<string> newOption;
+        if(leftOrRight == 0)
+            newOption = new List<string>(leftOption);
+        else
+            newOption = new List<string>(rightOption);
+        
 
         for(int i = 0; i < dropdowns.Length; i++){
             select[i] = dropdowns[i].options[dropdowns[i].value].text;
@@ -378,21 +389,55 @@ public class SystemData : MonoBehaviour
             }
         }
 
-        for(int i = 0; i < newOption.Count; i++)
-            print(newOption[i]);
-
         for(int i = 0; i < dropdowns.Length; i++){
             dropdowns[i].ClearOptions();
             List<string> tmpOption = new List<string>(newOption);
-            if(select[i] != "未設定")
-                tmpOption.Add(select[i]);
+            if(select[i] != "未設定"){
+                tmpOption.Add(tmpOption[0]);
+                tmpOption[0] = select[i];
+            }
+                
             dropdowns[i].AddOptions(tmpOption);
-            dropdowns[i].value = tmpOption.Count-1;
+            dropdowns[i].value = 0;
         }
-
         
     }
     public void SetLibero(){
+        if(leftRight == 0){
+            
+            leftOption.Clear();
+            rightOption.Clear();
+
+            leftOption.Add("未設定");
+            rightOption.Add("未設定");
+
+            for(int i = 0; i < 6; i++){
+                if(UserData.Instance.UserPlayerPlayPos[i] != 4)
+                    leftOption.Add(UserData.Instance.UserPlayerName[i]);
+                if(UserData.Instance.EnemyPlayerPlayPos[i] != 4)
+                    rightOption.Add(UserData.Instance.EnemyPlayerName[i]);
+            }
+
+            print(leftOption.Count);
+        }
+        else{
+            
+            leftOption.Clear();
+            rightOption.Clear();
+
+            leftOption.Add("未設定");
+            rightOption.Add("未設定");
+
+            for(int i = 0; i < 6; i++){
+                if(UserData.Instance.UserPlayerPlayPos[i] != 4)
+                    rightOption.Add(UserData.Instance.UserPlayerName[i]);
+                if(UserData.Instance.EnemyPlayerPlayPos[i] != 4)
+                    leftOption.Add(UserData.Instance.EnemyPlayerName[i]);
+            }
+            print(leftOption.Count);
+        }
+
+        print(leftOption.Count);
         changeLiberoChoice(leftLiberoC, 0);
         changeLiberoChoice(rightLiberoC, 1);
         SetChangeLibero();
@@ -402,6 +447,13 @@ public class SystemData : MonoBehaviour
     public GameObject Canvas;
     RefreshPoint PointScript;
     public void AutoCLibero(){
+        for(int i = 0; i < 2; i++){
+            string output1 = String.Format("{0} num: {1} first: {2} sec: {3}\n", "left", leftLibero[i, 0], leftLibero[i, 1], leftLibero[i, 2]);
+            string output2 = String.Format("{0} num: {1} first: {2} sec: {3}\n", "right", rightLibero[i, 0], rightLibero[i, 1], rightLibero[i, 2]);
+            Debug.Log(output1);
+            Debug.Log(output2);
+        }
+
         PointScript = Canvas.GetComponent<RefreshPoint>();        
 
         for(int i = 0; i < 2; i++){
@@ -519,7 +571,7 @@ public class SystemData : MonoBehaviour
                         Int32.Parse(rightDrag[0].playerNum) == rightLibero[i,2] || 
                         Int32.Parse(rightDrag[4].playerNum) == rightLibero[i,2] || 
                         Int32.Parse(rightDrag[5].playerNum) == rightLibero[i,2])&& 
-                        PointScript.whoServe == 1){ // 目標球員在後排
+                        PointScript.whoServe == 0){ // 目標球員在後排
                         string tmpName="", tmpNum="";
                         int tmpPos=0;
                         for(int j = 0; j < 12; j++){
