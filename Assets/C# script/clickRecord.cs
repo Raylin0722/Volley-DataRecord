@@ -509,6 +509,8 @@ public class ClickRecord : MonoBehaviour
                 for(int i = 0; i < 6; i++){
                     SystemScript.leftPlayers[i].SetActive(true);
                     SystemScript.rightPlayers[i].SetActive(true);
+                    SystemScript.leftPlayers[i].GetComponent<dragPlayer>().isSelect[0] = false;
+                    SystemScript.rightPlayers[i].GetComponent<dragPlayer>().isSelect[0] = false;
                 }
                 ClickData tmp = Behavior.Last();
                 pin.GetComponent<RectTransform>().transform.position = tmp.clicks[0];
