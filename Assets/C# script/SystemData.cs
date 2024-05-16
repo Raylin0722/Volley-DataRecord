@@ -458,7 +458,7 @@ public class SystemData : MonoBehaviour
 
         for(int i = 0; i < 2; i++){
             
-            if(leftLibero[i,1]!=0 || leftLibero[i, 2]!= 0){
+            if((leftLibero[i,1]!=0 || leftLibero[i, 2]!= 0)){
                 if(Int32.Parse(leftDrag[1].playerNum) == leftLibero[i,0] || 
                    Int32.Parse(leftDrag[2].playerNum) == leftLibero[i,0] || 
                    Int32.Parse(leftDrag[3].playerNum) == leftLibero[i,0]){ // 自由球員在前排
@@ -491,13 +491,13 @@ public class SystemData : MonoBehaviour
                     lockingL = true;
                 }
                 else{ // 自由球員未在場上
-                    if((Int32.Parse(leftDrag[0].playerNum) == leftLibero[i,1] || 
-                        Int32.Parse(leftDrag[4].playerNum) == leftLibero[i,1] || 
+                    if((Int32.Parse(leftDrag[4].playerNum) == leftLibero[i,1] || 
                         Int32.Parse(leftDrag[5].playerNum) == leftLibero[i,1] ||
-                        Int32.Parse(leftDrag[0].playerNum) == leftLibero[i,2] || 
                         Int32.Parse(leftDrag[4].playerNum) == leftLibero[i,2] || 
-                        Int32.Parse(leftDrag[5].playerNum) == leftLibero[i,2])&& 
-                        PointScript.whoServe == 1){ // 目標球員在後排
+                        Int32.Parse(leftDrag[5].playerNum) == leftLibero[i,2])|| 
+                        (Int32.Parse(leftDrag[0].playerNum) == leftLibero[i,1] ||
+                        Int32.Parse(leftDrag[0].playerNum) == leftLibero[i,2] &&
+                        PointScript.whoServe == 1)){ // 目標球員在後排
                         string tmpName="", tmpNum="";
                         int tmpPos=0;
                         for(int j = 0; j < 12; j++){
@@ -565,13 +565,14 @@ public class SystemData : MonoBehaviour
                     lockingR = true;
                 }
                 else{ // 自由球員未在場上
-                    if((Int32.Parse(rightDrag[0].playerNum) == rightLibero[i,1] || 
-                        Int32.Parse(rightDrag[4].playerNum) == rightLibero[i,1] || 
+                    if((Int32.Parse(rightDrag[4].playerNum) == rightLibero[i,1] || 
                         Int32.Parse(rightDrag[5].playerNum) == rightLibero[i,1] ||
-                        Int32.Parse(rightDrag[0].playerNum) == rightLibero[i,2] || 
                         Int32.Parse(rightDrag[4].playerNum) == rightLibero[i,2] || 
-                        Int32.Parse(rightDrag[5].playerNum) == rightLibero[i,2])&& 
-                        PointScript.whoServe == 0){ // 目標球員在後排
+                        Int32.Parse(rightDrag[5].playerNum) == rightLibero[i,2])||
+                        (Int32.Parse(rightDrag[0].playerNum) == rightLibero[i,1] || 
+                        Int32.Parse(rightDrag[0].playerNum) == rightLibero[i,2] &&  
+                        PointScript.whoServe == 0) 
+                       ){ // 目標球員在後排
                         string tmpName="", tmpNum="";
                         int tmpPos=0;
                         for(int j = 0; j < 12; j++){
