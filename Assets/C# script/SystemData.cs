@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 using System;
+using UnityEngine.SceneManagement;
 
 public class SystemData : MonoBehaviour
 {
@@ -610,6 +611,43 @@ public class SystemData : MonoBehaviour
             }
 
             
+        }
+    }
+
+    public void backGameSelect(){
+        CallEndRecord();
+        UserData tmp = new UserData();
+        tmp.UserName = UserData.Instance.UserName;
+        tmp.UserID = UserData.Instance.UserID;
+        tmp.TeamID = UserData.Instance.TeamID;
+        tmp.numOfGame = UserData.Instance.numOfGame;
+        tmp.numOfPlayer = UserData.Instance.numOfPlayer;
+        UserData.Instance = tmp;
+        
+        SceneManager.LoadScene("GameSelect");
+    }
+
+    public void CallEndRecord(){
+        int UserID = UserData.Instance.UserID;
+        int GameID = UserData.Instance.GameID;
+        StartCoroutine(EndRecord(UserID, GameID));
+        return
+    }
+
+    public IEnumerator EndRecord(UserID, GameID){
+        WWWForm form = new WWWForm();
+        form.AddField("UserID", UserID);
+        form.AddField("GameID", GameID);
+
+        
+        UnityWebRequest www = UnityWebRequest.Post("https://volley.csie.ntnu.edu.tw/EndRecord", form);
+        yield return www.SendWebRequest();
+
+        if(www.result == UnityWebRequest.Result.Success){
+            ;
+        }
+        else{
+            print("Error!");
         }
     }
 

@@ -696,7 +696,7 @@ def graphicData():
                     SetWinner.append(result["LREachRound"]["right"][i])
                 else:
                     SetWinner.append(-1)
-                result["scores"][i]['winner'] = SetWinner[0][i]
+                result["scores"][i]['winner'] = SetWinner[i]
             cur.execute("insert into SetWinner(UserID, GameID, TotalSet, Set1, Set2, Set3, Set4, Set5) value(%s, %s, %s, %s, %s, %s, %s, %s)"
                         ,(UserID, GameID, count, SetWinner[0], SetWinner[1], SetWinner[2], SetWinner[3], SetWinner[4]))
             cnx.commit()
@@ -1002,6 +1002,36 @@ def GetPlayerCatchPos():
     return resultReturn
                 
             
+@app.route("/EndRecord", methods=['GET', 'POST'])
+def EndRecord():
+    UserID = request.form.get("UserID")
+    GameID = request.form.get("GameID")
+    
+    resultReturn = {"success" : False, "situation": -1, "ec": None}
+    
+    if UserID == None or GameID == None:
+        resultReturn["ec"] = "args error!" + "".format() 
+        return resultReturn
+    
+    cnx = mysql.connector.connect(**config)
+    cur = cnx.cursor(buffered=True)
+
+    cur.execute("select * from users where UserID=%s;", (UserID, ))
+    result = cur.fetchall()
+    
+    cur.execute("select * from GameInfo where UserID=%s and GameID=%s;", (UserID, GameID))
+    check1 = cur.fetchall()
+
+    if len(result) == 1 and len(check1) == 1:
+        try:
+            ()
+        except Exception as ec:
+            ()
+        finally:
+            ()
+    else:
+        result['ec'] = "Database Error!"
+        return result
     
 
 
