@@ -97,67 +97,6 @@ public class dealDB : MonoBehaviour
         SystemScript = this.gameObject.GetComponent<SystemData>();
     }
 
-
-
-    public void CallinitDB(){
-        StartCoroutine(initDB());
-    }
-
-    public IEnumerator initDB(){
-        WWWForm form = new WWWForm();
-        form.AddField("UserID", UserID);
-        form.AddField("GameID", GameID);
-        UnityWebRequest www = UnityWebRequest.Post("https://volley.csie.ntnu.edu.tw/initDB", form);
-        yield return www.SendWebRequest();
-
-        Return result = new Return();
-        if(www.result == UnityWebRequest.Result.Success){
-            string response = www.downloadHandler.text;
-            result = JsonUtility.FromJson<Return>(response);
-            if(result.success == false){
-                switch (result.situation){
-                    case -1:
-                        Debug.Log("參數傳送錯誤!"); 
-                        break;
-                    case -2:
-                        Debug.Log("資料庫錯誤!"); 
-                        break;
-                    case -3:
-                        Debug.Log("比賽不存在!"); 
-                        break;
-                    case -4:
-                        Debug.Log("帳號不存在!"); 
-                        break;
-                }
-            }
-            else{
-                Debug.Log("Success!");
-            }
-        }
-        else{
-            Debug.Log("未連接到伺服器!");
-        }
-
-    }
-
-    public void CallDisplayData(){
-        StartCoroutine(displayData());
-    }
-
-    public IEnumerator displayData(){
-        WWWForm form = new WWWForm();
-        form.AddField("gameName", gameName);
-        form.AddField("account", account);
-
-        
-        UnityWebRequest www = UnityWebRequest.Post("https://volley.csie.ntnu.edu.tw/displayData", form);
-        yield return www.SendWebRequest();
-
-        if(www.result == UnityWebRequest.Result.Success){
-            string response = www.downloadHandler.text;
-            showData = JsonConvert.DeserializeObject<List<Data>>(response);
-        }
-    }
     [SerializeField] GameObject content;
     public void CallInsertData(){
         //content.GetComponent<Text>().text = "";

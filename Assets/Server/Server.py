@@ -11,15 +11,19 @@ app = Flask(__name__)
 
 config = {
     'user': 'root',        
-    'password': 'test',        
+    'password': 'volley@csie',        
     'database': 'Volleyball',        
     'host': 'localhost',        
     'port': '3306'        
 }
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route("/", methods=['GET', 'POST'])
 def index():
-    return render_template("test.html")
+    return "index"
+
+@app.route('/showData', methods=['GET', 'POST'])
+def showData():
+    return render_template("d3.html")
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -79,6 +83,7 @@ def login():
     else:
         resultReturn['ec'] = "len of users != 1"
         resultReturn['situation'] = -6
+
 
     return resultReturn
 
@@ -388,8 +393,6 @@ def UpdateUserData():
                     GameAlreadyFinish.append(False)
                 else:
                     GameAlreadyFinish.append(True) 
-                
-            
             cur.execute("select * from Player where UserID=%s and TeamID!=%s order by TeamID, PNum;", (UserID, UserTeamID))
             OtherPlayer = cur.fetchall()
             cur.execute("select * from Team where UserID=%s and TeamID!=%s;", (UserID, UserTeamID))
@@ -494,11 +497,10 @@ def graphicData():
     UserID = request.args.get("UserID")
     GameID = request.args.get("GameID")
 
-
     print(UserID, GameID)
 
     if UserID == None or GameID == None:
-        return "Invalid UserID/GameID"
+        return "Invalid UserID/GameID" + str(GameID) +" " +str(UserID)
 
     cnx = mysql.connector.connect(**config)
     cur = cnx.cursor(buffered=True)
@@ -615,13 +617,13 @@ def graphicData():
     
     for i in range(12):
         if(i < len(playerDataL)):
-            result["players"]["left"][i]["name"] = playerDataL[i][2]
-            result["players"]["left"][i]["num"] = playerDataL[i][3]
-            result["players"]["left"][i]["pos"] = playerDataL[i][4]
+            result["players"]["left"][i]["name"] = playerDataL[i][3]
+            result["players"]["left"][i]["num"] = playerDataL[i][4]
+            result["players"]["left"][i]["pos"] = playerDataL[i][5]
         if(i < len(playerDataR)):
-            result["players"]["right"][i]["name"] = playerDataR[i][2]
-            result["players"]["right"][i]["num"] = playerDataR[i][3]
-            result["players"]["right"][i]["pos"] = playerDataR[i][4]
+            result["players"]["right"][i]["name"] = playerDataR[i][3]
+            result["players"]["right"][i]["num"] = playerDataR[i][4]
+            result["players"]["right"][i]["pos"] = playerDataR[i][5]
     
     set1L = 0; set1R = 0
     set2L = 0; set2R = 0
@@ -709,8 +711,10 @@ def graphicData():
             return "Database Error!"
         
     except Exception as ec:
-        print(ec)
-        return "Database Error!"
+        import traceback
+        error_message = traceback.format_exc()
+        #print(ec)
+        return "Database Error!  EC: " + error_message
     finally:
         cur.close()
         cnx.close()    
@@ -924,7 +928,7 @@ def GetPlayerCatchPos():
     for i in range(6):
         searchStrL += formationSplit[i] + " "
         searchStrR += formationSplit[i + 6] + " "
-    searchStrL += "R% R% R% R% R% R% "
+    searchStrL += "R% R% R% R% R% R%"
     
 
     cnx = mysql.connector.connect(**config)
@@ -979,7 +983,7 @@ def GetPlayerCatchPos():
             rightOut[str(data[6])][2] += 1
         
         for i in range(6):
-            if(leftOut[str(numL[i])][2] < 10):
+            if(leftOut[str(numL[i])][2] < 2):
                 resultReturn["PL"+str(i+1)+"X"] = -1
                 resultReturn["PL"+str(i+1)+"Y"] = -1
             else:
@@ -987,7 +991,7 @@ def GetPlayerCatchPos():
                 resultReturn["PL"+str(i+1)+"Y"] = int(leftOut[str(numL[i])][1] / leftOut[str(numL[i])][2])
 
             
-            if(rightOut[str(numR[i])][2] < 10):
+            if(rightOut[str(numR[i])][2] < 2):
                 resultReturn["PR"+str(i+1)+"X"] = -1
                 resultReturn["PR"+str(i+1)+"Y"] = -1
             else:
@@ -1001,40 +1005,41 @@ def GetPlayerCatchPos():
 
     return resultReturn
                 
-            
 @app.route("/EndRecord", methods=['GET', 'POST'])
 def EndRecord():
     UserID = request.form.get("UserID")
     GameID = request.form.get("GameID")
-    
-    resultReturn = {"success" : False, "situation": -1, "ec": None}
-    
-    if UserID == None or GameID == None:
-        resultReturn["ec"] = "args error!" + "".format() 
+
+    resultReturn = {"success" : False, "ec": None}
+
+    if UserID is None or GameID is None:
+        resultReturn["ec"] = "args error"
         return resultReturn
-    
+
     cnx = mysql.connector.connect(**config)
     cur = cnx.cursor(buffered=True)
-
+    
     cur.execute("select * from users where UserID=%s;", (UserID, ))
     result = cur.fetchall()
     
     cur.execute("select * from GameInfo where UserID=%s and GameID=%s;", (UserID, GameID))
     check1 = cur.fetchall()
-
+    
     if len(result) == 1 and len(check1) == 1:
         try:
-            ()
+            cur.execute("update GameInfo set GameFinish=true where UserID=%s and GameID=%s;", (UserID, GameID))
+            cnx.commit()
+            resultReturn["success"] = True
         except Exception as ec:
-            ()
+            resultReturn["ec"] = str(ec)
         finally:
-            ()
+            cur.close()
+            cnx.close()
+            
     else:
-        result['ec'] = "Database Error!"
-        return result
+        resultReturn['ec'] = "Database Error(not unique Users/Game)"
     
+    return resultReturn
 
-
-
-if __name__ == '__main__':
-    app.run(port=5000, debug=True)   
+#if __name__ == '__main__':
+#    app.run(port=5000, debug=True)   

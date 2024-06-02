@@ -132,7 +132,7 @@ public class ClickRecord : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(SystemScript.changePlayer){
+        if(SystemScript.changePlayer || SystemScript.changeFirstFormation){
             return;
         }
         if(!SystemScript.changePosition){

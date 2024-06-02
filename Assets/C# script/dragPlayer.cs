@@ -141,6 +141,43 @@ public class dragPlayer : MonoBehaviour {
             updata[0] = false;
             return;
         }
+        if(SystemScript.changeFirstFormation){
+            dragPlayerToChange changeTmp;
+            string tmpName = playerName, tmpNum = playerNum;
+            int tmpPos = playerPlayPos;
+            
+            if(SystemScript.CformationTmp[0] != -1){
+                int index = SystemScript.CformationTmp[1];
+                if(SystemScript.CformationTmp[0] == 0 && this.gameObject.tag == "Left"){
+                    changeTmp = SystemScript.changeLeftPlayers[index].GetComponent<dragPlayerToChange>();
+
+                    playerName = changeTmp.playerName;
+                    playerNum = changeTmp.playerNum;
+                    playerPlayPos = changeTmp.playerPlayPos;
+                    changeTmp.playerName = tmpName;
+                    changeTmp.playerNum = tmpNum;
+                    changeTmp.playerPlayPos = tmpPos;
+                    changeTmp.refresh[0] = false;
+                    
+                }
+                else if(SystemScript.CformationTmp[0] == 1 && this.gameObject.tag == "Right"){
+                    changeTmp = SystemScript.changeRightPlayers[index].GetComponent<dragPlayerToChange>();
+                    playerName = changeTmp.playerName;
+                    playerNum = changeTmp.playerNum;
+                    playerPlayPos = changeTmp.playerPlayPos;
+                    changeTmp.playerName = tmpName;
+                    changeTmp.playerNum = tmpNum;
+                    changeTmp.playerPlayPos = tmpPos;
+                    changeTmp.refresh[0] = false;
+                }
+                else
+                    return;
+            }
+            SystemScript.CformationTmp[0] = -1;
+            SystemScript.CformationTmp[1] = -1;
+            updata[0] = false;
+            return;
+        }
         if(DataScript.Behavior.Last().complete == false && DataScript.Behavior.Last().behavior == -1)
             return;
         if(!SystemScript.changePosition){

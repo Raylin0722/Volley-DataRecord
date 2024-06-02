@@ -6,9 +6,12 @@ using UnityEngine.EventSystems;
 using TMPro;
 using System;
 using UnityEngine.SceneManagement;
+using UnityEngine.Networking;
+using Newtonsoft.Json;
 
 public class SystemData : MonoBehaviour
 {
+    public bool changeFirstFormation;
     public string formation; // 紀錄當前陣容
     [SerializeField] public GameObject[] leftPlayers; // 左方球員
     [SerializeField] public GameObject[] rightPlayers; // 右方球員
@@ -60,10 +63,13 @@ public class SystemData : MonoBehaviour
     public List<string> rightOption;
     public dragPlayer[] leftDrag;
     public dragPlayer[] rightDrag;
+    public dragPlayerToChange[] leftChange;
+    public dragPlayerToChange[] rightChange;
 
-        
+    
     void Start(){
         
+        changeFirstFormation = false;
         score = new int[2];
         point = new int[2];
         leftScoreText.text = "0";
@@ -118,6 +124,54 @@ public class SystemData : MonoBehaviour
                 changeRightPlayers[i].GetComponent<dragPlayerToChange>().side = new int[1]{1};
 
             }
+            
+            initLibero();
+            
+        }
+        else{
+            rightTeamName.text = UserData.Instance.UserTeamName;
+            leftTeamName.text = UserData.Instance.EnemyTeamName;
+            for(int i = 0 ; i < 6; i++){
+                rightPlayers[i].GetComponent<dragPlayer>().playerName = UserData.Instance.UserPlayerName[i];
+                leftPlayers[i].GetComponent<dragPlayer>().playerName = UserData.Instance.EnemyPlayerName[i];
+                rightPlayers[i].GetComponent<dragPlayer>().playerNum = UserData.Instance.UserPlayerNumber[i].ToString();
+                leftPlayers[i].GetComponent<dragPlayer>().playerNum = UserData.Instance.EnemyPlayerNumber[i].ToString();
+                rightPlayers[i].GetComponent<dragPlayer>().playerPlayPos = UserData.Instance.UserPlayerPlayPos[i];
+                leftPlayers[i].GetComponent<dragPlayer>().playerPlayPos = UserData.Instance.EnemyPlayerPlayPos[i];
+
+                changeLeftPlayers[i].GetComponent<dragPlayerToChange>().playerName = UserData.Instance.EnemyPlayerName[i + 6];
+                changeRightPlayers[i].GetComponent<dragPlayerToChange>().playerName = UserData.Instance.UserPlayerName[i + 6];
+                changeLeftPlayers[i].GetComponent<dragPlayerToChange>().playerNum = UserData.Instance.EnemyPlayerNumber[i + 6].ToString();
+                changeRightPlayers[i].GetComponent<dragPlayerToChange>().playerNum = UserData.Instance.UserPlayerNumber[i + 6].ToString();
+                changeLeftPlayers[i].GetComponent<dragPlayerToChange>().playerPlayPos = UserData.Instance.EnemyPlayerPlayPos[i + 6];
+                changeRightPlayers[i].GetComponent<dragPlayerToChange>().playerPlayPos = UserData.Instance.UserPlayerPlayPos[i + 6];
+                changeLeftPlayers[i].GetComponent<dragPlayerToChange>().FirstPlayer = false;
+                changeRightPlayers[i].GetComponent<dragPlayerToChange>().FirstPlayer = false;
+                changeLeftPlayers[i].GetComponent<dragPlayerToChange>().timeOfChange = 1;
+                changeRightPlayers[i].GetComponent<dragPlayerToChange>().timeOfChange = 1;
+                changeLeftPlayers[i].GetComponent<dragPlayerToChange>().changeTarget = -1;
+                changeRightPlayers[i].GetComponent<dragPlayerToChange>().changeTarget = -1;
+                changeLeftPlayers[i].GetComponent<dragPlayerToChange>().side = new int[1]{0};
+                changeRightPlayers[i].GetComponent<dragPlayerToChange>().side = new int[1]{1};
+            }
+            initLibero();
+
+        }
+        leftDrag = new dragPlayer[6];
+        rightDrag = new dragPlayer[6];
+        leftChange = new dragPlayerToChange[6];
+        rightChange = new dragPlayerToChange[6];
+
+        for(int i = 0; i < 6; i++){
+            leftDrag[i] = leftPlayers[i].GetComponent<dragPlayer>();
+            rightDrag[i] = rightPlayers[i].GetComponent<dragPlayer>();
+            leftChange[i] = changeLeftPlayers[i].GetComponent<dragPlayerToChange>();
+            rightChange[i] = changeRightPlayers[i].GetComponent<dragPlayerToChange>();
+        }
+    }
+
+    public void initLibero(){
+        if(leftRight == 0){
             int lc= 0, rc = 0;
             for(int i = 0 ; i < 12; i++){
                 if(UserData.Instance.UserPlayerPlayPos[i] == 4 && lc < 2){
@@ -170,34 +224,8 @@ public class SystemData : MonoBehaviour
                 leftLiberoC[i].AddOptions(leftOption);
                 rightLiberoC[i].AddOptions(rightOption);
             }
-            
         }
         else{
-            rightTeamName.text = UserData.Instance.UserTeamName;
-            leftTeamName.text = UserData.Instance.EnemyTeamName;
-            for(int i = 0 ; i < 6; i++){
-                rightPlayers[i].GetComponent<dragPlayer>().playerName = UserData.Instance.UserPlayerName[i];
-                leftPlayers[i].GetComponent<dragPlayer>().playerName = UserData.Instance.EnemyPlayerName[i];
-                rightPlayers[i].GetComponent<dragPlayer>().playerNum = UserData.Instance.UserPlayerNumber[i].ToString();
-                leftPlayers[i].GetComponent<dragPlayer>().playerNum = UserData.Instance.EnemyPlayerNumber[i].ToString();
-                rightPlayers[i].GetComponent<dragPlayer>().playerPlayPos = UserData.Instance.UserPlayerPlayPos[i];
-                leftPlayers[i].GetComponent<dragPlayer>().playerPlayPos = UserData.Instance.EnemyPlayerPlayPos[i];
-
-                changeLeftPlayers[i].GetComponent<dragPlayerToChange>().playerName = UserData.Instance.EnemyPlayerName[i + 6];
-                changeRightPlayers[i].GetComponent<dragPlayerToChange>().playerName = UserData.Instance.UserPlayerName[i + 6];
-                changeLeftPlayers[i].GetComponent<dragPlayerToChange>().playerNum = UserData.Instance.EnemyPlayerNumber[i + 6].ToString();
-                changeRightPlayers[i].GetComponent<dragPlayerToChange>().playerNum = UserData.Instance.UserPlayerNumber[i + 6].ToString();
-                changeLeftPlayers[i].GetComponent<dragPlayerToChange>().playerPlayPos = UserData.Instance.EnemyPlayerPlayPos[i + 6];
-                changeRightPlayers[i].GetComponent<dragPlayerToChange>().playerPlayPos = UserData.Instance.UserPlayerPlayPos[i + 6];
-                changeLeftPlayers[i].GetComponent<dragPlayerToChange>().FirstPlayer = false;
-                changeRightPlayers[i].GetComponent<dragPlayerToChange>().FirstPlayer = false;
-                changeLeftPlayers[i].GetComponent<dragPlayerToChange>().timeOfChange = 1;
-                changeRightPlayers[i].GetComponent<dragPlayerToChange>().timeOfChange = 1;
-                changeLeftPlayers[i].GetComponent<dragPlayerToChange>().changeTarget = -1;
-                changeRightPlayers[i].GetComponent<dragPlayerToChange>().changeTarget = -1;
-                changeLeftPlayers[i].GetComponent<dragPlayerToChange>().side = new int[1]{0};
-                changeRightPlayers[i].GetComponent<dragPlayerToChange>().side = new int[1]{1};
-            }
             int lc= 0, rc = 0;
             for(int i = 0 ; i < 12; i++){
                 if(UserData.Instance.UserPlayerPlayPos[i] == 4 && rc < 2){
@@ -245,13 +273,6 @@ public class SystemData : MonoBehaviour
                 leftLiberoC[i].AddOptions(leftOption);
                 rightLiberoC[i].AddOptions(rightOption);
             }
-
-        }
-        leftDrag = new dragPlayer[6];
-        rightDrag = new dragPlayer[6];
-        for(int i = 0; i < 6; i++){
-            leftDrag[i] = leftPlayers[i].GetComponent<dragPlayer>();
-            rightDrag[i] = rightPlayers[i].GetComponent<dragPlayer>();
         }
     }
 
@@ -455,6 +476,7 @@ public class SystemData : MonoBehaviour
             Debug.Log(output2);
         }
 
+
         PointScript = Canvas.GetComponent<RefreshPoint>();        
 
         for(int i = 0; i < 2; i++){
@@ -484,6 +506,25 @@ public class SystemData : MonoBehaviour
                             leftDrag[j].updata[0] = false;
                         }
                     }
+
+                    for(int j = 0; j < 12; j++){
+                        if((leftRight == 0 ? UserData.Instance.UserPlayerNumber[j] : UserData.Instance.EnemyPlayerNumber[j]) == leftLibero[i, 0]){
+                            tmpNum = leftRight == 0 ? UserData.Instance.UserPlayerNumber[j].ToString() : UserData.Instance.EnemyPlayerNumber[j].ToString();
+                            tmpName = leftRight == 0 ? UserData.Instance.UserPlayerName[j] : UserData.Instance.EnemyPlayerName[j];
+                            tmpPos = leftRight == 0 ? UserData.Instance.UserPlayerPlayPos[j] : UserData.Instance.EnemyPlayerPlayPos[j];
+                            break;
+                        }
+                    }
+
+                    for(int j = 0; j < 6; j++){
+                        if(Int32.Parse(leftChange[j].playerNum) == leftLibero[i, 0]){
+                            leftChange[j].playerNum = tmpNum;
+                            leftChange[j].playerPlayPos = tmpPos;
+                            leftChange[j].playerName = tmpName;
+                            leftChange[j].refresh[0] = false;
+                        }
+                    }
+
                     leftLiberoC[i].interactable = true;
                     lockingL = false;
                 }
@@ -500,17 +541,24 @@ public class SystemData : MonoBehaviour
                         Int32.Parse(leftDrag[0].playerNum) == leftLibero[i,2] &&
                         PointScript.whoServe == 1)){ // 目標球員在後排
                         string tmpName="", tmpNum="";
-                        int tmpPos=0;
+                        int tmpPos=0, tmpJ = 0;
                         for(int j = 0; j < 12; j++){
                             if((leftRight == 0 ? UserData.Instance.UserPlayerNumber[j] : UserData.Instance.EnemyPlayerNumber[j]) == leftLibero[i, 0]){
                                 tmpNum = leftRight == 0 ? UserData.Instance.UserPlayerNumber[j].ToString() : UserData.Instance.EnemyPlayerNumber[j].ToString();
                                 tmpName = leftRight == 0 ? UserData.Instance.UserPlayerName[j] : UserData.Instance.EnemyPlayerName[j];
                                 tmpPos = leftRight == 0 ? UserData.Instance.UserPlayerPlayPos[j] : UserData.Instance.EnemyPlayerPlayPos[j];
+                                tmpJ = j;
                                 break;
                             }
                         }
                         foreach(int j in new List<int>{0, 4, 5}){
                             if(Int32.Parse(leftDrag[j].playerNum) == leftLibero[i,1]){
+                                if(tmpJ >= 6){
+                                    leftChange[tmpJ - 6].playerName = leftDrag[j].playerName;
+                                    leftChange[tmpJ - 6].playerNum = leftDrag[j].playerNum;
+                                    leftChange[tmpJ - 6].playerPlayPos = leftDrag[j].playerPlayPos;
+                                    leftChange[tmpJ - 6].refresh[0] = false;
+                                }
                                 leftDrag[j].playerName = tmpName;
                                 leftDrag[j].playerNum = tmpNum;
                                 leftDrag[j].playerPlayPos = tmpPos;
@@ -519,6 +567,12 @@ public class SystemData : MonoBehaviour
                                 break;
                             }
                             else if(Int32.Parse(leftDrag[j].playerNum) == leftLibero[i,2]){
+                                if(tmpJ >= 6){
+                                    leftChange[tmpJ - 6].playerName = leftDrag[j].playerName;
+                                    leftChange[tmpJ - 6].playerNum = leftDrag[j].playerNum;
+                                    leftChange[tmpJ - 6].playerPlayPos = leftDrag[j].playerPlayPos;
+                                    leftChange[tmpJ - 6].refresh[0] = false;
+                                }
                                 leftDrag[j].playerName = tmpName;
                                 leftDrag[j].playerNum = tmpNum;
                                 leftDrag[j].playerPlayPos = tmpPos;
@@ -559,6 +613,23 @@ public class SystemData : MonoBehaviour
                             rightDrag[j].updata[0] = false;
                         }
                     }
+                    for(int j = 0; j < 12; j++){
+                        if((leftRight == 1 ? UserData.Instance.UserPlayerNumber[j] : UserData.Instance.EnemyPlayerNumber[j]) == rightLibero[i, 0]){
+                            tmpNum = leftRight == 1 ? UserData.Instance.UserPlayerNumber[j].ToString() : UserData.Instance.EnemyPlayerNumber[j].ToString();
+                            tmpName = leftRight == 1 ? UserData.Instance.UserPlayerName[j] : UserData.Instance.EnemyPlayerName[j];
+                            tmpPos = leftRight == 1 ? UserData.Instance.UserPlayerPlayPos[j] : UserData.Instance.EnemyPlayerPlayPos[j];
+                            break;
+                        }
+                    }
+
+                    for(int j = 0; j < 6; j++){
+                        if(Int32.Parse(rightChange[j].playerNum) == rightLibero[i, 0]){
+                            rightChange[j].playerNum = tmpNum;
+                            rightChange[j].playerPlayPos = tmpPos;
+                            rightChange[j].playerName = tmpName;
+                            rightChange[j].refresh[0] = false;
+                        }
+                    }
                     rightLiberoC[i].interactable = true;
                 }
                 else if(Int32.Parse(rightDrag[4].playerNum) == rightLibero[i,0] || 
@@ -575,17 +646,25 @@ public class SystemData : MonoBehaviour
                         PointScript.whoServe == 0) 
                        ){ // 目標球員在後排
                         string tmpName="", tmpNum="";
-                        int tmpPos=0;
+                        int tmpPos=0, tmpJ = 0;
                         for(int j = 0; j < 12; j++){
                             if((leftRight == 1 ? UserData.Instance.UserPlayerNumber[j] : UserData.Instance.EnemyPlayerNumber[j]) == rightLibero[i, 0]){
                                 tmpNum = leftRight == 1 ? UserData.Instance.UserPlayerNumber[j].ToString() : UserData.Instance.EnemyPlayerNumber[j].ToString();
                                 tmpName = leftRight == 1 ? UserData.Instance.UserPlayerName[j] : UserData.Instance.EnemyPlayerName[j];
                                 tmpPos = leftRight == 1 ? UserData.Instance.UserPlayerPlayPos[j] : UserData.Instance.EnemyPlayerPlayPos[j];
+                                tmpJ = j;
                                 break;
                             }
                         }
                         foreach(int j in new List<int>{0, 4, 5}){
                             if(Int32.Parse(rightDrag[j].playerNum) == rightLibero[i,1]){
+                                if(tmpJ >= 6){
+                                    rightChange[tmpJ - 6].playerName = rightDrag[j].playerName;
+                                    rightChange[tmpJ - 6].playerNum = rightDrag[j].playerNum;
+                                    rightChange[tmpJ - 6].playerPlayPos = rightDrag[j].playerPlayPos;
+                                    rightChange[tmpJ - 6].refresh[0] = false;
+                                }
+
                                 rightDrag[j].playerName = tmpName;
                                 rightDrag[j].playerNum = tmpNum;
                                 rightDrag[j].playerPlayPos = tmpPos;
@@ -594,6 +673,13 @@ public class SystemData : MonoBehaviour
                                 break;
                             }
                             else if(Int32.Parse(rightDrag[j].playerNum) == rightLibero[i,2]){
+                                if(tmpJ >= 6){
+                                    rightChange[tmpJ - 6].playerName = rightDrag[j].playerName;
+                                    rightChange[tmpJ - 6].playerNum = rightDrag[j].playerNum;
+                                    rightChange[tmpJ - 6].playerPlayPos = rightDrag[j].playerPlayPos;
+                                    rightChange[tmpJ - 6].refresh[0] = false;
+                                }
+
                                 rightDrag[j].playerName = tmpName;
                                 rightDrag[j].playerNum = tmpNum;
                                 rightDrag[j].playerPlayPos = tmpPos;
@@ -614,27 +700,20 @@ public class SystemData : MonoBehaviour
         }
     }
 
-    public void backGameSelect(){
-        CallEndRecord();
-        UserData tmp = new UserData();
-        tmp.UserName = UserData.Instance.UserName;
-        tmp.UserID = UserData.Instance.UserID;
-        tmp.TeamID = UserData.Instance.TeamID;
-        tmp.numOfGame = UserData.Instance.numOfGame;
-        tmp.numOfPlayer = UserData.Instance.numOfPlayer;
-        UserData.Instance = tmp;
-        
-        SceneManager.LoadScene("GameSelect");
-    }
 
     public void CallEndRecord(){
         int UserID = UserData.Instance.UserID;
         int GameID = UserData.Instance.GameID;
         StartCoroutine(EndRecord(UserID, GameID));
-        return
+        return;
     }
 
-    public IEnumerator EndRecord(UserID, GameID){
+    public class ReqReturn{
+        public string ec;
+        public bool success;
+    }
+
+    public IEnumerator EndRecord(int UserID, int GameID){
         WWWForm form = new WWWForm();
         form.AddField("UserID", UserID);
         form.AddField("GameID", GameID);
@@ -643,12 +722,86 @@ public class SystemData : MonoBehaviour
         UnityWebRequest www = UnityWebRequest.Post("https://volley.csie.ntnu.edu.tw/EndRecord", form);
         yield return www.SendWebRequest();
 
+        ReqReturn result = new ReqReturn();
         if(www.result == UnityWebRequest.Result.Success){
-            ;
+            string response = www.downloadHandler.text;
+            result = JsonUtility.FromJson<ReqReturn>(response);
+            if(result.success){
+                UserData tmp = new UserData();
+                tmp.UserName = UserData.Instance.UserName;
+                tmp.UserID = UserData.Instance.UserID;
+                tmp.TeamID = UserData.Instance.TeamID;
+                tmp.numOfGame = UserData.Instance.numOfGame;
+                tmp.numOfPlayer = UserData.Instance.numOfPlayer;
+                UserData.Instance = tmp;
+                
+                SceneManager.LoadScene("GameSelect");
+            }
+            else{
+                print("Error!");
+            }
         }
         else{
             print("Error!");
         }
+    }
+
+    public Button[] CFButton;
+    public GameObject setBtn;
+    public GameObject backBtn;
+
+    public void changeFirst(){
+        changeFirstFormation = true;
+        for(int i = 0; i < 6; i++){
+            changeLeftPlayers[i].SetActive(true);
+            changeRightPlayers[i].SetActive(true);
+        }
+        gameView.SetActive(false);
+        deleteNewData.SetActive(false);
+
+        foreach (Button button in CFButton){
+            button.interactable = false;
+        }
+
+        setBtn.SetActive(false);
+        backBtn.SetActive(true);
+        Main.SetActive(true);
+        Setting.SetActive(false);
+        
+    }
+
+    public void exitChangeFirst(){
+        changeFirstFormation = false;
+        for(int i = 0; i < 6; i++){
+            changeLeftPlayers[i].SetActive(false);
+            changeRightPlayers[i].SetActive(false);
+        }
+        gameView.SetActive(true);
+        deleteNewData.SetActive(true);
+
+        foreach (Button button in CFButton){
+            button.interactable = true;
+        }
+        setBtn.SetActive(true);
+        backBtn.SetActive(false);
+        Main.SetActive(false);
+        Setting.SetActive(true);
+    }
+    public GameObject EndRecordScene;
+    public void GoToEndRecord(){
+        Setting.SetActive(false);
+        EndRecordScene.SetActive(true);
+    }
+
+    public void CancelEndRecord(){
+        Setting.SetActive(true);
+        EndRecordScene.SetActive(false);
+    }
+
+    public void GoToShowData(){
+        //string url = String.Format("https://volley.csie.ntnu.edu.tw/showData?UserID={0}&GameID={1}", UserData.Instance.UserID, UserData.Instance.GameID);
+        string url = String.Format("https://volley.csie.ntnu.edu.tw/showData?UserID={0}&GameID={1}", 3, 21);
+        Application.OpenURL(url);
     }
 
 }

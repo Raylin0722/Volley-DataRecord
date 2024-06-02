@@ -513,7 +513,8 @@ public class GameSelect : MonoBehaviour
             print("Error!");
         }
         else{ // show data
-
+            string url = String.Format("https://volley.csie.ntnu.edu.tw/showData?UserID={0}&GameID={1}", UserID, GameID);
+            Application.OpenURL(url);
         }
         
 

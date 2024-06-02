@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VolleyBall Data Analysis</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="main-title">VolleyBall Data Analysis</h1>
+    </header>
+    <div id="allGameTable">
+        <table>
+            <thead>
+                <tr>
+                    <th>隊伍</th>
+                    <th>勝場</th>
+                    <th onclick="visualizeSet(1)" class="setbutton">1</th>
+                    <th onclick="visualizeSet(2)" class="setbutton">2</th>
+                    <th onclick="visualizeSet(3)" class="setbutton">3</th>
+                    <th onclick="visualizeSet(4)" class="setbutton">4</th>
+                    <th onclick="visualizeSet(5)" class="setbutton">5</th>
+                </tr>
+            </thead>
+            <tbody id="allGameTableBody">
+            </tbody>
+        </table>
+    </div>
+    <div id="graphButtons">
+        <button class="graphbutton" onclick="visualizeGraph(1)">全局數據</button>
+        <button class="graphbutton" onclick="visualizeGraph(2)">選手分析</button>
+        <button class="graphbutton" onclick="visualizeGraph(3)">球賽歷程</button>
+    </div>
+    <div id="chartContainer">
+        <div class="chart" id="donutContainer"></div>
+        <div class="chart" id="lineContainer"></div>
+        <div class="chart" id="playerDataContainer"></div>
+        <div class="chart" id="scatterContainer"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/d3-tip.js') }}"></script>
+    
+
+</body>
+</html>

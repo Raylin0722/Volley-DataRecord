@@ -1,0 +1,160 @@
+.main-title {
+    font-size: 32px;         
+    text-align: center;   
+    margin: 10px;        
+    color: #333;          
+}
+
+#allGameTable {
+    width: 100%;
+    margin: 10px
+}
+
+table {
+    width: 40%;             
+    border-collapse: collapse;
+    margin: 0 auto;
+    font-size: 16px;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+th, td {
+    padding: 10px;
+    border-bottom: 0px solid #ddd;
+    white-space: nowrap;
+}
+
+th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.setbutton {
+    width: 100px;          
+    height: 30px;
+    margin: 5px;
+    background-color: #f1f1f1; 
+    color: black;
+    border-radius: 5px;
+    font-size: 16px;         
+    cursor: pointer;         
+    transition: background-color 0.3s;
+}
+
+.setbutton:hover {
+    background-color: #ddd;
+}
+
+.setbutton.selected {
+    background-color: #ccc;
+    box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+}
+
+.setbutton:active {
+    background-color: #bbb;
+    box-shadow: inset 0 3px 5px rgba(0,0,0,0.5);
+}
+
+#graphButtons {
+    display: flex;
+    justify-content: space-between;
+    width: 350px;
+    margin: 0 auto;
+}
+
+.graphbutton {
+    width: 100px;          
+    height: 30px;
+    margin: 5px;
+    background-color: #f1f1f1; 
+    color: black;
+    border: 1px solid #999;
+    border-radius: 5px;
+    font-size: 16px;         
+    transition: background-color 0.3s;
+}
+
+.graphbutton:hover {
+    background-color: #ddd;
+}
+
+.graphbutton.selected {
+    background-color: #ccc;
+    box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+}
+
+.graphbutton:active {
+    background-color: #bbb;
+    box-shadow: inset 0 3px 5px rgba(0,0,0,0.5);
+}
+
+#chartContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.lineContainer {
+    flex: 1;
+    margin-left: 20px;
+}
+
+#playerDataContainer table {
+    width: 100%; /* 設置表格寬度為容器的100% */
+    border-collapse: collapse; /* 合併表格邊框 */
+}
+
+#playerDataContainer th, #playerDataContainer td {
+    padding: 8px; /* 設置單元格內間距 */
+    border: 1px solid #ddd; /* 設置邊框 */
+    text-align: center;
+}
+
+#playerDataContainer th {
+    background-color: #f2f2f2; /* 設置表頭背景顏色 */
+}
+
+#playerDataContainer td {
+    min-width: 200px; /* 設置每一格的最小寬度 */
+}
+
+#playerDataContainer th.sortable {
+    background-color: #f1f1f1;
+    color: black;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#playerDataContainer th.sortable:hover {
+    background-color: #ddd;
+}
+
+#playerDataContainer th.selected {
+    background-color: #ccc;
+    box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+}
+
+#playerDataContainer th.sortable:active {
+    background-color: #bbb;
+    box-shadow: inset 0 3px 5px rgba(0,0,0,0.5);
+}
+
+#scatterContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    margin-top: 10px;
+}
+
+.tooltip {
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    border-radius: 4px;
+    font-size: 12px;
+    border: 1px solid #000000;
+    padding: 4px;
+}

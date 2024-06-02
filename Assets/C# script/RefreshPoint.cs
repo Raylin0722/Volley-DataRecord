@@ -205,6 +205,12 @@ public class RefreshPoint : MonoBehaviour
         }
         reClick = -1;
     }
+
+    public Text[] leftLiberoName;
+    public Text[] rightLiberoName;
+    public Dropdown[] leftDrop;
+    public Dropdown[] rightDrop;
+
     void LRChange(){
         string tmpText;
         tmpText = systemDataScript.leftTeamName.text;
@@ -246,11 +252,25 @@ public class RefreshPoint : MonoBehaviour
             systemDataScript.rightPlayers[i].GetComponent<dragPlayer>().playerPlayPos = tmpPos;
             systemDataScript.rightPlayers[i].GetComponent<dragPlayer>().updata[0] = false;
             systemDataScript.leftPlayers[i].GetComponent<dragPlayer>().updata[0] = false;
+        
+            tmpName = systemDataScript.changeLeftPlayers[i].GetComponent<dragPlayerToChange>().playerName;
+            tmpNum = systemDataScript.changeLeftPlayers[i].GetComponent<dragPlayerToChange>().playerNum;
+            tmpPos = systemDataScript.changeLeftPlayers[i].GetComponent<dragPlayerToChange>().playerPlayPos;
+            systemDataScript.changeLeftPlayers[i].GetComponent<dragPlayerToChange>().playerName = systemDataScript.changeRightPlayers[i].GetComponent<dragPlayerToChange>().playerName;
+            systemDataScript.changeLeftPlayers[i].GetComponent<dragPlayerToChange>().playerNum = systemDataScript.changeRightPlayers[i].GetComponent<dragPlayerToChange>().playerNum;
+            systemDataScript.changeLeftPlayers[i].GetComponent<dragPlayerToChange>().playerPlayPos = systemDataScript.changeRightPlayers[i].GetComponent<dragPlayerToChange>().playerPlayPos;
+            systemDataScript.changeRightPlayers[i].GetComponent<dragPlayerToChange>().playerName = tmpName;
+            systemDataScript.changeRightPlayers[i].GetComponent<dragPlayerToChange>().playerNum = tmpNum;
+            systemDataScript.changeRightPlayers[i].GetComponent<dragPlayerToChange>().playerPlayPos = tmpPos;
+            systemDataScript.changeRightPlayers[i].GetComponent<dragPlayerToChange>().refresh[0] = false;
+            systemDataScript.changeLeftPlayers[i].GetComponent<dragPlayerToChange>().refresh[0] = false;
         }
         int tmpID;
         tmpID =  systemDataScript.leftTeamNum[0];
         systemDataScript.leftTeamNum[0] = systemDataScript.rightTeamNum[0];
         systemDataScript.rightTeamNum[0] = tmpID;
+
+        systemDataScript.initLibero();
     }     
 
     void setFormation(){

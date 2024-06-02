@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
+using System;
+
 public class dragPlayerToChange : MonoBehaviour {
     private Vector3 initialPosition;
     Vector2 difference = Vector2.zero;
@@ -21,6 +23,7 @@ public class dragPlayerToChange : MonoBehaviour {
     void Start(){
         SystemScript = system.GetComponent<SystemData>();
         refresh = new bool[1]{false};
+        side = new int[1]{0};
     }
     void Update(){
         if(!refresh[0]){
@@ -34,19 +37,24 @@ public class dragPlayerToChange : MonoBehaviour {
     }
     public void OnMouseDown() {
         for(int i = 0; i < 6; i++){
-            if(side[0] == 0){ // LEFT
+            if(this.gameObject.tag == "Left"){ // LEFT
+                print(String.Format("{0} {1} {2}", SystemScript.changeLeftPlayers[i], this.gameObject, SystemScript.changeLeftPlayers[i] == this.gameObject));
                 if(SystemScript.changeLeftPlayers[i] == this.gameObject && 
-                   SystemScript.changeLeftPlayers[i].GetComponent<dragPlayer>().playerPlayPos != 4){
-                    SystemScript.CformationTmp[0] = side[0];
+                   SystemScript.changeLeftPlayers[i].GetComponent<dragPlayerToChange>().playerPlayPos != 4){
+                    SystemScript.CformationTmp[0] = 0;
                     SystemScript.CformationTmp[1] = i;
+                    print(SystemScript.CformationTmp[0]);
+                    print(SystemScript.CformationTmp[1]);
                     break;
                 }
             }
             else{ // RIGHT
                 if(SystemScript.changeRightPlayers[i] == this.gameObject &&
-                   SystemScript.changeRightPlayers[i].GetComponent<dragPlayer>().playerPlayPos != 4){
-                    SystemScript.CformationTmp[0] = side[0];
+                   SystemScript.changeRightPlayers[i].GetComponent<dragPlayerToChange>().playerPlayPos != 4){
+                    SystemScript.CformationTmp[0] = 1;
                     SystemScript.CformationTmp[1] = i;
+                    print(SystemScript.CformationTmp[0]);
+                    print(SystemScript.CformationTmp[1]);
                     break;
                 }
             }
