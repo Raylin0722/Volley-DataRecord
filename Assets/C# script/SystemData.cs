@@ -701,50 +701,7 @@ public class SystemData : MonoBehaviour
     }
 
 
-    public void CallEndRecord(){
-        int UserID = UserData.Instance.UserID;
-        int GameID = UserData.Instance.GameID;
-        StartCoroutine(EndRecord(UserID, GameID));
-        return;
-    }
-
-    public class ReqReturn{
-        public string ec;
-        public bool success;
-    }
-
-    public IEnumerator EndRecord(int UserID, int GameID){
-        WWWForm form = new WWWForm();
-        form.AddField("UserID", UserID);
-        form.AddField("GameID", GameID);
-
-        
-        UnityWebRequest www = UnityWebRequest.Post("https://volley.csie.ntnu.edu.tw/EndRecord", form);
-        yield return www.SendWebRequest();
-
-        ReqReturn result = new ReqReturn();
-        if(www.result == UnityWebRequest.Result.Success){
-            string response = www.downloadHandler.text;
-            result = JsonUtility.FromJson<ReqReturn>(response);
-            if(result.success){
-                UserData tmp = new UserData();
-                tmp.UserName = UserData.Instance.UserName;
-                tmp.UserID = UserData.Instance.UserID;
-                tmp.TeamID = UserData.Instance.TeamID;
-                tmp.numOfGame = UserData.Instance.numOfGame;
-                tmp.numOfPlayer = UserData.Instance.numOfPlayer;
-                UserData.Instance = tmp;
-                
-                SceneManager.LoadScene("GameSelect");
-            }
-            else{
-                print("Error!");
-            }
-        }
-        else{
-            print("Error!");
-        }
-    }
+    
 
     public Button[] CFButton;
     public GameObject setBtn;
