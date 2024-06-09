@@ -236,7 +236,7 @@ public class SystemData : MonoBehaviour
                     rc++;
                 }
                 if(UserData.Instance.EnemyPlayerPlayPos[i] == 4 && lc < 2){
-                    leftLibero[rc, 0] = UserData.Instance.EnemyPlayerNumber[i];
+                    leftLibero[lc, 0] = UserData.Instance.EnemyPlayerNumber[i];
                     leftLiberoName[lc].text = UserData.Instance.EnemyPlayerName[i];
                     leftLibero[lc, 1] = 0;
                     leftLibero[lc, 2] = 0;
@@ -551,6 +551,7 @@ public class SystemData : MonoBehaviour
                                 break;
                             }
                         }
+                        print(tmpJ);
                         foreach(int j in new List<int>{0, 4, 5}){
                             if(Int32.Parse(leftDrag[j].playerNum) == leftLibero[i,1]){
                                 if(tmpJ >= 6){
@@ -656,6 +657,7 @@ public class SystemData : MonoBehaviour
                                 break;
                             }
                         }
+                        print(tmpJ);
                         foreach(int j in new List<int>{0, 4, 5}){
                             if(Int32.Parse(rightDrag[j].playerNum) == rightLibero[i,1]){
                                 if(tmpJ >= 6){
