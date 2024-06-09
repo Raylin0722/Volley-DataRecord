@@ -111,7 +111,7 @@ public class dragPlayer : MonoBehaviour {
             
             if(SystemScript.CformationTmp[0] != -1){
                 int index = SystemScript.CformationTmp[1];
-                if(SystemScript.CformationTmp[0] == 0 && this.gameObject.tag == "Left" && tmpPos !=4){
+                if(SystemScript.CformationTmp[0] == 0 && this.gameObject.tag == "Left"){
                     changeTmp = SystemScript.changeLeftPlayers[index].GetComponent<dragPlayerToChange>();
 
                     playerName = changeTmp.playerName;
@@ -123,7 +123,7 @@ public class dragPlayer : MonoBehaviour {
                     changeTmp.refresh[0] = false;
                     
                 }
-                else if(SystemScript.CformationTmp[0] == 1 && this.gameObject.tag == "Right"&& tmpPos != 4){
+                else if(SystemScript.CformationTmp[0] == 1 && this.gameObject.tag == "Right"){
                     changeTmp = SystemScript.changeRightPlayers[index].GetComponent<dragPlayerToChange>();
                     playerName = changeTmp.playerName;
                     playerNum = changeTmp.playerNum;

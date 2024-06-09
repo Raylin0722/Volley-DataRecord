@@ -692,9 +692,9 @@ def graphicData():
             for i in range(5):
                 if result['scores'][i]["leftScore"] != 0 or result['scores'][i]["rightScore"]:
                     count += 1
-                if result['scores'][i]["leftScore"] > result['scores'][i]["rightScore"]:
+                if (result['scores'][i]["leftScore"] > result['scores'][i]["rightScore"]) and (result['scores'][i]["leftScore"] >= 25 and result['scores'][i]["leftScore"] - result['scores'][i]["rightScore"] >= 2):
                     SetWinner.append(result["LREachRound"]["left"][i])
-                elif result['scores'][i]["leftScore"] < result['scores'][i]["rightScore"]:
+                elif (result['scores'][i]["leftScore"] < result['scores'][i]["rightScore"]) and (result['scores'][i]["rightScore"] >= 25 and result['scores'][i]["rightScore"] - result['scores'][i]["leftScore"] >= 2):
                     SetWinner.append(result["LREachRound"]["right"][i])
                 else:
                     SetWinner.append(-1)

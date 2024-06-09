@@ -39,8 +39,7 @@ public class dragPlayerToChange : MonoBehaviour {
         for(int i = 0; i < 6; i++){
             if(this.gameObject.tag == "Left"){ // LEFT
                 print(String.Format("{0} {1} {2}", SystemScript.changeLeftPlayers[i], this.gameObject, SystemScript.changeLeftPlayers[i] == this.gameObject));
-                if(SystemScript.changeLeftPlayers[i] == this.gameObject && 
-                   SystemScript.changeLeftPlayers[i].GetComponent<dragPlayerToChange>().playerPlayPos != 4){
+                if(SystemScript.changeLeftPlayers[i] == this.gameObject){
                     SystemScript.CformationTmp[0] = 0;
                     SystemScript.CformationTmp[1] = i;
                     print(SystemScript.CformationTmp[0]);
@@ -49,8 +48,7 @@ public class dragPlayerToChange : MonoBehaviour {
                 }
             }
             else{ // RIGHT
-                if(SystemScript.changeRightPlayers[i] == this.gameObject &&
-                   SystemScript.changeRightPlayers[i].GetComponent<dragPlayerToChange>().playerPlayPos != 4){
+                if(SystemScript.changeRightPlayers[i] == this.gameObject){
                     SystemScript.CformationTmp[0] = 1;
                     SystemScript.CformationTmp[1] = i;
                     print(SystemScript.CformationTmp[0]);
